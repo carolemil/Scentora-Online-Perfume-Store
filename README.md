@@ -19,4 +19,4 @@ Scentora is a front-end online perfume shopping website developed using HTML, CS
 
 ## Project Team
 MIU – Computer Science
-SWE230 – Web Development# web-dev
+SWE230 – Web Development
