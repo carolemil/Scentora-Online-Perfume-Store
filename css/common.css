@@ -1,0 +1,89 @@
+
+:root {
+    --cream: #FAF7F0;
+    --light-cream: #F2EBDD;
+    --beige: #E9DDCB;
+    --brown: #49352A;
+    --dark-brown: #302219;
+    --gold: #AD8754;
+    --muted: #897C70;
+    --white: #FFFFFF;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'DM Sans', sans-serif;
+    background-color: var(--cream);
+    color: var(--brown);
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+button,
+input,
+textarea {
+    font: inherit;
+}
+
+button,
+a {
+    -webkit-tap-highlight-color: transparent;
+}
+
+img {
+    max-width: 100%;
+}
+
+.logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 29px;
+    font-weight: 600;
+    color: var(--brown);
+    letter-spacing: -1px;
+}
+
+.logo span {
+    color: var(--gold);
+}
+
+.eyebrow {
+    color: var(--gold);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    margin-bottom: 20px;
+}
+
+.primary-button {
+    display: inline-block;
+    background-color: var(--brown);
+    color: var(--white);
+    border: 1px solid var(--brown);
+    padding: 15px 27px;
+    border-radius: 3px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.primary-button:hover {
+    background-color: var(--gold);
+    border-color: var(--gold);
+}
+
+.section-padding {
+    padding: 95px 8%;
+}
