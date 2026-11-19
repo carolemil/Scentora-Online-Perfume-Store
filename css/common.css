@@ -1,4 +1,8 @@
 
+/* =====================================
+   SCENTORA GLOBAL DESIGN
+===================================== */
+
 :root {
     --cream: #FAF7F0;
     --light-cream: #F2EBDD;
@@ -9,6 +13,9 @@
     --muted: #897C70;
     --white: #FFFFFF;
 }
+
+
+/* RESET */
 
 * {
     margin: 0;
@@ -37,53 +44,178 @@ textarea {
     font: inherit;
 }
 
-button,
-a {
-    -webkit-tap-highlight-color: transparent;
-}
-
 img {
     max-width: 100%;
 }
 
-.logo {
+
+/* =====================================
+   SCENTORA SIGNATURE LOGO
+===================================== */
+
+.brand-logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+
+    color: var(--brown);
+
+    text-decoration: none;
+
+    transition: 0.4s ease;
+}
+
+.brand-symbol {
+    width: 36px;
+    height: 36px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 1px solid var(--gold);
+    border-radius: 50%;
+
+    color: var(--gold);
+    font-size: 24px;
+
+    transition: 0.4s ease;
+}
+
+.brand-name {
     font-family: 'Playfair Display', serif;
     font-size: 29px;
     font-weight: 600;
-    color: var(--brown);
     letter-spacing: -1px;
 }
 
-.logo span {
+.brand-dot {
     color: var(--gold);
 }
+
+.brand-logo:hover .brand-symbol {
+    transform: rotate(45deg) scale(1.12);
+
+    box-shadow:
+        0 0 12px #AD875480,
+        0 0 25px #AD875440;
+}
+
+.brand-logo:hover .brand-name {
+    text-shadow: 0 0 12px #AD875460;
+}
+
+
+/* =====================================
+   SHARED TYPOGRAPHY
+===================================== */
 
 .eyebrow {
     color: var(--gold);
+
     font-size: 11px;
     font-weight: 700;
+
     letter-spacing: 3px;
+
     margin-bottom: 20px;
 }
 
+
+/* =====================================
+   SHARED BUTTONS
+===================================== */
+
 .primary-button {
     display: inline-block;
+
     background-color: var(--brown);
     color: var(--white);
+
     border: 1px solid var(--brown);
+
     padding: 15px 27px;
+
     border-radius: 3px;
+
     font-size: 12px;
     font-weight: 600;
+
     cursor: pointer;
-    transition: 0.3s ease;
+
+    transition: 0.35s ease;
 }
 
 .primary-button:hover {
     background-color: var(--gold);
     border-color: var(--gold);
+
+    box-shadow:
+        0 0 10px #AD875460,
+        0 0 22px #AD875430;
+
+    transform: translateY(-2px);
 }
+
+
+/* NAVIGATION BUTTON */
+
+.nav-button {
+    background-color: var(--brown);
+    color: white;
+
+    padding: 12px 21px;
+
+    border-radius: 3px;
+
+    font-size: 12px;
+
+    transition: 0.35s ease;
+}
+
+.nav-button:hover {
+    background-color: var(--gold);
+
+    box-shadow: 0 0 15px #AD875460;
+}
+
+
+/* =====================================
+   GLOBAL HOVER EFFECTS
+===================================== */
+
+.nav-links a,
+.footer-links a {
+    transition: 0.3s ease;
+}
+
+.nav-links a:hover,
+.footer-links a:hover {
+    color: var(--gold);
+    text-shadow: 0 0 10px #AD875480;
+}
+
+
+/* =====================================
+   SHARED SECTIONS
+===================================== */
 
 .section-padding {
     padding: 95px 8%;
+}
+
+
+/* ACCESSIBILITY */
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+    }
+
 }
