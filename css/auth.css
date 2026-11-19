@@ -1,0 +1,751 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body.login-page {
+    min-height: 100vh;
+    font-family: "DM Sans", sans-serif;
+    color: #633D29;
+    background-image: url("../assets/images/OIP(8).jpg");
+    background-size: cover;
+    background-position: CENTER;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    position: relative;
+    overflow-x: hidden;
+}
+
+.background-overlay {
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(
+        110deg,
+        rgba(255, 247, 232, .12),
+        rgba(255, 239, 218, .08),
+        rgba(255, 247, 232, .16)
+    );
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* HEADER */
+
+.top-header {
+    width: 100%;
+    padding: 18px 4.5%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 3;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    color: #854B2C;
+    text-decoration: none;
+    transition: .35s ease;
+}
+
+.brand-logo {
+    width: 43px;
+    height: 43px;
+    transition: .5s ease;
+}
+
+.brand-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.brand-text strong {
+    font-family: "Playfair Display", serif;
+    font-size: 20px;
+    letter-spacing: 3px;
+    font-weight: 500;
+}
+
+.brand-text strong span {
+    color: #B36C3E;
+}
+
+.brand-text small {
+    font-size: 7px;
+    letter-spacing: 2px;
+}
+
+.brand:hover {
+    color: #B36C3E;
+    filter: drop-shadow(0 0 7px rgba(179, 108, 62, .4));
+}
+
+.brand:hover .brand-logo {
+    transform: rotate(-8deg) scale(1.1);
+}
+
+.header-tagline {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    color: #80543A;
+    font-family: "Playfair Display", serif;
+    font-size: 11px;
+    letter-spacing: 1px;
+}
+
+.header-tagline span {
+    display: inline-block;
+    width: 35px;
+    height: 1px;
+    background: #A87957;
+}
+
+/* MAIN LAYOUT */
+
+.login-main {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 85px 20px 55px;
+    position: relative;
+    z-index: 1;
+}
+
+/* GLASS LOGIN CARD */
+
+.login-card {
+    width: 100%;
+    max-width: 440px;
+    padding: 24px 32px 29px;
+    text-align: center;
+
+    background: rgba(255, 250, 243, .69);
+    border: 1px solid rgba(255, 255, 255, .82);
+    border-radius: 17px;
+
+    backdrop-filter: blur(17px);
+    -webkit-backdrop-filter: blur(17px);
+
+    box-shadow:
+        0 15px 50px rgba(92, 57, 35, .13),
+        inset 0 1px 0 rgba(255, 255, 255, .8);
+
+    animation: cardAppear .9s cubic-bezier(.2, .8, .2, 1) both;
+    transition: box-shadow .4s ease, transform .4s ease;
+}
+
+.login-card:hover {
+    box-shadow:
+        0 20px 60px rgba(92, 57, 35, .19),
+        0 0 25px rgba(255, 255, 255, .25),
+        inset 0 1px 0 rgba(255, 255, 255, .9);
+}
+
+/* LOGO INSIDE CARD */
+
+.card-logo {
+    width: 42px;
+    height: 42px;
+    margin: 0 auto 5px;
+    color: #864A2D;
+    animation: logoReveal 1.2s ease both;
+}
+
+.card-logo svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+}
+
+.card-logo:hover {
+    animation: logoSpin .8s ease;
+}
+
+/* TEXT */
+
+.login-card h1 {
+    font-family: "Playfair Display", serif;
+    font-size: 39px;
+    font-weight: 500;
+    color: #663D28;
+    margin-bottom: 2px;
+    letter-spacing: -.7px;
+}
+
+.card-subtitle {
+    color: #805C46;
+    font-size: 11px;
+    margin-bottom: 22px;
+}
+
+/* INPUTS */
+
+
+/* ROUNDED EMAIL AND PASSWORD FIELDS */
+
+.input-field {
+    width: 100%;
+    height: 49px;
+    background: rgba(255, 255, 255, .82);
+    border: 1px solid rgba(255, 255, 255, .95);
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+    padding: 0 17px;
+    transition: .3s ease;
+    box-shadow: 0 3px 10px rgba(100, 65, 43, .04);
+}
+
+.input-field:focus-within {
+    border-color: #B77B55;
+    background: #fff;
+    box-shadow: 0 0 0 4px rgba(183, 123, 85, .12);
+    transform: translateY(-2px);
+}
+
+
+
+
+.input-icon {
+    width: 16px;
+    height: 16px;
+    color: #80553C;
+    margin-right: 12px;
+    flex-shrink: 0;
+}
+
+.input-icon svg,
+.show-password svg {
+    width: 100%;
+    height: 100%;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.input-field input {
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #633D29;
+    font-family: "DM Sans", sans-serif;
+    font-size: 11px;
+}
+
+.input-field input::placeholder {
+    color: #9B8475;
+}
+
+.show-password {
+    border: none;
+    background: transparent;
+    color: #80553C;
+    width: 17px;
+    height: 17px;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: .25s;
+}
+
+.show-password:hover {
+    color: #B36C3E;
+    transform: scale(1.13);
+}
+
+.field-error {
+    display: block;
+    min-height: 14px;
+    text-align: left;
+    color: #A74636;
+    font-size: 10px;
+    padding-left: 4px;
+    margin-bottom: 4px;
+}
+
+.input-invalid {
+    border-color: #B45B4A !important;
+    box-shadow: 0 0 0 2px rgba(180, 91, 74, .1) !important;
+}
+
+/* REMEMBER AND FORGOT PASSWORD */
+
+.form-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 5px 0 17px;
+}
+
+.remember {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    color: #76513B;
+    font-size: 10px;
+    cursor: pointer;
+}
+
+.remember input {
+    accent-color: #A85C36;
+    width: 12px;
+    height: 12px;
+    cursor: pointer;
+}
+
+.forgot-link {
+    border: none;
+    background: none;
+    color: #A75D37;
+    font-family: inherit;
+    font-size: 10px;
+    cursor: pointer;
+    transition: .25s;
+}
+
+.forgot-link:hover {
+    color: #6F3D26;
+    text-decoration: underline;
+}
+
+/* LOGIN BUTTON */
+
+.login-button {
+    width: 100%;
+    height: 43px;
+    border: none;
+    border-radius: 30px;
+    background: linear-gradient(110deg, #A94F2D, #B9693D, #9D4929);
+    color: #fffaf4;
+    font-family: "DM Sans", sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 5px 13px rgba(145, 75, 42, .17);
+    transition: .35s ease;
+}
+
+.login-button::before {
+    content: "";
+    position: absolute;
+    top: -70%;
+    left: -55%;
+    width: 35%;
+    height: 240%;
+    background: rgba(255, 255, 255, .3);
+    transform: rotate(25deg);
+    transition: .7s ease;
+}
+
+.login-button:hover::before {
+    left: 125%;
+}
+
+.login-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 22px rgba(145, 75, 42, .3);
+    background: linear-gradient(110deg, #B9683D, #C47A4C, #A95732);
+}
+
+.login-button:active {
+    transform: scale(.985);
+}
+
+.login-button:disabled {
+    opacity: .7;
+    cursor: wait;
+    transform: none;
+}
+
+.arrow {
+    font-size: 17px;
+    font-weight: 400;
+    transition: .3s;
+}
+
+.login-button:hover .arrow {
+    transform: translateX(5px);
+}
+
+.login-message {
+    min-height: 15px;
+    margin-top: 7px;
+    font-size: 10px;
+    line-height: 1.5;
+}
+
+/* OR DIVIDER */
+
+.or-divider {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    margin: 13px 0 14px;
+}
+
+.or-divider span {
+    flex: 1;
+    height: 1px;
+    background: rgba(131, 91, 64, .13);
+}
+
+.or-divider small {
+    color: #805C46;
+    font-size: 9px;
+}
+
+
+/* GOOGLE AND APPLE BUTTONS */
+
+.social-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.social-button {
+    min-height: 45px;
+    padding: 8px 10px;
+    border: 1px solid #E6D8CA;
+    border-radius: 50px;
+    background: rgba(255, 255, 255, .78);
+    color: #49352A;
+    font-family: "DM Sans", sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 9px;
+    cursor: pointer;
+    transition: all .3s ease;
+    box-shadow: 0 3px 10px rgba(100, 65, 43, .04);
+}
+
+.google-logo {
+    width: 17px;
+    height: 17px;
+    flex-shrink: 0;
+}
+
+.apple-logo {
+    width: 15px;
+    height: 18px;
+    flex-shrink: 0;
+    color: #171717;
+}
+
+.social-button:hover {
+    background: #FFFFFF;
+    border-color: #B77B55;
+    transform: translateY(-3px);
+    box-shadow: 0 7px 18px rgba(100, 65, 43, .12);
+}
+
+.social-button:active {
+    transform: scale(.97);
+}
+
+
+
+
+/* SIGN UP */
+
+.signup-text {
+    color: #795840;
+    font-size: 10px;
+    margin-top: 20px;
+}
+
+.signup-text a {
+    color: #A65330;
+    text-decoration: none;
+    font-weight: 700;
+    margin-left: 4px;
+    transition: .3s;
+}
+
+.signup-text a:hover {
+    color: #6B3D27;
+    text-decoration: underline;
+}
+
+/* FOOTER */
+
+.page-footer {
+    position: absolute;
+    bottom: 13px;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    color: rgba(105, 71, 48, .7);
+    font-size: 8px;
+    letter-spacing: 2px;
+    z-index: 2;
+}
+
+.page-footer span {
+    font-weight: 700;
+}
+
+/* FLOATING DECORATIONS */
+
+.petal {
+    position: absolute;
+    color: rgba(255, 255, 255, .85);
+    text-shadow: 0 0 12px rgba(255, 255, 255, .8);
+    pointer-events: none;
+    animation: floatPetal 6s ease-in-out infinite;
+}
+
+.petal-one {
+    top: 22%;
+    left: 23%;
+    font-size: 20px;
+}
+
+.petal-two {
+    top: 72%;
+    left: 17%;
+    font-size: 13px;
+    animation-delay: 1.4s;
+}
+
+.petal-three {
+    top: 25%;
+    right: 22%;
+    font-size: 17px;
+    animation-delay: 2.5s;
+}
+
+.petal-four {
+    bottom: 17%;
+    right: 19%;
+    font-size: 14px;
+    animation-delay: 3.5s;
+}
+
+/* FORGOT PASSWORD MODAL */
+
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 10;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background: rgba(64, 42, 29, .45);
+    backdrop-filter: blur(7px);
+}
+
+.modal-overlay.show {
+    display: flex;
+    animation: fadeIn .3s ease both;
+}
+
+.modal-card {
+    position: relative;
+    width: 100%;
+    max-width: 380px;
+    padding: 35px;
+    border-radius: 15px;
+    background: rgba(255, 250, 243, .96);
+    box-shadow: 0 20px 60px rgba(50, 30, 20, .2);
+    text-align: center;
+    animation: cardAppear .4s ease both;
+}
+
+.modal-close {
+    position: absolute;
+    top: 10px;
+    right: 16px;
+    border: none;
+    background: none;
+    color: #80553C;
+    font-size: 25px;
+    cursor: pointer;
+    transition: .3s;
+}
+
+.modal-close:hover {
+    transform: rotate(90deg);
+    color: #B36C3E;
+}
+
+.modal-icon {
+    color: #A85C36;
+    font-size: 30px;
+    margin-bottom: 10px;
+}
+
+.modal-card h2 {
+    font-family: "Playfair Display", serif;
+    font-weight: 500;
+    font-size: 27px;
+    margin-bottom: 10px;
+}
+
+.modal-card > p {
+    color: #8B705C;
+    font-size: 11px;
+    line-height: 1.7;
+    margin-bottom: 20px;
+}
+
+.modal-card input {
+    width: 100%;
+    height: 43px;
+    border: 1px solid #E5D2C0;
+    background: #fff;
+    border-radius: 7px;
+    padding: 0 12px;
+    outline: none;
+    font-family: inherit;
+    font-size: 11px;
+}
+
+.modal-card input:focus {
+    border-color: #B36C3E;
+    box-shadow: 0 0 0 3px rgba(179, 108, 62, .1);
+}
+
+.modal-card .login-button {
+    margin-top: 12px;
+}
+
+/* ANIMATIONS */
+
+@keyframes cardAppear {
+    from {
+        opacity: 0;
+        transform: translateY(28px) scale(.97);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes logoReveal {
+    from {
+        opacity: 0;
+        transform: scale(.6) rotate(-20deg);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) rotate(0);
+    }
+}
+
+@keyframes logoSpin {
+    0% { transform: rotate(0); }
+    50% { transform: rotate(12deg); }
+    100% { transform: rotate(0); }
+}
+
+@keyframes floatPetal {
+    0%, 100% {
+        transform: translateY(0) rotate(0);
+        opacity: .45;
+    }
+    50% {
+        transform: translateY(-22px) rotate(25deg);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 600px) {
+    body.login-page {
+        background-position: center;
+        background-attachment: scroll;
+    }
+
+    .top-header {
+        padding: 15px 5%;
+    }
+
+    .brand-logo {
+        width: 36px;
+        height: 36px;
+    }
+
+    .brand-text strong {
+        font-size: 17px;
+    }
+
+    .header-tagline {
+        font-size: 9px;
+    }
+
+    .header-tagline span {
+        width: 15px;
+    }
+
+    .login-main {
+        padding: 100px 16px 65px;
+    }
+
+    .login-card {
+        max-width: 410px;
+        padding: 25px 22px;
+    }
+
+    .petal {
+        display: none;
+    }
+
+    .page-footer {
+        font-size: 7px;
+    }
+}
+
+@media (max-width: 370px) {
+    .header-tagline {
+        display: none;
+    }
+
+    .social-buttons {
+        grid-template-columns: 1fr;
+    }
+
+    .login-card h1 {
+        font-size: 34px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+    }
+}
