@@ -1,33 +1,43 @@
 
-// Display the current year in the footer
-document.getElementById("year").textContent = new Date().getFullYear();
+// Display the current year
+const yearElement = document.getElementById("year");
+
+if (yearElement) {
+    yearElement.textContent = new Date().getFullYear();
+}
 
 
 // Contact form validation
 const contactForm = document.getElementById("contactForm");
 
-contactForm.addEventListener("submit", function (event) {
-    event.preventDefault();
+if (contactForm) {
 
-    const name = document.getElementById("contactName").value.trim();
-    const email = document.getElementById("contactEmail").value.trim();
-    const message = document.getElementById("contactMessage").value.trim();
+    contactForm.addEventListener("submit", function (event) {
 
-    const formMessage = document.getElementById("formMessage");
+        event.preventDefault();
 
-    if (name === "" || email === "" || message === "") {
-        formMessage.textContent = "Please fill in all fields.";
-        return;
-    }
+        const name = document.getElementById("contactName").value.trim();
+        const email = document.getElementById("contactEmail").value.trim();
+        const message = document.getElementById("contactMessage").value.trim();
 
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const formMessage = document.getElementById("formMessage");
 
-    if (!emailPattern.test(email)) {
-        formMessage.textContent = "Please enter a valid email address.";
-        return;
-    }
+        if (name === "" || email === "" || message === "") {
+            formMessage.textContent = "Please fill in all fields.";
+            return;
+        }
 
-    formMessage.textContent = "Thank you! Your message has been received.";
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    contactForm.reset();
-});
+        if (!emailPattern.test(email)) {
+            formMessage.textContent = "Please enter a valid email address.";
+            return;
+        }
+
+        formMessage.textContent = "Thank you! Your message has been received.";
+
+        contactForm.reset();
+
+    });
+
+}
