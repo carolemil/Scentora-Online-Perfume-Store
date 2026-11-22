@@ -1,256 +1,350 @@
 
-const loginForm = document.getElementById("loginForm");
+document.addEventListener("DOMContentLoaded", function () {
 
-const emailInput = document.getElementById("email");
-const passwordInput = document.getElementById("password");
+    const USERS_KEY = "scentoraDemoUsers";
+    const CURRENT_USER_KEY = "scentoraCurrentUser";
 
-const emailError = document.getElementById("emailError");
-const passwordError = document.getElementById("passwordError");
-const loginMessage = document.getElementById("loginMessage");
-
-const loginButton = document.getElementById("loginButton");
-const togglePassword = document.getElementById("togglePassword");
-
-
-// EMAIL VALIDATION
-function isValidEmail(email) {
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-    return emailPattern.test(email);
-}
-
-
-// PASSWORD VALIDATION
-function validatePassword(password) {
-    return (
-        password.length >= 8 &&
-        /[A-Z]/.test(password) &&
-        /[a-z]/.test(password) &&
-        /[0-9]/.test(password)
-    );
-}
-
-
-// PASSWORD HASHING
-async function hashPassword(password, salt) {
-    const data = new TextEncoder().encode(salt + password);
-
-    const hashBuffer = await crypto.subtle.digest("SHA-256", data);
-
-    return Array.from(new Uint8Array(hashBuffer))
-        .map(byte => byte.toString(16).padStart(2, "0"))
-        .join("");
-}
-
-
-// SHOW / HIDE PASSWORD
-togglePassword.addEventListener("click", function () {
-    const hidden = passwordInput.type === "password";
-
-    passwordInput.type = hidden ? "text" : "password";
-
-    togglePassword.setAttribute(
-        "aria-label",
-        hidden ? "Hide password" : "Show password"
-    );
-});
-
-
-// CLEAR ERRORS WHILE TYPING
-emailInput.addEventListener("input", function () {
-    emailError.textContent = "";
-    emailInput.closest(".input-field").classList.remove("input-invalid");
-});
-
-passwordInput.addEventListener("input", function () {
-    passwordError.textContent = "";
-    passwordInput.closest(".input-field").classList.remove("input-invalid");
-});
-
-
-// LOGIN
-loginForm.addEventListener("submit", async function (event) {
-    event.preventDefault();
-
-    emailError.textContent = "";
-    passwordError.textContent = "";
-    loginMessage.textContent = "";
-
-    emailInput.closest(".input-field").classList.remove("input-invalid");
-    passwordInput.closest(".input-field").classList.remove("input-invalid");
-
-    const email = emailInput.value.trim().toLowerCase();
-    const password = passwordInput.value;
-
-    let valid = true;
-
-    if (!email) {
-        emailError.textContent = "Please enter your email address.";
-        emailInput.closest(".input-field").classList.add("input-invalid");
-        valid = false;
-    } else if (!isValidEmail(email)) {
-        emailError.textContent = "Please enter a valid email address.";
-        emailInput.closest(".input-field").classList.add("input-invalid");
-        valid = false;
-    }
-
-    if (!password) {
-        passwordError.textContent = "Please enter your password.";
-        passwordInput.closest(".input-field").classList.add("input-invalid");
-        valid = false;
-    } else if (!validatePassword(password)) {
-        passwordError.textContent =
-            "Use at least 8 characters, one uppercase letter, one lowercase letter, and one number.";
-        passwordInput.closest(".input-field").classList.add("input-invalid");
-        valid = false;
-    }
-
-    if (!valid) return;
-
-    loginButton.disabled = true;
-    loginButton.querySelector("span").textContent = "Please wait...";
-
-    try {
-        const users = JSON.parse(
-            localStorage.getItem("scentoraDemoUsers") || "[]"
-        );
-
-        const user = users.find(
-            item => item.email.toLowerCase() === email
-        );
-
-        if (!user) {
-            loginMessage.style.color = "#A74636";
-            loginMessage.textContent = "Incorrect email or password.";
-            return;
+    function getUsers() {
+        try {
+            return JSON.parse(localStorage.getItem(USERS_KEY)) || [];
+        } catch {
+            return [];
         }
-
-        if (user.isVerified !== true) {
-            loginMessage.style.color = "#A74636";
-            loginMessage.textContent =
-                "Please verify your email address before logging in.";
-            return;
-        }
-
-        if (!user.passwordHash || !user.salt) {
-            loginMessage.style.color = "#A74636";
-            loginMessage.textContent =
-                "This account needs to be registered again using the updated registration system.";
-            return;
-        }
-
-        const enteredHash = await hashPassword(password, user.salt);
-
-        if (enteredHash !== user.passwordHash) {
-            loginMessage.style.color = "#A74636";
-            loginMessage.textContent = "Incorrect email or password.";
-            return;
-        }
-
-        const currentUser = {
-            name: user.name,
-            email: user.email,
-            role: user.role
-        };
-
-        if (document.getElementById("rememberMe").checked) {
-            localStorage.setItem(
-                "scentoraCurrentUser",
-                JSON.stringify(currentUser)
-            );
-            sessionStorage.removeItem("scentoraCurrentUser");
-        } else {
-            sessionStorage.setItem(
-                "scentoraCurrentUser",
-                JSON.stringify(currentUser)
-            );
-            localStorage.removeItem("scentoraCurrentUser");
-        }
-
-        loginMessage.style.color = "#63846A";
-        loginMessage.textContent = "Welcome back! Redirecting...";
-
-        setTimeout(function () {
-            window.location.href = "shop.html";
-        }, 1000);
-
-    } catch (error) {
-        console.error(error);
-        loginMessage.style.color = "#A74636";
-        loginMessage.textContent =
-            "Something went wrong. Please try again.";
-
-    } finally {
-        loginButton.disabled = false;
-        loginButton.querySelector("span").textContent = "Log In";
-    }
-});
-
-
-// FORGOT PASSWORD MODAL
-const forgotModal = document.getElementById("forgotModal");
-const forgotPassword = document.getElementById("forgotPassword");
-const closeModal = document.getElementById("closeModal");
-
-forgotPassword.addEventListener("click", function () {
-    forgotModal.classList.add("show");
-    forgotModal.setAttribute("aria-hidden", "false");
-});
-
-function closeForgotModal() {
-    forgotModal.classList.remove("show");
-    forgotModal.setAttribute("aria-hidden", "true");
-}
-
-closeModal.addEventListener("click", closeForgotModal);
-
-forgotModal.addEventListener("click", function (event) {
-    if (event.target === forgotModal) {
-        closeForgotModal();
-    }
-});
-
-document.addEventListener("keydown", function (event) {
-    if (event.key === "Escape") {
-        closeForgotModal();
-    }
-});
-
-
-// FORGOT PASSWORD FORM
-document.getElementById("forgotForm").addEventListener("submit", function (event) {
-    event.preventDefault();
-
-    const recoveryEmail = document
-        .getElementById("recoveryEmail")
-        .value.trim()
-        .toLowerCase();
-
-    const recoveryError = document.getElementById("recoveryError");
-    const recoveryMessage = document.getElementById("recoveryMessage");
-
-    recoveryError.textContent = "";
-    recoveryMessage.textContent = "";
-
-    if (!isValidEmail(recoveryEmail)) {
-        recoveryError.textContent = "Please enter a valid email address.";
-        return;
     }
 
-    recoveryMessage.style.color = "#A85C36";
-    recoveryMessage.textContent =
-        "Password recovery needs a server to send a secure reset link.";
-});
+    function saveUsers(users) {
+        localStorage.setItem(USERS_KEY, JSON.stringify(users));
+    }
 
+    function showError(id, message) {
+        const element = document.getElementById(id);
+        if (element) element.textContent = message;
+    }
 
-// SOCIAL LOGIN PLACEHOLDERS
-document.getElementById("googleLogin").addEventListener("click", function () {
-    loginMessage.style.color = "#A85C36";
-    loginMessage.textContent =
-        "Google sign-in will be available after authentication integration.";
-});
+    function clearErrors(ids) {
+        ids.forEach(id => showError(id, ""));
+    }
 
-document.getElementById("appleLogin").addEventListener("click", function () {
-    loginMessage.style.color = "#A85C36";
-    loginMessage.textContent =
-        "Apple sign-in will be available after authentication integration.";
+    function setMessage(id, message, success = false) {
+        const element = document.getElementById(id);
+        if (!element) return;
+
+        element.textContent = message;
+        element.style.color = success ? "#63846A" : "#A74636";
+    }
+
+    function validEmail(email) {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+
+    function validPhone(phone) {
+        return /^(01[0125][0-9]{8}|\+201[0125][0-9]{8})$/.test(phone);
+    }
+
+    function validName(name) {
+        return /^[A-Za-zÀ-ÿ\s'-]{2,30}$/.test(name);
+    }
+
+    function validPassword(password) {
+        return password.length >= 8 &&
+            /[A-Z]/.test(password) &&
+            /[a-z]/.test(password) &&
+            /[0-9]/.test(password);
+    }
+
+    async function hashPassword(password, salt) {
+        const encoder = new TextEncoder();
+        const data = encoder.encode(salt + password);
+        const hash = await crypto.subtle.digest("SHA-256", data);
+
+        return Array.from(new Uint8Array(hash))
+            .map(byte => byte.toString(16).padStart(2, "0"))
+            .join("");
+    }
+
+    function makeSalt() {
+        const bytes = crypto.getRandomValues(new Uint8Array(16));
+
+        return Array.from(bytes)
+            .map(byte => byte.toString(16).padStart(2, "0"))
+            .join("");
+    }
+
+    function togglePassword(buttonId, inputId) {
+        const button = document.getElementById(buttonId);
+        const input = document.getElementById(inputId);
+
+        if (!button || !input) return;
+
+        button.addEventListener("click", function () {
+            const hidden = input.type === "password";
+            input.type = hidden ? "text" : "password";
+            button.textContent = hidden ? "Hide" : "Show";
+        });
+    }
+
+    togglePassword("toggleLoginPassword", "loginPassword");
+    togglePassword("toggleRegPassword", "regPassword");
+    togglePassword("toggleConfirmPassword", "regConfirmPassword");
+
+    /* REGISTRATION */
+
+    const registerForm = document.getElementById("registerForm");
+
+    if (registerForm) {
+
+        const passwordInput = document.getElementById("regPassword");
+        const strengthBar = document.getElementById("strengthBar");
+        const strengthText = document.getElementById("strengthText");
+
+        passwordInput.addEventListener("input", function () {
+            const password = passwordInput.value;
+            let score = 0;
+
+            if (password.length >= 8) score++;
+            if (/[A-Z]/.test(password)) score++;
+            if (/[a-z]/.test(password)) score++;
+            if (/[0-9]/.test(password)) score++;
+            if (/[^A-Za-z0-9]/.test(password)) score++;
+
+            const levels = [
+                { width: "0%", text: "Password strength" },
+                { width: "20%", text: "Very weak" },
+                { width: "40%", text: "Weak" },
+                { width: "60%", text: "Fair" },
+                { width: "80%", text: "Good" },
+                { width: "100%", text: "Strong" }
+            ];
+
+            strengthBar.style.width = levels[score].width;
+            strengthText.textContent = levels[score].text;
+        });
+
+        registerForm.addEventListener("submit", async function (event) {
+            event.preventDefault();
+
+            const firstName = document.getElementById("regFirstName").value.trim();
+            const lastName = document.getElementById("regLastName").value.trim();
+            const email = document.getElementById("regEmail").value.trim().toLowerCase();
+            const phone = document.getElementById("regPhone").value.trim();
+            const password = document.getElementById("regPassword").value;
+            const confirmPassword = document.getElementById("regConfirmPassword").value;
+            const accepted = document.getElementById("acceptTerms").checked;
+
+            clearErrors([
+                "firstNameError",
+                "lastNameError",
+                "emailError",
+                "phoneError",
+                "passwordError",
+                "confirmPasswordError",
+                "termsError"
+            ]);
+
+            setMessage("registerMessage", "");
+
+            let valid = true;
+
+            if (!validName(firstName)) {
+                showError("firstNameError", "Enter a valid first name.");
+                valid = false;
+            }
+
+            if (!validName(lastName)) {
+                showError("lastNameError", "Enter a valid last name.");
+                valid = false;
+            }
+
+            if (!validEmail(email)) {
+                showError("emailError", "Enter a valid email address.");
+                valid = false;
+            }
+
+            if (!validPhone(phone)) {
+                showError("phoneError", "Enter a valid Egyptian phone number.");
+                valid = false;
+            }
+
+            if (!validPassword(password)) {
+                showError("passwordError", "Use 8+ characters, uppercase, lowercase and a number.");
+                valid = false;
+            }
+
+            if (password !== confirmPassword) {
+                showError("confirmPasswordError", "Passwords do not match.");
+                valid = false;
+            }
+
+            if (!accepted) {
+                showError("termsError", "Please accept the Terms & Conditions.");
+                valid = false;
+            }
+
+            if (!valid) return;
+
+            const users = getUsers();
+
+            if (users.some(user => user.email && user.email.toLowerCase() === email)) {
+                showError("emailError", "This email is already registered.");
+                return;
+            }
+
+            try {
+                const salt = makeSalt();
+                const passwordHash = await hashPassword(password, salt);
+
+                const newUser = {
+                    id: Date.now(),
+                    firstName,
+                    lastName,
+                    name: firstName + " " + lastName,
+                    email,
+                    phone,
+                    salt,
+                    passwordHash,
+                    role: "customer",
+                    createdAt: new Date().toISOString()
+                };
+
+                users.push(newUser);
+                saveUsers(users);
+
+                localStorage.setItem(CURRENT_USER_KEY, JSON.stringify({
+                    id: newUser.id,
+                    name: newUser.name,
+                    email: newUser.email,
+                    role: newUser.role
+                }));
+
+                setMessage("registerMessage", "Account created successfully! Redirecting...", true);
+
+                document.getElementById("registerButton").disabled = true;
+
+                setTimeout(() => {
+                    window.location.href = "shop.html";
+                }, 1200);
+
+            } catch (error) {
+                setMessage("registerMessage", "Something went wrong. Please try again.");
+                console.error(error);
+            }
+        });
+    }
+
+    /* LOGIN */
+
+    const loginForm = document.getElementById("loginForm");
+
+    if (loginForm) {
+
+        loginForm.addEventListener("submit", async function (event) {
+            event.preventDefault();
+
+            const email = document.getElementById("loginEmail").value.trim().toLowerCase();
+            const password = document.getElementById("loginPassword").value;
+
+            clearErrors(["loginEmailError", "loginPasswordError"]);
+            setMessage("loginMessage", "");
+
+            let valid = true;
+
+            if (!validEmail(email)) {
+                showError("loginEmailError", "Enter a valid email address.");
+                valid = false;
+            }
+
+            if (!password) {
+                showError("loginPasswordError", "Please enter your password.");
+                valid = false;
+            }
+
+            if (!valid) return;
+
+            const users = getUsers();
+            const user = users.find(item => item.email && item.email.toLowerCase() === email);
+
+            if (!user) {
+                setMessage("loginMessage", "No account found with this email.");
+                return;
+            }
+
+            try {
+                let passwordMatches = false;
+
+                if (user.passwordHash && user.salt) {
+                    const hash = await hashPassword(password, user.salt);
+                    passwordMatches = hash === user.passwordHash;
+                } else if (user.password) {
+                    passwordMatches = user.password === password;
+
+                    if (passwordMatches) {
+                        const salt = makeSalt();
+                        user.salt = salt;
+                        user.passwordHash = await hashPassword(password, salt);
+                        delete user.password;
+                        saveUsers(users);
+                    }
+                }
+
+                if (!passwordMatches) {
+                    setMessage("loginMessage", "Incorrect email or password.");
+                    return;
+                }
+
+                localStorage.setItem(CURRENT_USER_KEY, JSON.stringify({
+                    id: user.id,
+                    name: user.name || `${user.firstName || ""} ${user.lastName || ""}`.trim(),
+                    email: user.email,
+                    role: user.role || "customer"
+                }));
+
+                setMessage("loginMessage", "Welcome back! Redirecting...", true);
+
+                document.getElementById("loginButton").disabled = true;
+
+                setTimeout(() => {
+                    window.location.href = user.role === "admin" ? "admin.html" : "shop.html";
+                }, 1000);
+
+            } catch (error) {
+                setMessage("loginMessage", "Login failed. Please try again.");
+                console.error(error);
+            }
+        });
+    }
+
+    /* FORGOT PASSWORD */
+
+    const forgotButton = document.getElementById("forgotPassword");
+
+    if (forgotButton) {
+        forgotButton.addEventListener("click", function () {
+            const email = document.getElementById("loginEmail").value.trim();
+
+            if (!email || !validEmail(email)) {
+                setMessage("loginMessage", "Enter your email address first.");
+                return;
+            }
+
+            setMessage("loginMessage", "Password reset requires a connected email service.");
+        });
+    }
+
+    /* SOCIAL LOGIN PLACEHOLDERS */
+
+    const googleButton = document.getElementById("googleLogin");
+    const appleButton = document.getElementById("appleLogin");
+
+    if (googleButton) {
+        googleButton.addEventListener("click", () => {
+            alert("Google login requires OAuth configuration.");
+        });
+    }
+
+    if (appleButton) {
+        appleButton.addEventListener("click", () => {
+            alert("Apple login requires OAuth configuration.");
+        });
+    }
+
 });

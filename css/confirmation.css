@@ -1,0 +1,276 @@
+:root {
+  --cream: #FAF6F0;
+  --light-cream: #F5EFE6;
+  --beige: #E8DEC8;
+  --brown: #4A3B32;
+  --dark-brown: #2C221E;
+  --gold: #C5A059;
+  --muted: #7D6E65;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: var(--cream);
+  color: var(--dark-brown);
+  line-height: 1.6;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* NAVIGATION */
+.navbar {
+  min-height: 85px;
+  padding: 15px 8%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 25px;
+  background-color: var(--cream);
+  border-bottom: 1px solid #EDE5D9;
+}
+
+.logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  color: var(--dark-brown);
+}
+
+.logo span {
+  color: var(--gold);
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.nav-links a {
+  color: var(--muted);
+  font-size: 12px;
+  transition: 0.3s;
+}
+
+.nav-links a:hover {
+  color: var(--gold);
+}
+
+.nav-button {
+  display: inline-block;
+  background-color: var(--brown);
+  color: white;
+  padding: 13px 24px;
+  border-radius: 3px;
+  font-size: 12px;
+  transition: 0.3s;
+}
+
+.nav-button:hover {
+  background-color: var(--gold);
+}
+
+.secondary-button {
+  font-size: 12px;
+  color: var(--brown);
+  border-bottom: 1px solid var(--gold);
+  padding-bottom: 4px;
+  transition: 0.3s;
+}
+
+.secondary-button:hover {
+  color: var(--gold);
+}
+
+/* CONFIRMATION CARD */
+.confirmation-wrapper {
+  min-height: 75vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 6%;
+  background-color: #F5F0E8;
+}
+
+.confirmation-card {
+  background-color: var(--cream);
+  border: 1px solid #E6DACA;
+  max-width: 580px;
+  width: 100%;
+  padding: 50px 45px;
+  text-align: center;
+}
+
+.check-circle {
+  width: 68px;
+  height: 68px;
+  margin: 0 auto 22px;
+  border-radius: 50%;
+  background-color: #F3EDE3;
+  border: 1.5px solid var(--gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gold);
+}
+
+.check-circle svg {
+  width: 30px;
+  height: 30px;
+}
+
+.eyebrow {
+  font-size: 10px;
+  letter-spacing: 3px;
+  color: var(--gold);
+  margin-bottom: 10px;
+}
+
+.confirmation-card h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 36px;
+  font-weight: 500;
+  line-height: 1.25;
+  color: var(--dark-brown);
+}
+
+.confirmation-card h1 span {
+  color: var(--gold);
+  font-style: italic;
+}
+
+.tagline {
+  color: var(--muted);
+  font-size: 13px;
+  margin: 12px 0 30px;
+}
+
+/* RECEIPT SUMMARY */
+.receipt-box {
+  background-color: #F5EFE6;
+  border: 1px solid #E6DACA;
+  padding: 22px 26px;
+  text-align: left;
+  margin-bottom: 22px;
+}
+
+.receipt-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  font-size: 12px;
+  color: var(--muted);
+  margin: 9px 0;
+}
+
+.receipt-row strong {
+  color: var(--dark-brown);
+  font-weight: 500;
+  text-align: right;
+}
+
+.divider {
+  border: none;
+  border-top: 1px solid #E6DACA;
+  margin: 14px 0;
+}
+
+.total-row {
+  font-size: 14px;
+}
+
+.total-row strong {
+  color: var(--gold);
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.email-note {
+  font-size: 11px;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+
+.email-note span {
+  color: var(--brown);
+  font-weight: 500;
+}
+
+.delivery-note {
+  font-size: 12px;
+  color: var(--brown);
+  margin-bottom: 28px;
+}
+
+.delivery-note strong {
+  color: var(--gold);
+  font-weight: 600;
+}
+
+.action-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+/* FOOTER */
+.footer {
+  background-color: var(--dark-brown);
+  color: var(--cream);
+  padding: 45px 8%;
+  text-align: center;
+}
+
+.footer .logo {
+  display: inline-block;
+  color: var(--cream);
+  margin-bottom: 12px;
+}
+
+.footer > p {
+  color: #C9BBAA;
+  font-size: 12px;
+}
+
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+  margin: 25px 0;
+}
+
+.footer-links a {
+  font-size: 11px;
+  color: #E5D5C0;
+}
+
+.footer-links a:hover {
+  color: var(--gold);
+}
+
+.footer .copyright {
+  border-top: 1px solid #655448;
+  padding-top: 20px;
+}
+
+@media (max-width: 600px) {
+  .confirmation-card {
+    padding: 35px 24px;
+  }
+  .confirmation-card h1 {
+    font-size: 28px;
+  }
+}
