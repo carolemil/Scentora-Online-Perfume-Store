@@ -1,4 +1,3 @@
-
 // GET HTML ELEMENTS
 
 const productsGrid = document.getElementById("productsGrid");
@@ -18,10 +17,11 @@ const checkoutButton = document.getElementById("checkoutButton");
 const noProducts = document.getElementById("noProducts");
 
 
-// VARIABLES
+// VARIABLES (Connected to Admin & Cart via localStorage!)
 
 let selectedCategory = "All";
-let cart = [];
+let storeProducts = JSON.parse(localStorage.getItem("scentora_products")) || products;
+let cart = JSON.parse(localStorage.getItem("scentora_cart")) || [];
 
 
 // DISPLAY PRODUCTS
@@ -104,24 +104,17 @@ function displayProducts(productList) {
 
 function filterProducts() {
 
-    let filteredProducts = [...products];
-
-    // Category filter
+    let filteredProducts = [...storeProducts];
 
     if (selectedCategory === "Offers") {
         filteredProducts = filteredProducts.filter(
             product => product.discount > 0
         );
-
     } else if (selectedCategory !== "All") {
-
         filteredProducts = filteredProducts.filter(
             product => product.category === selectedCategory
         );
-
     }
-
-    // Search filter
 
     const searchText = searchInput.value.toLowerCase().trim();
 
@@ -129,18 +122,12 @@ function filterProducts() {
         product.name.toLowerCase().includes(searchText)
     );
 
-    // Price sorting
-
     const sortValue = sortSelect.value;
 
     if (sortValue === "low-high") {
-
         filteredProducts.sort((a, b) => a.price - b.price);
-
     } else if (sortValue === "high-low") {
-
         filteredProducts.sort((a, b) => b.price - a.price);
-
     }
 
     displayProducts(filteredProducts);
@@ -169,13 +156,9 @@ categoryButtons.forEach(button => {
 });
 
 
-// SEARCH EVENT
+// SEARCH & SORT EVENTS
 
 searchInput.addEventListener("input", filterProducts);
-
-
-// SORT EVENT
-
 sortSelect.addEventListener("change", filterProducts);
 
 
@@ -189,17 +172,19 @@ function addToCart(productId) {
 
     if (existingItem) {
 
-        existingItem.quantity++;
+        existingItem.quantity = (existingItem.quantity || existingItem.qty || 1) + 1;
+        existingItem.qty = existingItem.quantity;
 
     } else {
 
-        const product = products.find(
+        const product = storeProducts.find(
             item => item.id === productId
         );
 
         cart.push({
             ...product,
-            quantity: 1
+            quantity: 1,
+            qty: 1
         });
 
     }
@@ -209,9 +194,11 @@ function addToCart(productId) {
 }
 
 
-// UPDATE CART
+// UPDATE CART & SAVE TO SHARED STORAGE
 
 function updateCart() {
+
+    localStorage.setItem("scentora_cart", JSON.stringify(cart));
 
     cartItems.innerHTML = "";
 
@@ -219,17 +206,16 @@ function updateCart() {
     let count = 0;
 
     if (cart.length === 0) {
-
         cartItems.innerHTML = "<p>Your cart is empty.</p>";
-
     }
 
     cart.forEach(item => {
 
-        const itemTotal = item.price * item.quantity;
+        const itemQty = item.quantity || item.qty || 1;
+        const itemTotal = item.price * itemQty;
 
         total += itemTotal;
-        count += item.quantity;
+        count += itemQty;
 
         const div = document.createElement("div");
         div.className = "cart-item";
@@ -248,17 +234,15 @@ function updateCart() {
 
         const minus = document.createElement("button");
         minus.textContent = "-";
-
         minus.addEventListener("click", () => {
             changeQuantity(item.id, -1);
         });
 
         const quantity = document.createElement("span");
-        quantity.textContent = item.quantity;
+        quantity.textContent = itemQty;
 
         const plus = document.createElement("button");
         plus.textContent = "+";
-
         plus.addEventListener("click", () => {
             changeQuantity(item.id, 1);
         });
@@ -274,7 +258,6 @@ function updateCart() {
         const remove = document.createElement("button");
         remove.className = "remove-btn";
         remove.textContent = "Remove";
-
         remove.addEventListener("click", () => {
             removeFromCart(item.id);
         });
@@ -302,16 +285,15 @@ function changeQuantity(productId, amount) {
 
     if (!item) return;
 
-    item.quantity += amount;
+    const currentQty = item.quantity || item.qty || 1;
+    const newQty = currentQty + amount;
 
-    if (item.quantity <= 0) {
-
+    if (newQty <= 0) {
         removeFromCart(productId);
-
     } else {
-
+        item.quantity = newQty;
+        item.qty = newQty;
         updateCart();
-
     }
 
 }
@@ -330,62 +312,32 @@ function removeFromCart(productId) {
 }
 
 
-// OPEN CART
+// OPEN & CLOSE CART OVERLAY
 
 cartButton.addEventListener("click", function () {
-
     cartOverlay.classList.add("show");
-
 });
-
-
-// CLOSE CART
 
 closeCart.addEventListener("click", function () {
-
     cartOverlay.classList.remove("show");
-
 });
 
-
-// CLOSE CART WHEN CLICKING OUTSIDE
-
 cartOverlay.addEventListener("click", function (event) {
-
     if (event.target === cartOverlay) {
         cartOverlay.classList.remove("show");
     }
-
 });
 
 
-// CHECKOUT
+// PROCEED TO CHECKOUT -> LINKS DIRECTLY TO YOUR cart.html!
 
 checkoutButton.addEventListener("click", function () {
-
-    if (cart.length === 0) {
-
-        alert("Your shopping cart is empty!");
-
-    } else {
-
-        alert(
-            `Thank you for shopping with us!\nYour total is ${cartTotal.textContent} EGP.\n\nThis is a demo checkout. No actual order has been placed.`
-        );
-
-        cart = [];
-
-        updateCart();
-
-        cartOverlay.classList.remove("show");
-
-    }
-
+    localStorage.setItem("scentora_cart", JSON.stringify(cart));
+    window.location.href = "cart.html";
 });
 
 
 // INITIALIZE STORE
 
-displayProducts(products);
-
+displayProducts(storeProducts);
 updateCart();

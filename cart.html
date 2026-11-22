@@ -19,7 +19,6 @@
       <a href="index.html#about">About</a>
       <a href="index.html#contact">Contact</a>
       <a href="cart.html" class="active">Cart</a>
-      <a href="admin.html">Admin</a>
     </nav>
 
     <div class="nav-actions">
@@ -37,25 +36,27 @@
 
   <!-- Main Cart Layout -->
   <main class="cart-container">
-    <!-- Left Column: Bag Items -->
+    <!-- Left Column: Bag Items + Recommendations Below -->
     <section class="cart-items-section">
       <div class="section-header">
         <h2>Selected Fragrances (<span id="item-count">0</span>)</h2>
         <button id="clear-cart-btn" class="secondary-button">Clear Bag</button>
       </div>
 
-      <!-- Quick Test Add using your team's real catalog -->
-      <div class="demo-bar">
-        <span>Quick Test Add:</span>
-        <button type="button" onclick="addDemoItem(1, 'Vanilla Dream', 2500, 'Women')">+ Vanilla Dream (2,500 EGP)</button>
-        <button type="button" onclick="addDemoItem(2, 'Oud Royal', 3200, 'Men')">+ Oud Royal (3,200 EGP)</button>
-        <button type="button" onclick="addDemoItem(3, 'Rose Elegance', 1800, 'Women')">+ Rose Elegance (1,800 EGP)</button>
-      </div>
-
+      <!-- Cart Items Render Here First -->
       <div id="cart-items-list"></div>
+
+      <!-- You May Also Like (Positioned Below Cart Items & Linked to Inventory) -->
+      <div class="recommendations-section" id="recommendations-wrapper">
+        <div class="rec-header">
+          <p class="eyebrow">CURATED FOR YOU</p>
+          <h3>You May Also Like</h3>
+        </div>
+        <div id="recommendations-grid" class="rec-grid"></div>
+      </div>
     </section>
 
-    <!-- Right Column: Summary, Promo Code & Demo Checkout -->
+    <!-- Right Column: Summary, Promo Code & Checkout -->
     <aside class="checkout-section">
       <h2>Order Summary</h2>
 
@@ -85,12 +86,12 @@
         <span id="total">0 EGP</span>
       </div>
 
-      <form id="checkout-form" novalidate>
+      <form id="checkout-form" autocomplete="on" novalidate>
         <h3>Delivery Details</h3>
-        <input type="text" id="cust-name" placeholder="Full Name" required>
-        <input type="email" id="cust-email" placeholder="Email Address" required>
-        <input type="tel" id="cust-phone" placeholder="Phone Number (e.g. 010xxxxxxxx)" required>
-        <input type="text" id="cust-address" placeholder="Delivery Address (City, Street)" required>
+        <input type="text" id="cust-name" name="name" autocomplete="name" placeholder="Full Name" required>
+        <input type="email" id="cust-email" name="email" autocomplete="email" placeholder="Email Address" required>
+        <input type="tel" id="cust-phone" name="tel" autocomplete="tel" placeholder="Phone Number (e.g. 010xxxxxxxx)" required>
+        <input type="text" id="cust-address" name="street-address" autocomplete="street-address" placeholder="Delivery Address (City, Street)" required>
 
         <p id="error-msg" class="error-text"></p>
         <p id="success-msg" class="success-text"></p>
@@ -108,11 +109,12 @@
       <a href="index.html">Home</a>
       <a href="shop.html">Shop</a>
       <a href="cart.html">Cart</a>
-      <a href="admin.html">Admin</a>
     </div>
     <p class="copyright">© 2026 Scentora. All rights reserved.</p>
   </footer>
 
+  <!-- Load your team's real product inventory first, then cart logic -->
+  <script src="js/products.js"></script>
   <script src="js/cart.js"></script>
 </body>
 </html>

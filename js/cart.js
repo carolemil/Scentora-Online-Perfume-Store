@@ -2,25 +2,47 @@ let cart = JSON.parse(localStorage.getItem('scentora_cart')) || [];
 let activeDiscount = 0;
 let activePromoCode = '';
 
+// Pull live inventory from Admin changes first, falling back to your team's products.js
+function getCatalog() {
+  const saved = JSON.parse(localStorage.getItem('scentora_products'));
+  if (saved && saved.length > 0) return saved;
+  return typeof products !== 'undefined' ? products : [];
+}
+
 function saveAndRender() {
   localStorage.setItem('scentora_cart', JSON.stringify(cart));
   renderCart();
+  renderRecommendations();
 }
 
-function addDemoItem(id, name, price, category = 'Unisex') {
-  const existing = cart.find(item => item.name === name);
+function addSuggestedItem(productId) {
+  const catalog = getCatalog();
+  const product = catalog.find(item => item.id === productId);
+  if (!product) return;
+
+  const existing = cart.find(item => item.id === productId || item.name === product.name);
   if (existing) {
-    existing.qty += 1;
+    const updated = (existing.qty || existing.quantity || 1) + 1;
+    existing.qty = updated;
+    existing.quantity = updated;
   } else {
-    cart.push({ id, name, price, category, qty: 1 });
+    cart.push({
+      ...product,
+      qty: 1,
+      quantity: 1
+    });
   }
   saveAndRender();
 }
 
 function updateQty(index, change) {
-  cart[index].qty += change;
-  if (cart[index].qty <= 0) {
+  const current = cart[index].qty || cart[index].quantity || 1;
+  const updated = current + change;
+  if (updated <= 0) {
     cart.splice(index, 1);
+  } else {
+    cart[index].qty = updated;
+    cart[index].quantity = updated;
   }
   saveAndRender();
 }
@@ -59,6 +81,21 @@ document.getElementById('apply-promo-btn').addEventListener('click', () => {
     promoMsg.style.color = '#a93226';
   }
   renderCart();
+});
+
+// Press Enter inside any Delivery Details box to move to the next field (or submit on the last one)
+const checkoutInputs = Array.from(document.querySelectorAll('#checkout-form input'));
+checkoutInputs.forEach((input, idx) => {
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      if (idx < checkoutInputs.length - 1) {
+        checkoutInputs[idx + 1].focus();
+      } else {
+        document.getElementById('checkout-form').requestSubmit();
+      }
+    }
+  });
 });
 
 function renderCart() {
@@ -123,18 +160,53 @@ function renderCart() {
   }
 }
 
+function renderRecommendations() {
+  const grid = document.getElementById('recommendations-grid');
+  const wrapper = document.getElementById('recommendations-wrapper');
+  const catalog = getCatalog();
+
+  const suggestions = catalog
+    .filter(prod => !cart.some(item => item.id === prod.id || item.name === prod.name))
+    .slice(0, 3);
+
+  if (suggestions.length === 0) {
+    wrapper.style.display = 'none';
+    return;
+  }
+
+  wrapper.style.display = 'block';
+  grid.innerHTML = '';
+
+  suggestions.forEach(prod => {
+    grid.innerHTML += `
+      <div class="rec-card">
+        <img src="${prod.image}" alt="${prod.name}" onerror="this.onerror=null;this.src='https://placehold.co/300x300/f4ede2/75563f?text=Scentora';">
+        <div class="rec-info">
+          <span class="rec-cat">${prod.category}</span>
+          <h4>${prod.name}</h4>
+          <p class="rec-price">${prod.price.toLocaleString()} EGP</p>
+        </div>
+        <button type="button" class="rec-add-btn" onclick="addSuggestedItem(${prod.id})">+ Add to Bag</button>
+      </div>
+    `;
+  });
+}
+
 document.getElementById('checkout-form').addEventListener('submit', (e) => {
   e.preventDefault();
   const errorEl = document.getElementById('error-msg');
-  const successEl = document.getElementById('success-msg');
 
-  const name = document.getElementById('cust-name').value.trim();
-  const email = document.getElementById('cust-email').value.trim();
-  const phone = document.getElementById('cust-phone').value.trim();
-  const address = document.getElementById('cust-address').value.trim();
+  const nameInput = document.getElementById('cust-name');
+  const emailInput = document.getElementById('cust-email');
+  const phoneInput = document.getElementById('cust-phone');
+  const addressInput = document.getElementById('cust-address');
+
+  const name = nameInput.value.trim();
+  const email = emailInput.value.trim();
+  const phone = phoneInput.value.trim();
+  const address = addressInput.value.trim();
 
   errorEl.innerText = '';
-  successEl.innerText = '';
 
   if (cart.length === 0) {
     errorEl.innerText = 'Your bag is empty. Add a perfume before checking out.';
@@ -142,28 +214,39 @@ document.getElementById('checkout-form').addEventListener('submit', (e) => {
   }
   if (name.length < 3) {
     errorEl.innerText = 'Please enter your full name.';
+    nameInput.focus();
     return;
   }
   if (!email.includes('@') || !email.includes('.')) {
     errorEl.innerText = 'Please enter a valid email address.';
+    emailInput.focus();
     return;
   }
   if (phone.length < 8) {
     errorEl.innerText = 'Please enter a valid phone number.';
+    phoneInput.focus();
     return;
   }
   if (address.length < 5) {
     errorEl.innerText = 'Please enter your full delivery address.';
+    addressInput.focus();
     return;
   }
 
-  successEl.innerText = `Thank you, ${name}! Your Scentora order has been confirmed.`;
+  const orderSummary = {
+    orderNumber: '#SCN-' + Math.floor(1000 + Math.random() * 9000),
+    name,
+    email,
+    address,
+    itemsSummary: cart.map(i => `${i.name} (x${i.qty || i.quantity || 1})`).join(', '),
+    total: document.getElementById('total').innerText
+  };
+  localStorage.setItem('scentora_last_order', JSON.stringify(orderSummary));
+
   cart = [];
-  activeDiscount = 0;
-  activePromoCode = '';
-  document.getElementById('promo-msg').innerText = '';
-  saveAndRender();
-  e.target.reset();
+  localStorage.setItem('scentora_cart', JSON.stringify(cart));
+  window.location.href = 'order-confirmation.html';
 });
 
 renderCart();
+renderRecommendations();
