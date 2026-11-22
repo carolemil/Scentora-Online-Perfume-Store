@@ -1,256 +1,200 @@
-
-const loginForm = document.getElementById("loginForm");
-
-const emailInput = document.getElementById("email");
-const passwordInput = document.getElementById("password");
-
-const emailError = document.getElementById("emailError");
-const passwordError = document.getElementById("passwordError");
-const loginMessage = document.getElementById("loginMessage");
-
-const loginButton = document.getElementById("loginButton");
-const togglePassword = document.getElementById("togglePassword");
-
-
-// EMAIL VALIDATION
+// EMAIL FORMAT VALIDATION
 function isValidEmail(email) {
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
     return emailPattern.test(email);
 }
 
 
-// PASSWORD VALIDATION
-function validatePassword(password) {
-    return (
-        password.length >= 8 &&
-        /[A-Z]/.test(password) &&
-        /[a-z]/.test(password) &&
-        /[0-9]/.test(password)
-    );
+// ==========================================
+// 1. LOGIN PAGE LOGIC (login.html)
+// ==========================================
+const loginForm = document.getElementById("loginForm");
+
+if (loginForm) {
+    const emailInput = document.getElementById("email");
+    const passwordInput = document.getElementById("password");
+    const loginMessage = document.getElementById("loginMessage");
+    const togglePassword = document.getElementById("togglePassword");
+
+    if (togglePassword) {
+        togglePassword.addEventListener("click", function () {
+            passwordInput.type = passwordInput.type === "password" ? "text" : "password";
+        });
+    }
+
+    loginForm.addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        const email = emailInput.value.trim().toLowerCase();
+        const password = passwordInput.value;
+
+        if (!email || !password) {
+            loginMessage.style.color = "#A74636";
+            loginMessage.textContent = "Please enter your email and password.";
+            return;
+        }
+
+        if (!isValidEmail(email)) {
+            loginMessage.style.color = "#A74636";
+            loginMessage.textContent = "Please enter a valid email address (e.g. name@example.com).";
+            emailInput.focus();
+            return;
+        }
+
+        const users = JSON.parse(localStorage.getItem("scentoraDemoUsers") || "[]");
+        const foundUser = users.find(u => u.email.toLowerCase() === email);
+
+        if (foundUser) {
+            // Email IS recognized -> log in and send straight to shop.html
+            localStorage.setItem("scentoraCurrentUser", JSON.stringify({
+                name: foundUser.name,
+                email: foundUser.email,
+                role: foundUser.role || "customer"
+            }));
+
+            loginMessage.style.color = "#63846A";
+            loginMessage.textContent = `Welcome back, ${foundUser.name}! Redirecting to shop...`;
+
+            setTimeout(() => {
+                window.location.href = "shop.html";
+            }, 900);
+        } else {
+            // Email is NOT recognized -> tell them to create an account and redirect to register.html
+            loginMessage.style.color = "#A74636";
+            loginMessage.textContent = "No account found with this email. Please create an account...";
+
+            sessionStorage.setItem("pendingRegisterEmail", email);
+
+            setTimeout(() => {
+                window.location.href = "register.html";
+            }, 1300);
+        }
+    });
 }
 
 
-// PASSWORD HASHING
-async function hashPassword(password, salt) {
-    const data = new TextEncoder().encode(salt + password);
+// ==========================================
+// 2. REGISTER PAGE LOGIC (register.html)
+// ==========================================
+const registerForm = document.getElementById("registerForm");
 
-    const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+if (registerForm) {
+    const regName = document.getElementById("regName");
+    const regEmail = document.getElementById("regEmail");
+    const regPassword = document.getElementById("regPassword");
+    const regConfirmPassword = document.getElementById("regConfirmPassword");
+    const registerMessage = document.getElementById("registerMessage");
 
-    return Array.from(new Uint8Array(hashBuffer))
-        .map(byte => byte.toString(16).padStart(2, "0"))
-        .join("");
-}
-
-
-// SHOW / HIDE PASSWORD
-togglePassword.addEventListener("click", function () {
-    const hidden = passwordInput.type === "password";
-
-    passwordInput.type = hidden ? "text" : "password";
-
-    togglePassword.setAttribute(
-        "aria-label",
-        hidden ? "Hide password" : "Show password"
-    );
-});
-
-
-// CLEAR ERRORS WHILE TYPING
-emailInput.addEventListener("input", function () {
-    emailError.textContent = "";
-    emailInput.closest(".input-field").classList.remove("input-invalid");
-});
-
-passwordInput.addEventListener("input", function () {
-    passwordError.textContent = "";
-    passwordInput.closest(".input-field").classList.remove("input-invalid");
-});
-
-
-// LOGIN
-loginForm.addEventListener("submit", async function (event) {
-    event.preventDefault();
-
-    emailError.textContent = "";
-    passwordError.textContent = "";
-    loginMessage.textContent = "";
-
-    emailInput.closest(".input-field").classList.remove("input-invalid");
-    passwordInput.closest(".input-field").classList.remove("input-invalid");
-
-    const email = emailInput.value.trim().toLowerCase();
-    const password = passwordInput.value;
-
-    let valid = true;
-
-    if (!email) {
-        emailError.textContent = "Please enter your email address.";
-        emailInput.closest(".input-field").classList.add("input-invalid");
-        valid = false;
-    } else if (!isValidEmail(email)) {
-        emailError.textContent = "Please enter a valid email address.";
-        emailInput.closest(".input-field").classList.add("input-invalid");
-        valid = false;
+    const pendingEmail = sessionStorage.getItem("pendingRegisterEmail");
+    if (pendingEmail) {
+        regEmail.value = pendingEmail;
+        sessionStorage.removeItem("pendingRegisterEmail");
     }
 
-    if (!password) {
-        passwordError.textContent = "Please enter your password.";
-        passwordInput.closest(".input-field").classList.add("input-invalid");
-        valid = false;
-    } else if (!validatePassword(password)) {
-        passwordError.textContent =
-            "Use at least 8 characters, one uppercase letter, one lowercase letter, and one number.";
-        passwordInput.closest(".input-field").classList.add("input-invalid");
-        valid = false;
-    }
+    registerForm.addEventListener("submit", function (event) {
+        event.preventDefault();
 
-    if (!valid) return;
+        const name = regName.value.trim();
+        const email = regEmail.value.trim().toLowerCase();
+        const password = regPassword.value;
+        const confirmPassword = regConfirmPassword.value;
 
-    loginButton.disabled = true;
-    loginButton.querySelector("span").textContent = "Please wait...";
-
-    try {
-        const users = JSON.parse(
-            localStorage.getItem("scentoraDemoUsers") || "[]"
-        );
-
-        const user = users.find(
-            item => item.email.toLowerCase() === email
-        );
-
-        if (!user) {
-            loginMessage.style.color = "#A74636";
-            loginMessage.textContent = "Incorrect email or password.";
+        if (!name || !email || !password || !confirmPassword) {
+            registerMessage.style.color = "#A74636";
+            registerMessage.textContent = "Please fill in all fields.";
             return;
         }
 
-        if (user.isVerified !== true) {
-            loginMessage.style.color = "#A74636";
-            loginMessage.textContent =
-                "Please verify your email address before logging in.";
+        if (!isValidEmail(email)) {
+            registerMessage.style.color = "#A74636";
+            registerMessage.textContent = "Please enter a valid email address (e.g. name@example.com).";
+            regEmail.focus();
             return;
         }
 
-        if (!user.passwordHash || !user.salt) {
-            loginMessage.style.color = "#A74636";
-            loginMessage.textContent =
-                "This account needs to be registered again using the updated registration system.";
+        if (password !== confirmPassword) {
+            registerMessage.style.color = "#A74636";
+            registerMessage.textContent = "Passwords do not match.";
             return;
         }
 
-        const enteredHash = await hashPassword(password, user.salt);
+        const users = JSON.parse(localStorage.getItem("scentoraDemoUsers") || "[]");
+        const alreadyExists = users.some(u => u.email.toLowerCase() === email);
 
-        if (enteredHash !== user.passwordHash) {
-            loginMessage.style.color = "#A74636";
-            loginMessage.textContent = "Incorrect email or password.";
+        if (alreadyExists) {
+            registerMessage.style.color = "#A74636";
+            registerMessage.textContent = "This email is already registered. Redirecting to login...";
+            setTimeout(() => {
+                window.location.href = "login.html";
+            }, 1200);
             return;
         }
 
-        const currentUser = {
-            name: user.name,
-            email: user.email,
-            role: user.role
+        const newUser = {
+            name: name,
+            email: email,
+            password: password,
+            role: "customer"
         };
 
-        if (document.getElementById("rememberMe").checked) {
-            localStorage.setItem(
-                "scentoraCurrentUser",
-                JSON.stringify(currentUser)
-            );
-            sessionStorage.removeItem("scentoraCurrentUser");
-        } else {
-            sessionStorage.setItem(
-                "scentoraCurrentUser",
-                JSON.stringify(currentUser)
-            );
-            localStorage.removeItem("scentoraCurrentUser");
-        }
+        users.push(newUser);
+        localStorage.setItem("scentoraDemoUsers", JSON.stringify(users));
+        localStorage.setItem("scentoraCurrentUser", JSON.stringify({
+            name: newUser.name,
+            email: newUser.email,
+            role: newUser.role
+        }));
 
-        loginMessage.style.color = "#63846A";
-        loginMessage.textContent = "Welcome back! Redirecting...";
+        registerMessage.style.color = "#63846A";
+        registerMessage.textContent = `Account created! Welcome, ${name}. Redirecting to shop...`;
 
-        setTimeout(function () {
+        setTimeout(() => {
             window.location.href = "shop.html";
         }, 1000);
-
-    } catch (error) {
-        console.error(error);
-        loginMessage.style.color = "#A74636";
-        loginMessage.textContent =
-            "Something went wrong. Please try again.";
-
-    } finally {
-        loginButton.disabled = false;
-        loginButton.querySelector("span").textContent = "Log In";
-    }
-});
-
-
-// FORGOT PASSWORD MODAL
-const forgotModal = document.getElementById("forgotModal");
-const forgotPassword = document.getElementById("forgotPassword");
-const closeModal = document.getElementById("closeModal");
-
-forgotPassword.addEventListener("click", function () {
-    forgotModal.classList.add("show");
-    forgotModal.setAttribute("aria-hidden", "false");
-});
-
-function closeForgotModal() {
-    forgotModal.classList.remove("show");
-    forgotModal.setAttribute("aria-hidden", "true");
+    });
 }
+// ==========================================
+// 3. ADMIN LOGIN LOGIC (admin-login.html)
+// ==========================================
+const adminLoginForm = document.getElementById("adminLoginForm");
 
-closeModal.addEventListener("click", closeForgotModal);
+if (adminLoginForm) {
+    const adminEmailInput = document.getElementById("adminEmail");
+    const adminPasswordInput = document.getElementById("adminPassword");
+    const adminLoginMessage = document.getElementById("adminLoginMessage");
+    const toggleAdminPassword = document.getElementById("toggleAdminPassword");
 
-forgotModal.addEventListener("click", function (event) {
-    if (event.target === forgotModal) {
-        closeForgotModal();
-    }
-});
-
-document.addEventListener("keydown", function (event) {
-    if (event.key === "Escape") {
-        closeForgotModal();
-    }
-});
-
-
-// FORGOT PASSWORD FORM
-document.getElementById("forgotForm").addEventListener("submit", function (event) {
-    event.preventDefault();
-
-    const recoveryEmail = document
-        .getElementById("recoveryEmail")
-        .value.trim()
-        .toLowerCase();
-
-    const recoveryError = document.getElementById("recoveryError");
-    const recoveryMessage = document.getElementById("recoveryMessage");
-
-    recoveryError.textContent = "";
-    recoveryMessage.textContent = "";
-
-    if (!isValidEmail(recoveryEmail)) {
-        recoveryError.textContent = "Please enter a valid email address.";
-        return;
+    if (toggleAdminPassword) {
+        toggleAdminPassword.addEventListener("click", function () {
+            adminPasswordInput.type = adminPasswordInput.type === "password" ? "text" : "password";
+        });
     }
 
-    recoveryMessage.style.color = "#A85C36";
-    recoveryMessage.textContent =
-        "Password recovery needs a server to send a secure reset link.";
-});
+    adminLoginForm.addEventListener("submit", function (event) {
+        event.preventDefault();
 
+        const email = adminEmailInput.value.trim().toLowerCase();
+        const password = adminPasswordInput.value;
 
-// SOCIAL LOGIN PLACEHOLDERS
-document.getElementById("googleLogin").addEventListener("click", function () {
-    loginMessage.style.color = "#A85C36";
-    loginMessage.textContent =
-        "Google sign-in will be available after authentication integration.";
-});
+        if (!email || !password) {
+            adminLoginMessage.style.color = "#A74636";
+            adminLoginMessage.textContent = "Please enter the admin email and password.";
+            return;
+        }
 
-document.getElementById("appleLogin").addEventListener("click", function () {
-    loginMessage.style.color = "#A85C36";
-    loginMessage.textContent =
-        "Apple sign-in will be available after authentication integration.";
-});
+        // Preset Admin Credentials
+        if (email === "admin@gmail.com" && password === "admin123") {
+            sessionStorage.setItem("scentoraAdminLoggedIn", "true");
+
+            adminLoginMessage.style.color = "#63846A";
+            adminLoginMessage.textContent = "Access granted. Opening Admin Dashboard...";
+
+            setTimeout(() => {
+                window.location.href = "admin.html";
+            }, 800);
+        } else {
+            adminLoginMessage.style.color = "#A74636";
+            adminLoginMessage.textContent = "Invalid admin email or password.";
+        }
+    });
+}
