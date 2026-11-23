@@ -15,13 +15,34 @@ const cartTotal = document.getElementById("cartTotal");
 
 const checkoutButton = document.getElementById("checkoutButton");
 const noProducts = document.getElementById("noProducts");
+const shopOfferBannerText = document.getElementById("shopOfferBannerText");
 
 
 // VARIABLES (Connected to Admin & Cart via localStorage!)
 
 let selectedCategory = "All";
-let storeProducts = JSON.parse(localStorage.getItem("scentora_products")) || products;
+const savedProducts = JSON.parse(localStorage.getItem("scentora_products"));
+let storeProducts = (savedProducts && savedProducts.length > 0) ? savedProducts : products;
 let cart = JSON.parse(localStorage.getItem("scentora_cart")) || [];
+
+
+// SYNC ACTIVE OFFERS BANNER FROM ADMIN
+
+function syncShopOfferBanner() {
+    if (!shopOfferBannerText) return;
+    const offers = JSON.parse(localStorage.getItem("scentora_offers")) || [
+        { code: "SCENT15", discount: 15 },
+        { code: "LUXURY25", discount: 25 }
+    ];
+
+    if (offers.length === 0) {
+        shopOfferBannerText.textContent = "Enjoy up to 25% OFF on selected fragrances!";
+        return;
+    }
+
+    const bestOffer = offers.reduce((max, item) => item.discount > max.discount ? item : max, offers[0]);
+    shopOfferBannerText.innerHTML = `Enjoy up to <strong>${bestOffer.discount}% OFF</strong> — use promo code <strong>${bestOffer.code}</strong> at checkout!`;
+}
 
 const requestedCategory = new URLSearchParams(window.location.search).get("category");
 
@@ -98,6 +119,10 @@ function displayProducts(productList) {
 
         button.addEventListener("click", function () {
             addToCart(product.id);
+            button.textContent = "Added ✓";
+            setTimeout(() => {
+                button.textContent = "Add to Cart";
+            }, 900);
         });
 
         info.appendChild(name);
@@ -195,6 +220,8 @@ function addToCart(productId) {
             item => item.id === productId
         );
 
+        if (!product) return;
+
         cart.push({
             ...product,
             quantity: 1,
@@ -247,6 +274,7 @@ function updateCart() {
         controls.className = "quantity-controls";
 
         const minus = document.createElement("button");
+        minus.type = "button";
         minus.textContent = "-";
         minus.addEventListener("click", () => {
             changeQuantity(item.id, -1);
@@ -256,6 +284,7 @@ function updateCart() {
         quantity.textContent = itemQty;
 
         const plus = document.createElement("button");
+        plus.type = "button";
         plus.textContent = "+";
         plus.addEventListener("click", () => {
             changeQuantity(item.id, 1);
@@ -270,6 +299,7 @@ function updateCart() {
         details.appendChild(controls);
 
         const remove = document.createElement("button");
+        remove.type = "button";
         remove.className = "remove-btn";
         remove.textContent = "Remove";
         remove.addEventListener("click", () => {
@@ -343,7 +373,7 @@ cartOverlay.addEventListener("click", function (event) {
 });
 
 
-// PROCEED TO CHECKOUT -> LINKS DIRECTLY TO YOUR cart.html!
+// PROCEED TO CHECKOUT -> LINKS DIRECTLY TO cart.html
 
 checkoutButton.addEventListener("click", function () {
     localStorage.setItem("scentora_cart", JSON.stringify(cart));
@@ -353,5 +383,6 @@ checkoutButton.addEventListener("click", function () {
 
 // INITIALIZE STORE
 
+syncShopOfferBanner();
 filterProducts();
 updateCart();
