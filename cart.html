@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shopping Bag | Scentora</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/cart.css">
+</head>
+<body>
+
+  <!-- Navigation -->
+  <header class="navbar">
+
+    <a href="index.html" class="brand">
+      <svg class="brand-logo" viewBox="0 0 100 100"
+           fill="none" xmlns="http://www.w3.org/2000/svg">
+        <g stroke="currentColor" stroke-width="2.2"
+           stroke-linecap="round" stroke-linejoin="round">
+
+          <path d="M67 23C57 12 38 15 32 28C26 41 39 48 52 50C67 52 76 62 68 76C60 90 39 88 30 76"/>
+
+          <g transform="translate(39 20)">
+            <ellipse cy="-8" rx="4.5" ry="7"/>
+            <ellipse cy="-8" rx="4.5" ry="7" transform="rotate(72)"/>
+            <ellipse cy="-8" rx="4.5" ry="7" transform="rotate(144)"/>
+            <ellipse cy="-8" rx="4.5" ry="7" transform="rotate(216)"/>
+            <ellipse cy="-8" rx="4.5" ry="7" transform="rotate(288)"/>
+            <circle r="2.3" fill="#AD8754" stroke="none"/>
+          </g>
+
+          <g transform="translate(69 77)">
+            <ellipse cy="-7" rx="4" ry="6"/>
+            <ellipse cy="-7" rx="4" ry="6" transform="rotate(72)"/>
+            <ellipse cy="-7" rx="4" ry="6" transform="rotate(144)"/>
+            <ellipse cy="-7" rx="4" ry="6" transform="rotate(216)"/>
+            <ellipse cy="-7" rx="4" ry="6" transform="rotate(288)"/>
+            <circle r="2" fill="#AD8754" stroke="none"/>
+          </g>
+
+        </g>
+      </svg>
+
+      <span class="brand-name">scentora<span>.</span></span>
+    </a>
+
+    <nav class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="shop.html">Shop</a>
+      <a href="index.html#categories">Categories</a>
+      <a href="index.html#about">About</a>
+      <a href="index.html#contact">Contact</a>
+    </nav>
+
+    <div class="nav-actions">
+      <a href="login.html" class="login-link">Login</a>
+      <a href="register.html" class="nav-button">Join Us <span>↗</span></a>
+    </div>
+
+  </header>
+
+  <!-- Page Banner -->
+  <section class="page-banner">
+    <p class="eyebrow">YOUR SELECTION</p>
+    <h1>Shopping <span>Bag</span></h1>
+    <p class="banner-sub">Review your chosen fragrances before completing your order.</p>
+  </section>
+
+  <!-- Main Cart Layout -->
+  <main class="cart-container">
+    <!-- Left Column: Bag Items + Recommendations Below -->
+    <section class="cart-items-section">
+      <div class="section-header">
+        <h2>Selected Fragrances (<span id="item-count">0</span>)</h2>
+        <button id="clear-cart-btn" class="secondary-button">Clear Bag</button>
+      </div>
+
+      <!-- Cart Items Render Here First -->
+      <div id="cart-items-list"></div>
+
+      <!-- You May Also Like (Positioned Below Cart Items & Linked to Inventory) -->
+      <div class="recommendations-section" id="recommendations-wrapper">
+        <div class="rec-header">
+          <p class="eyebrow">CURATED FOR YOU</p>
+          <h3>You May Also Like</h3>
+        </div>
+        <div id="recommendations-grid" class="rec-grid"></div>
+      </div>
+    </section>
+
+    <!-- Right Column: Summary, Promo Code & Checkout -->
+    <aside class="checkout-section">
+      <h2>Order Summary</h2>
+
+      <div class="promo-box">
+        <input type="text" id="promo-input" placeholder="Promo Code (e.g. SCENT15)">
+        <button type="button" id="apply-promo-btn" class="nav-button">Apply</button>
+      </div>
+      <p id="promo-msg" class="promo-status"></p>
+
+      <div class="summary-row">
+        <span>Subtotal</span>
+        <span id="subtotal">0 EGP</span>
+      </div>
+      <div class="summary-row" id="discount-row" style="display: none;">
+        <span>Discount (<span id="discount-label"></span>)</span>
+        <span id="discount-amount" class="gold-text">-0 EGP</span>
+      </div>
+      <div class="summary-row">
+        <span>Delivery Fee</span>
+        <span id="shipping">0 EGP</span>
+      </div>
+
+      <hr class="divider">
+
+      <div class="summary-row total">
+        <span>Total</span>
+        <span id="total">0 EGP</span>
+      </div>
+
+      <form id="checkout-form" autocomplete="on" novalidate>
+        <h3>Delivery Details</h3>
+        <input type="text" id="cust-name" name="name" autocomplete="name" placeholder="Full Name" required>
+        <input type="email" id="cust-email" name="email" autocomplete="email" placeholder="Email Address" required>
+        <input type="tel" id="cust-phone" name="tel" autocomplete="tel" placeholder="Phone Number (e.g. 010xxxxxxxx)" required>
+        <input type="text" id="cust-address" name="street-address" autocomplete="street-address" placeholder="Delivery Address (City, Street)" required>
+
+        <p id="error-msg" class="error-text"></p>
+        <p id="success-msg" class="success-text"></p>
+
+        <button type="submit" class="checkout-btn">Proceed to Checkout →</button>
+      </form>
+    </aside>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <a href="index.html" class="brand footer-brand">
+      <svg class="brand-logo" viewBox="0 0 100 100"
+           fill="none" xmlns="http://www.w3.org/2000/svg">
+        <g stroke="currentColor" stroke-width="2.2"
+           stroke-linecap="round" stroke-linejoin="round">
+
+          <path d="M67 23C57 12 38 15 32 28C26 41 39 48 52 50C67 52 76 62 68 76C60 90 39 88 30 76"/>
+
+          <g transform="translate(39 20)">
+            <ellipse cy="-8" rx="4.5" ry="7"/>
+            <ellipse cy="-8" rx="4.5" ry="7" transform="rotate(72)"/>
+            <ellipse cy="-8" rx="4.5" ry="7" transform="rotate(144)"/>
+            <ellipse cy="-8" rx="4.5" ry="7" transform="rotate(216)"/>
+            <ellipse cy="-8" rx="4.5" ry="7" transform="rotate(288)"/>
+            <circle r="2.3" fill="#AD8754" stroke="none"/>
+          </g>
+
+          <g transform="translate(69 77)">
+            <ellipse cy="-7" rx="4" ry="6"/>
+            <ellipse cy="-7" rx="4" ry="6" transform="rotate(72)"/>
+            <ellipse cy="-7" rx="4" ry="6" transform="rotate(144)"/>
+            <ellipse cy="-7" rx="4" ry="6" transform="rotate(216)"/>
+            <ellipse cy="-7" rx="4" ry="6" transform="rotate(288)"/>
+            <circle r="2" fill="#AD8754" stroke="none"/>
+          </g>
+
+        </g>
+      </svg>
+
+      <span class="brand-name">scentora<span>.</span></span>
+    </a>
+
+    <p class="footer-tagline">Luxury is a fragrance you never forget.</p>
+
+    <div class="footer-links">
+      <a href="index.html">Home</a>
+      <a href="shop.html">Shop</a>
+      <a href="cart.html">Cart</a>
+    </div>
+
+    <p class="copyright">© 2026 Scentora. All rights reserved.</p>
+  </footer>
+
+  <!-- Load your team's real product inventory first, then cart logic -->
+  <script src="js/products.js"></script>
+  <script src="js/cart.js"></script>
+</body>
+</html>

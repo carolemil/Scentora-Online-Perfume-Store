@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Portal | Scentora</title>
+
+    <link rel="stylesheet" href="css/auth.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+</head>
+
+<body class="login-page">
+
+    <div class="background-overlay"></div>
+
+    <header class="top-header">
+        <a href="index.html" class="brand">
+            <svg class="brand-logo" viewBox="0 0 100 100"
+                 fill="none" xmlns="http://www.w3.org/2000/svg">
+                <g stroke="currentColor" stroke-width="2.2"
+                   stroke-linecap="round" stroke-linejoin="round">
+
+                    <path d="M67 23C57 12 38 15 32 28C26 41 39 48 52 50C67 52 76 62 68 76C60 90 39 88 30 76"/>
+
+                    <g transform="translate(39 20)">
+                        <ellipse cy="-8" rx="4.5" ry="7"/>
+                        <ellipse cy="-8" rx="4.5" ry="7" transform="rotate(72)"/>
+                        <ellipse cy="-8" rx="4.5" ry="7" transform="rotate(144)"/>
+                        <ellipse cy="-8" rx="4.5" ry="7" transform="rotate(216)"/>
+                        <ellipse cy="-8" rx="4.5" ry="7" transform="rotate(288)"/>
+                        <circle r="2.3" fill="#AD8754" stroke="none"/>
+                    </g>
+
+                    <g transform="translate(69 77)">
+                        <ellipse cy="-7" rx="4" ry="6"/>
+                        <ellipse cy="-7" rx="4" ry="6" transform="rotate(72)"/>
+                        <ellipse cy="-7" rx="4" ry="6" transform="rotate(144)"/>
+                        <ellipse cy="-7" rx="4" ry="6" transform="rotate(216)"/>
+                        <ellipse cy="-7" rx="4" ry="6" transform="rotate(288)"/>
+                        <circle r="2" fill="#AD8754" stroke="none"/>
+                    </g>
+
+                </g>
+            </svg>
+
+            <span class="brand-name">scentora<span>.</span></span>
+        </a>
+
+        <p class="header-tagline">Store Management Portal <span></span></p>
+    </header>
+
+    <main class="login-main">
+
+        <div class="petal petal-one">✧</div>
+        <div class="petal petal-two">✦</div>
+        <div class="petal petal-three">✧</div>
+        <div class="petal petal-four">✦</div>
+
+        <section class="login-card">
+
+            <div class="card-logo">
+                <svg viewBox="0 0 100 100"
+                     fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <g stroke="currentColor" stroke-width="2.2"
+                       stroke-linecap="round" stroke-linejoin="round">
+
+                        <path d="M67 23C57 12 38 15 32 28C26 41 39 48 52 50C67 52 76 62 68 76C60 90 39 88 30 76"/>
+
+                        <g transform="translate(39 20)">
+                            <ellipse cy="-8" rx="4.5" ry="7"/>
+                            <ellipse cy="-8" rx="4.5" ry="7" transform="rotate(72)"/>
+                            <ellipse cy="-8" rx="4.5" ry="7" transform="rotate(144)"/>
+                            <ellipse cy="-8" rx="4.5" ry="7" transform="rotate(216)"/>
+                            <ellipse cy="-8" rx="4.5" ry="7" transform="rotate(288)"/>
+                            <circle r="2.3" fill="#AD8754" stroke="none"/>
+                        </g>
+
+                        <g transform="translate(69 77)">
+                            <ellipse cy="-7" rx="4" ry="6"/>
+                            <ellipse cy="-7" rx="4" ry="6" transform="rotate(72)"/>
+                            <ellipse cy="-7" rx="4" ry="6" transform="rotate(144)"/>
+                            <ellipse cy="-7" rx="4" ry="6" transform="rotate(216)"/>
+                            <ellipse cy="-7" rx="4" ry="6" transform="rotate(288)"/>
+                            <circle r="2" fill="#AD8754" stroke="none"/>
+                        </g>
+
+                    </g>
+                </svg>
+            </div>
+
+            <h1>Admin Access</h1>
+            <p class="card-subtitle">Sign in to manage inventory and offers</p>
+
+            <form id="adminBypassForm" novalidate>
+
+                <div class="input-field">
+                    <span class="input-icon">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <rect x="3.5" y="5" width="17" height="14" rx="2"/>
+                            <path d="M4 7L12 13L20 7"/>
+                        </svg>
+                    </span>
+
+                    <input
+                        type="email"
+                        id="adminEmail"
+                        value="admin@scentora.com"
+                        placeholder="Admin Email"
+                        autocomplete="email"
+                    >
+                </div>
+
+                <div class="input-field password-field">
+                    <span class="input-icon">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <rect x="4" y="10" width="16" height="11" rx="2"/>
+                            <path d="M8 10V7a4 4 0 0 1 8 0v3"/>
+                            <circle cx="12" cy="15" r="1.2"/>
+                            <path d="M12 16.2V18"/>
+                        </svg>
+                    </span>
+
+                    <input
+                        type="password"
+                        id="adminPassword"
+                        value="scentora123"
+                        placeholder="Admin Password"
+                        autocomplete="current-password"
+                    >
+
+                    <button type="button" class="show-password" id="toggleAdminPassword" aria-label="Show password">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M2 12S5.5 5.5 12 5.5S22 12 22 12S18.5 18.5 12 18.5S2 12 2 12Z"/>
+                            <circle cx="12" cy="12" r="3"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <button type="submit" class="login-button" id="adminLoginButton">
+                    <span>Enter Dashboard</span>
+                    <span class="arrow">→</span>
+                </button>
+
+                <p class="login-message" id="adminLoginMessage" aria-live="polite"></p>
+
+            </form>
+
+            <p class="signup-text">
+                Not an administrator?
+                <a href="index.html">Back to Store</a>
+            </p>
+
+        </section>
+    </main>
+
+    <footer class="page-footer">
+        <span>SCENTORA</span> &nbsp;·&nbsp; MANAGEMENT PORTAL
+    </footer>
+
+    <script>
+        // Toggle password visibility
+        const toggleBtn = document.getElementById("toggleAdminPassword");
+        const passInput = document.getElementById("adminPassword");
+        if (toggleBtn && passInput) {
+            toggleBtn.addEventListener("click", () => {
+                passInput.type = passInput.type === "password" ? "text" : "password";
+            });
+        }
+
+        // Direct login without credential validation
+        document.getElementById("adminBypassForm").addEventListener("submit", function (e) {
+            e.preventDefault();
+            localStorage.setItem("scentoraAdminLoggedIn", "true");
+            sessionStorage.setItem("scentoraAdminLoggedIn", "true");
+            window.location.href = "admin.html";
+        });
+    </script>
+</body>
+</html>

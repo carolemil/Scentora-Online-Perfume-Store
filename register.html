@@ -1,0 +1,199 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account | Scentora</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/auth.css">
+</head>
+
+<body class="login-page">
+
+    <div class="background-overlay"></div>
+
+    <header class="top-header">
+        <a href="index.html" class="brand">
+
+            <!-- SCENTORA SIGNATURE FLOWER LOGO -->
+            <svg class="brand-logo" viewBox="0 0 100 100"
+                 fill="none" xmlns="http://www.w3.org/2000/svg">
+
+                <g stroke="currentColor" stroke-width="2.2"
+                   stroke-linecap="round" stroke-linejoin="round">
+
+                    <path d="M67 23C57 12 38 15 32 28C26 41 39 48 52 50C67 52 76 62 68 76C60 90 39 88 30 76"/>
+
+                    <g transform="translate(39 20)">
+                        <ellipse cy="-8" rx="4.5" ry="7"/>
+                        <ellipse cy="-8" rx="4.5" ry="7" transform="rotate(72)"/>
+                        <ellipse cy="-8" rx="4.5" ry="7" transform="rotate(144)"/>
+                        <ellipse cy="-8" rx="4.5" ry="7" transform="rotate(216)"/>
+                        <ellipse cy="-8" rx="4.5" ry="7" transform="rotate(288)"/>
+                        <circle r="2.3" fill="#AD8754" stroke="none"/>
+                    </g>
+
+                    <g transform="translate(69 77)">
+                        <ellipse cy="-7" rx="4" ry="6"/>
+                        <ellipse cy="-7" rx="4" ry="6" transform="rotate(72)"/>
+                        <ellipse cy="-7" rx="4" ry="6" transform="rotate(144)"/>
+                        <ellipse cy="-7" rx="4" ry="6" transform="rotate(216)"/>
+                        <ellipse cy="-7" rx="4" ry="6" transform="rotate(288)"/>
+                        <circle r="2" fill="#AD8754" stroke="none"/>
+                    </g>
+
+                </g>
+            </svg>
+
+            <div class="brand-text">
+                <strong>SCENTORA<span>.</span></strong>
+                <small>THE ART OF FRAGRANCE</small>
+            </div>
+        </a>
+
+        <div class="header-tagline">
+            <span></span>
+            A WORLD OF BEAUTIFUL SCENTS
+            <span></span>
+        </div>
+    </header>
+
+    <main class="login-main register-main">
+
+        <section class="login-card register-card">
+
+            <div class="card-logo">
+
+                <!-- REGISTRATION CARD FLOWER LOGO -->
+                <svg class="card-logo-svg" viewBox="0 0 100 100"
+                     fill="none" xmlns="http://www.w3.org/2000/svg">
+
+                    <g stroke="currentColor" stroke-width="2.2"
+                       stroke-linecap="round" stroke-linejoin="round">
+
+                        <path d="M67 23C57 12 38 15 32 28C26 41 39 48 52 50C67 52 76 62 68 76C60 90 39 88 30 76"/>
+
+                        <g transform="translate(39 20)">
+                            <ellipse cy="-8" rx="4.5" ry="7"/>
+                            <ellipse cy="-8" rx="4.5" ry="7" transform="rotate(72)"/>
+                            <ellipse cy="-8" rx="4.5" ry="7" transform="rotate(144)"/>
+                            <ellipse cy="-8" rx="4.5" ry="7" transform="rotate(216)"/>
+                            <ellipse cy="-8" rx="4.5" ry="7" transform="rotate(288)"/>
+                            <circle r="2.3" fill="#AD8754" stroke="none"/>
+                        </g>
+
+                        <g transform="translate(69 77)">
+                            <ellipse cy="-7" rx="4" ry="6"/>
+                            <ellipse cy="-7" rx="4" ry="6" transform="rotate(72)"/>
+                            <ellipse cy="-7" rx="4" ry="6" transform="rotate(144)"/>
+                            <ellipse cy="-7" rx="4" ry="6" transform="rotate(216)"/>
+                            <ellipse cy="-7" rx="4" ry="6" transform="rotate(288)"/>
+                            <circle r="2" fill="#AD8754" stroke="none"/>
+                        </g>
+
+                    </g>
+                </svg>
+
+            </div>
+
+            <h1>Create Account</h1>
+            <p class="card-subtitle">Join Scentora and discover your signature scent.</p>
+
+            <form id="registerForm">
+
+                <div class="form-grid">
+
+                    <div class="form-group">
+                        <label class="form-label" for="regFirstName">First Name</label>
+                        <div class="input-field">
+                            <input type="text" id="regFirstName" placeholder="First name" autocomplete="given-name">
+                        </div>
+                        <small class="field-error" id="firstNameError"></small>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="regLastName">Last Name</label>
+                        <div class="input-field">
+                            <input type="text" id="regLastName" placeholder="Last name" autocomplete="family-name">
+                        </div>
+                        <small class="field-error" id="lastNameError"></small>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label class="form-label" for="regEmail">Email Address</label>
+                        <div class="input-field">
+                            <input type="email" id="regEmail" placeholder="example@email.com" autocomplete="email">
+                        </div>
+                        <small class="field-error" id="emailError"></small>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label class="form-label" for="regPhone">Phone Number</label>
+                        <div class="input-field">
+                            <input type="tel" id="regPhone" placeholder="01xxxxxxxxx" autocomplete="tel">
+                        </div>
+                        <small class="field-error" id="phoneError"></small>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="regPassword">Password</label>
+                        <div class="input-field">
+                            <input type="password" id="regPassword" placeholder="Create password" autocomplete="new-password">
+                            <button type="button" class="show-password" id="toggleRegPassword">Show</button>
+                        </div>
+                        <small class="field-error" id="passwordError"></small>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="regConfirmPassword">Confirm Password</label>
+                        <div class="input-field">
+                            <input type="password" id="regConfirmPassword" placeholder="Repeat password" autocomplete="new-password">
+                            <button type="button" class="show-password" id="toggleConfirmPassword">Show</button>
+                        </div>
+                        <small class="field-error" id="confirmPasswordError"></small>
+                    </div>
+
+                </div>
+
+                <div class="password-strength">
+                    <div class="strength-track">
+                        <span id="strengthBar"></span>
+                    </div>
+                    <small id="strengthText">Password strength</small>
+                </div>
+
+                <label class="terms-label">
+                    <input type="checkbox" id="acceptTerms">
+                    <span>I agree to the Terms & Conditions and Privacy Policy.</span>
+                </label>
+                <small class="field-error" id="termsError"></small>
+
+                <button type="submit" class="login-button" id="registerButton">
+                    Create Account <span class="arrow">→</span>
+                </button>
+
+                <p class="login-message" id="registerMessage"></p>
+
+            </form>
+
+            <p class="signup-text">
+                Already have an account?
+                <a href="login.html">Sign In</a>
+            </p>
+
+        </section>
+
+    </main>
+
+    <footer class="page-footer">
+        © 2026 <span>SCENTORA</span> · THE ART OF FRAGRANCE
+    </footer>
+
+    <script src="js/auth.js"></script>
+</body>
+</html>
