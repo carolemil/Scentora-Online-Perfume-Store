@@ -1,122 +1,119 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scentora | Luxury Perfumes</title>
+    <title>Scentora | Shop Perfumes</title>
 
     <link rel="stylesheet" href="css/shop.css">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
 </head>
 
 <body>
 
-    <!-- Navigation -->
+    <!-- Navbar -->
     <header class="navbar">
-       <a href="#" class="logo">SCENTORA<span>.</span></a>
+        <a href="index.html" class="logo">Scentora<span>.</span></a>
 
         <nav>
-            <a href="#home">Home</a>
-            <a href="#products">Shop</a>
-            <a href="#offers">Offers</a>
+            <a href="index.html">Home</a>
+            <a href="shop.html" class="active">Shop</a>
+            <a href="#">About</a>
         </nav>
 
-        <button class="cart-button" id="cartButton">
-             Cart (<span id="cartCount">0</span>)
-        </button>
+        <div class="cart">
+            🛍️ Cart <span id="cart-count">0</span>
+        </div>
     </header>
 
-    <!-- Hero Section -->
-    <section class="hero" id="home">
-        <div class="hero-content">
-            <p class="subtitle">DISCOVER YOUR SIGNATURE SCENT</p>
-            <h1>Elegance in<br>Every Drop.</h1>
-            <p>Luxury fragrances that tell your story.</p>
-            <a href="#products" class="shop-btn">Explore Collection</a>
+    <!-- Hero -->
+    <section class="shop-hero">
+        <div>
+            <p class="eyebrow">DISCOVER YOUR SIGNATURE SCENT</p>
+            <h1>Find your <em>perfect</em> fragrance.</h1>
+            <p>Explore fragrances that tell your story.</p>
         </div>
     </section>
 
-    <!-- Offers -->
-    <section class="offer-banner" id="offers">
-        <h2>Special Offers</h2>
-        <p>Enjoy up to 25% OFF on selected fragrances!</p>
-    </section>
+    <!-- Shop -->
+    <main class="shop-container">
 
-    <!-- Products Section -->
-    <main class="products-section" id="products">
-
-        <div class="section-heading">
-            <p class="subtitle">OUR COLLECTION</p>
-            <h2>Find Your Perfect Scent</h2>
-        </div>
-
-        <!-- Search -->
-        <div class="search-container">
-            <input
-                type="text"
-                id="searchInput"
-                placeholder="Search for your favorite perfume..."
-            >
-        </div>
-
-        <!-- Filters -->
-        <div class="filters">
-
-            <div class="categories">
-                <button class="category-btn active" data-category="All">All</button>
-                <button class="category-btn" data-category="Men">Men</button>
-                <button class="category-btn" data-category="Women">Women</button>
-                <button class="category-btn" data-category="Unisex">Unisex</button>
-                <button class="category-btn" data-category="Offers">Offers</button>
+        <div class="shop-heading">
+            <div>
+                <p class="eyebrow">OUR COLLECTION</p>
+                <h2>Shop All Perfumes</h2>
             </div>
 
-            <select id="sortSelect">
-                <option value="default">Sort By</option>
+            <p id="product-count">0 products</p>
+        </div>
+
+        <!-- Search and Sorting -->
+        <div class="toolbar">
+
+            <div class="search-box">
+                <span>⌕</span>
+                <input
+                    type="text"
+                    id="search-input"
+                    placeholder="Search perfumes..."
+                >
+            </div>
+
+            <select id="sort-select">
+                <option value="default">Sort by: Featured</option>
                 <option value="low-high">Price: Low to High</option>
                 <option value="high-low">Price: High to Low</option>
+                <option value="discount">Biggest Discount</option>
             </select>
 
         </div>
 
-        <!-- Products -->
-        <div class="products-grid" id="productsGrid">
-            <!-- Products generated using JavaScript -->
+        <!-- Categories -->
+        <div class="categories">
+
+            <button class="category-btn active" data-category="All">
+                All Perfumes
+            </button>
+
+            <button class="category-btn" data-category="Women">
+                Women's
+            </button>
+
+            <button class="category-btn" data-category="Men">
+                Men's
+            </button>
+
+            <button class="category-btn" data-category="Unisex">
+                Unisex
+            </button>
+
+            <button class="category-btn" data-category="Offers">
+                Special Offers
+            </button>
+
         </div>
 
-        <p id="noProducts" class="no-products" hidden>
+        <!-- Products -->
+        <section class="product-grid" id="product-grid">
+            <!-- Products generated by JavaScript -->
+        </section>
+
+        <p class="no-products" id="no-products">
             No perfumes found. Try another search.
         </p>
 
     </main>
 
-    <!-- Shopping Cart -->
-    <div class="cart-overlay" id="cartOverlay">
-        <div class="cart-panel">
-
-            <div class="cart-header">
-                <h2>Your Shopping Bag</h2>
-                <button id="closeCart" class="close-btn">✕</button>
-            </div>
-
-            <div id="cartItems" class="cart-items">
-                <p>Your cart is empty.</p>
-            </div>
-
-            <div class="cart-footer">
-                <h3>Total: <span id="cartTotal">0</span> EGP</h3>
-                <button id="checkoutButton" class="checkout-btn">
-                    Proceed to Checkout
-                </button>
-            </div>
-
-        </div>
+    <!-- Notification -->
+    <div id="toast" class="toast">
+        Added to cart!
     </div>
 
     <!-- Footer -->
     <footer>
-      <h2>SCENTORA.</h2>
-        <p>Luxury is a fragrance you never forget.</p>
-        <p>© 2026 Scentora. All rights reserved.</p>
+        <h2>Scentora<span>.</span></h2>
+        <p>Discover fragrances. Create memories.</p>
+        <p class="footer-copy">© 2026 Scentora. All rights reserved.</p>
     </footer>
 
     <script src="js/products.js"></script>
