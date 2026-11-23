@@ -439,3 +439,43 @@ select:focus {
     gap: 0;
   }
 }
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.brand-logo {
+  width: 43px;
+  height: 43px;
+  color: #854B2C;
+  display: block;
+  transition: transform 0.5s ease;
+}
+
+.brand:hover .brand-logo {
+  transform: rotate(-12deg);
+}
+
+.brand-name {
+  color: var(--home-brown);
+  font-family: "Playfair Display", serif;
+  font-size: 27px;
+  font-weight: 600;
+  letter-spacing: -1.3px;
+}
+
+.brand-name > span {
+  color: var(--home-gold);
+}
+
+.footer-brand {
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+.footer-brand .brand-logo,
+.footer-brand .brand-name {
+  color: var(--home-cream);
+}
