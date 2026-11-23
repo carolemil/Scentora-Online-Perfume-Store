@@ -24,6 +24,7 @@ function getCurrentUser() {
 function syncAuthUI() {
   const user = getCurrentUser();
   const loginLink = document.querySelector('.login-link');
+  const joinBtn = document.querySelector('.nav-actions .nav-button');
 
   if (loginLink) {
     if (user) {
@@ -39,6 +40,11 @@ function syncAuthUI() {
       loginLink.href = 'login.html';
       loginLink.onclick = null;
     }
+  }
+
+  // Hide "Join Us" button if already logged in; keep it if logged out
+  if (joinBtn) {
+    joinBtn.style.display = user ? 'none' : 'inline-block';
   }
 
   // Pre-fill Delivery Details if logged in
