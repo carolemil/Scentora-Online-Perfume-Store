@@ -14,7 +14,7 @@ const defaultOffers = [
   { code: "LUXURY25", discount: 25, desc: "Selected Fragrances Special" }
 ];
 
-// Ensure storage is seeded so admin-shop.html, shop.html, and admin-offers.html share the exact same data
+// Ensure storage is seeded so admin-shops.html, shops.html, and admin-offers.html share the exact same data
 if (!localStorage.getItem("scentora_products")) {
   localStorage.setItem("scentora_products", JSON.stringify(defaultCatalog));
 }
@@ -33,7 +33,8 @@ function updateStats() {
   if (offerCountEl) offerCountEl.innerText = offers.length;
 }
 
-// Keep counts synced automatically when returning from admin-shop.html or admin-offers.html
+// Keep counts synced automatically when returning from admin-shops
+// .html or admin-offers.html
 window.addEventListener("focus", updateStats);
 window.addEventListener("storage", updateStats);
 
