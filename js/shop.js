@@ -23,6 +23,20 @@ let selectedCategory = "All";
 let storeProducts = JSON.parse(localStorage.getItem("scentora_products")) || products;
 let cart = JSON.parse(localStorage.getItem("scentora_cart")) || [];
 
+const requestedCategory = new URLSearchParams(window.location.search).get("category");
+
+if (requestedCategory) {
+    const categoryButton = [...categoryButtons].find(
+        button => button.dataset.category.toLowerCase() === requestedCategory.toLowerCase()
+    );
+
+    if (categoryButton) {
+        selectedCategory = categoryButton.dataset.category;
+        categoryButtons.forEach(button => button.classList.remove("active"));
+        categoryButton.classList.add("active");
+    }
+}
+
 
 // DISPLAY PRODUCTS
 
@@ -339,5 +353,5 @@ checkoutButton.addEventListener("click", function () {
 
 // INITIALIZE STORE
 
-displayProducts(storeProducts);
+filterProducts();
 updateCart();
