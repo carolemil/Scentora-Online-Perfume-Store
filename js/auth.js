@@ -1,8 +1,8 @@
-
 document.addEventListener("DOMContentLoaded", function () {
 
     const USERS_KEY = "scentoraDemoUsers";
     const CURRENT_USER_KEY = "scentoraCurrentUser";
+    const REDIRECT_KEY = "scentoraRedirectAfterLogin";
 
     function getUsers() {
         try {
@@ -15,6 +15,46 @@ document.addEventListener("DOMContentLoaded", function () {
     function saveUsers(users) {
         localStorage.setItem(USERS_KEY, JSON.stringify(users));
     }
+
+    function getCurrentUser() {
+        const raw = localStorage.getItem(CURRENT_USER_KEY);
+        if (!raw || raw === "null" || raw === "false" || raw === "undefined") {
+            return null;
+        }
+        try {
+            return JSON.parse(raw);
+        } catch {
+            return null;
+        }
+    }
+
+    function syncNavbarAuth() {
+        const user = getCurrentUser();
+        const loginLink = document.querySelector(".login-link");
+        const joinBtn = document.querySelector(".nav-actions .nav-button");
+
+        if (loginLink) {
+            if (user) {
+                loginLink.textContent = "Log Out";
+                loginLink.href = "#";
+                loginLink.onclick = function (e) {
+                    e.preventDefault();
+                    localStorage.removeItem(CURRENT_USER_KEY);
+                    window.location.reload();
+                };
+            } else {
+                loginLink.textContent = "Login";
+                loginLink.href = "login.html";
+                loginLink.onclick = null;
+            }
+        }
+
+        if (joinBtn) {
+            joinBtn.style.display = user ? "none" : "inline-flex";
+        }
+    }
+
+    syncNavbarAuth();
 
     function showError(id, message) {
         const element = document.getElementById(id);
@@ -83,9 +123,25 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
+    function populateEmailSuggestions() {
+        const emailList = document.getElementById("scentoraEmailSuggestions");
+        if (!emailList) return;
+
+        const users = getUsers();
+        emailList.innerHTML = "";
+
+        users.forEach(user => {
+            if (!user.email) return;
+            const option = document.createElement("option");
+            option.value = user.email;
+            emailList.appendChild(option);
+        });
+    }
+
     togglePassword("toggleLoginPassword", "loginPassword");
     togglePassword("toggleRegPassword", "regPassword");
     togglePassword("toggleConfirmPassword", "regConfirmPassword");
+    populateEmailSuggestions();
 
     /* REGISTRATION */
 
@@ -213,6 +269,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     id: newUser.id,
                     name: newUser.name,
                     email: newUser.email,
+                    phone: newUser.phone,
                     role: newUser.role
                 }));
 
@@ -220,8 +277,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 document.getElementById("registerButton").disabled = true;
 
+                const redirectTarget = localStorage.getItem(REDIRECT_KEY) || "shops.html";
+                localStorage.removeItem(REDIRECT_KEY);
+
                 setTimeout(() => {
-                    window.location.href = "shop.html";
+                    window.location.href = redirectTarget;
                 }, 1200);
 
             } catch (error) {
@@ -295,6 +355,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     id: user.id,
                     name: user.name || `${user.firstName || ""} ${user.lastName || ""}`.trim(),
                     email: user.email,
+                    phone: user.phone || "",
                     role: user.role || "customer"
                 }));
 
@@ -302,8 +363,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 document.getElementById("loginButton").disabled = true;
 
+                const savedRedirect = localStorage.getItem(REDIRECT_KEY);
+                localStorage.removeItem(REDIRECT_KEY);
+
                 setTimeout(() => {
-                    window.location.href = user.role === "admin" ? "admin.html" : "shop.html";
+                    if (user.role === "admin") {
+                        window.location.href = "admin.html";
+                    } else {
+                        window.location.href = savedRedirect || "shops.html";
+                    }
                 }, 1000);
 
             } catch (error) {
