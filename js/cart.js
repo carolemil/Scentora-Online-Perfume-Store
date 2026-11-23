@@ -9,6 +9,56 @@ function getCatalog() {
   return typeof products !== 'undefined' ? products : [];
 }
 
+function getCurrentUser() {
+  const raw = localStorage.getItem('scentoraCurrentUser');
+  if (!raw || raw === 'null' || raw === 'false' || raw === 'undefined') {
+    return null;
+  }
+  try {
+    return JSON.parse(raw);
+  } catch {
+    return null;
+  }
+}
+
+function syncAuthUI() {
+  const user = getCurrentUser();
+  const loginLink = document.querySelector('.login-link');
+
+  if (loginLink) {
+    if (user) {
+      loginLink.textContent = 'Log Out';
+      loginLink.href = '#';
+      loginLink.onclick = (e) => {
+        e.preventDefault();
+        localStorage.removeItem('scentoraCurrentUser');
+        window.location.reload();
+      };
+    } else {
+      loginLink.textContent = 'Login';
+      loginLink.href = 'login.html';
+      loginLink.onclick = null;
+    }
+  }
+
+  // Pre-fill Delivery Details if logged in
+  if (user && typeof user === 'object') {
+    const nameField = document.getElementById('cust-name');
+    const emailField = document.getElementById('cust-email');
+    const phoneField = document.getElementById('cust-phone');
+
+    if (nameField && !nameField.value && user.name) {
+      nameField.value = user.name;
+    }
+    if (emailField && !emailField.value && user.email) {
+      emailField.value = user.email;
+    }
+    if (phoneField && !phoneField.value && user.phone) {
+      phoneField.value = user.phone;
+    }
+  }
+}
+
 function saveAndRender() {
   localStorage.setItem('scentora_cart', JSON.stringify(cart));
   renderCart();
@@ -195,6 +245,15 @@ function renderRecommendations() {
 document.getElementById('checkout-form').addEventListener('submit', (e) => {
   e.preventDefault();
   const errorEl = document.getElementById('error-msg');
+  errorEl.innerText = '';
+
+  // Require login before checking out
+  if (!getCurrentUser()) {
+    alert('Please log in to your account to complete checkout.');
+    localStorage.setItem('scentoraRedirectAfterLogin', 'cart.html');
+    window.location.href = 'login.html';
+    return;
+  }
 
   const nameInput = document.getElementById('cust-name');
   const emailInput = document.getElementById('cust-email');
@@ -205,8 +264,6 @@ document.getElementById('checkout-form').addEventListener('submit', (e) => {
   const email = emailInput.value.trim();
   const phone = phoneInput.value.trim();
   const address = addressInput.value.trim();
-
-  errorEl.innerText = '';
 
   if (cart.length === 0) {
     errorEl.innerText = 'Your bag is empty. Add a perfume before checking out.';
@@ -248,5 +305,6 @@ document.getElementById('checkout-form').addEventListener('submit', (e) => {
   window.location.href = 'order-confirmation.html';
 });
 
+syncAuthUI();
 renderCart();
 renderRecommendations();
