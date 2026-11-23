@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Catalog | Scentora</title>
+
+    <link rel="stylesheet" href="css/shops.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        /* Admin-specific additions matching shops.css palette */
+        .admin-badge-pill {
+            background-color: #b18a63;
+            color: white;
+            font-size: 11px;
+            letter-spacing: 1.5px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            margin-left: 10px;
+            vertical-align: middle;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+        }
+
+        .admin-nav-btns {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .secondary-nav-btn {
+            background-color: transparent;
+            color: #49372c;
+            border: 1px solid #cbb69d;
+            padding: 10px 18px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-size: 13px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .secondary-nav-btn:hover {
+            background-color: #e9ddcd;
+        }
+
+        .delete-card-btn {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            border: none;
+            background-color: rgba(255, 253, 249, 0.95);
+            color: #a44e42;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.2s;
+        }
+
+        .delete-card-btn:hover {
+            background-color: #a44e42;
+            color: white;
+            transform: scale(1.08);
+        }
+
+        /* Edit / Add Modal */
+        .edit-modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background-color: rgba(40, 28, 20, 0.55);
+            z-index: 300;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .edit-modal-overlay.show {
+            display: flex;
+        }
+
+        .edit-modal {
+            background-color: #faf7f1;
+            width: 100%;
+            max-width: 460px;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.22);
+        }
+
+        .edit-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #ddcbb5;
+        }
+
+        .edit-modal-header h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 24px;
+            color: #49372c;
+        }
+
+        .edit-modal form {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .edit-modal label {
+            display: block;
+            font-size: 12px;
+            font-weight: 500;
+            color: #75563f;
+            margin-bottom: 4px;
+        }
+
+        .edit-modal input,
+        .edit-modal select {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid #ddcbb5;
+            border-radius: 10px;
+            background-color: white;
+            color: #49372c;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .edit-modal input:focus,
+        .edit-modal select:focus {
+            border-color: #a17b58;
+        }
+
+        .modal-grid-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .modal-btn-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 8px;
+        }
+
+        .modal-btn-row button {
+            flex: 1;
+            padding: 13px;
+            border-radius: 25px;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .btn-cancel {
+            background-color: #e9ddcd;
+            color: #49372c;
+        }
+
+        .btn-save {
+            background-color: #75563f;
+            color: white;
+        }
+
+        .btn-save:hover {
+            background-color: #a17b58;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Security Check -->
+    <script>
+        if (sessionStorage.getItem("scentoraAdminLoggedIn") !== "true") {
+            window.location.href = "admin-login.html";
+        }
+    </script>
+
+    <!-- Navigation (Same layout as user shop, with Admin controls) -->
+    <header class="navbar">
+        <a href="admin-shop.html" class="logo">SCENTORA<span>.</span> <span class="admin-badge-pill">ADMIN</span></a>
+
+        <nav>
+            <a href="admin.html">Dashboard</a>
+            <a href="#products">Catalog</a>
+            <a href="shops.html" target="_blank">Preview User Shop</a>
+        </nav>
+
+        <div class="admin-nav-btns">
+            <button type="button" class="secondary-nav-btn" id="resetDefaultBtn">Reset Default 8</button>
+            <button type="button" class="cart-button" id="addFragranceBtn">+ Add Fragrance</button>
+        </div>
+    </header>
+
+    <!-- Hero Section (Identical to User Shop) -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <p class="subtitle">STOREFRONT CATALOG EDITOR</p>
+            <h1>Elegance in<br>Every Drop.</h1>
+            <p>Click any fragrance below to edit its details, pricing, or image. Changes sync live to the customer shop.</p>
+            <a href="#products" class="shops-btn">Edit Collection</a>
+        </div>
+    </section>
+
+    <!-- Offers Banner -->
+    <section class="offer-banner" id="offers">
+        <h2>Special Offers</h2>
+        <p id="adminOfferBannerText">Enjoy up to 25% OFF on selected fragrances!</p>
+    </section>
+
+    <!-- Products Section -->
+    <main class="products-section" id="products">
+
+        <div class="section-heading">
+            <p class="subtitle">MANAGE COLLECTION</p>
+            <h2>Click to Edit Any Scent</h2>
+        </div>
+
+        <!-- Search -->
+        <div class="search-container">
+            <input
+                type="text"
+                id="searchInput"
+                placeholder="Search fragrances to edit..."
+            >
+        </div>
+
+        <!-- Filters -->
+        <div class="filters">
+
+            <div class="categories">
+                <button class="category-btn active" data-category="All">All</button>
+                <button class="category-btn" data-category="Men">Men</button>
+                <button class="category-btn" data-category="Women">Women</button>
+                <button class="category-btn" data-category="Unisex">Unisex</button>
+                <button class="category-btn" data-category="Offers">Offers</button>
+            </div>
+
+            <select id="sortSelect">
+                <option value="default">Sort By</option>
+                <option value="low-high">Price: Low to High</option>
+                <option value="high-low">Price: High to Low</option>
+            </select>
+
+        </div>
+
+        <!-- Products Grid -->
+        <div class="products-grid" id="productsGrid">
+            <!-- Generated via js/admin-shops.js -->
+        </div>
+
+        <p id="noProducts" class="no-products" hidden>
+            No perfumes found. Try another search.
+        </p>
+
+    </main>
+
+    <!-- Edit / Add Fragrance Modal -->
+    <div class="edit-modal-overlay" id="editModalOverlay">
+        <div class="edit-modal">
+            <div class="edit-modal-header">
+                <h2 id="modalHeading">Edit Fragrance</h2>
+                <button type="button" class="close-btn" id="closeEditModal">✕</button>
+            </div>
+
+            <form id="adminShopForm">
+                <input type="hidden" id="editProductId">
+
+                <div>
+                    <label for="editName">Perfume Name</label>
+                    <input type="text" id="editName" placeholder="e.g. Vanilla Dream" required>
+                </div>
+
+                <div class="modal-grid-row">
+                    <div>
+                        <label for="editCategory">Category</label>
+                        <select id="editCategory" required>
+                            <option value="Women">Women</option>
+                            <option value="Men">Men</option>
+                            <option value="Unisex">Unisex</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="editPrice">Price (EGP)</label>
+                        <input type="number" id="editPrice" min="1" required>
+                    </div>
+                </div>
+
+                <div class="modal-grid-row">
+                    <div>
+                        <label for="editOldPrice">Old Price (Optional)</label>
+                        <input type="number" id="editOldPrice" min="0" placeholder="0">
+                    </div>
+
+                    <div>
+                        <label for="editImage">Image URL</label>
+                        <input type="url" id="editImage" placeholder="https://...">
+                    </div>
+                </div>
+
+                <div class="modal-btn-row">
+                    <button type="button" class="btn-cancel" id="cancelEditModal">Cancel</button>
+                    <button type="submit" class="btn-save">Save & Sync to Shop</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <h2>SCENTORA.</h2>
+        <p>Luxury is a fragrance you never forget.</p>
+        <p>© 2026 Scentora. All rights reserved.</p>
+    </footer>
+
+    <script src="js/products.js"></script>
+    <script src="js/admin-shops.js"></script>
+
+</body>
+</html>
