@@ -128,7 +128,16 @@ function displayProducts(productList) {
 
         const category = document.createElement("p");
         category.className = "product-category";
-        category.textContent = product.category;
+        category.textContent = product.size
+            ? `${product.category} · ${product.size}`
+            : product.category;
+
+        const notes = document.createElement("p");
+        notes.className = "product-notes";
+
+        if (Array.isArray(product.notes) && product.notes.length > 0) {
+            notes.textContent = product.notes.join(" · ");
+        }
 
         const price = document.createElement("p");
         price.className = "product-price";
@@ -163,6 +172,11 @@ function displayProducts(productList) {
 
         info.appendChild(name);
         info.appendChild(category);
+
+        if (notes.textContent !== "") {
+            info.appendChild(notes);
+        }
+
         info.appendChild(price);
         info.appendChild(button);
 
