@@ -528,7 +528,8 @@ select {
     display: block;
 }
 
-.cart-panel {
+.cart-panel,
+.cart-overlay > * {
     background: var(--home-cream);
     width: 400px;
     max-width: 100%;
@@ -540,7 +541,6 @@ select {
     box-shadow: -10px 0 40px rgba(48, 34, 25, 0.15);
     animation: slideIn 0.35s ease both;
 }
-
 .cart-header {
     display: flex;
     justify-content: space-between;
