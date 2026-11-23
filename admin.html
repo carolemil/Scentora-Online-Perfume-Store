@@ -4,8 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Dashboard | Scentora</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+
   <link rel="stylesheet" href="css/admin.css">
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
 
@@ -19,7 +23,37 @@
 
   <!-- Admin Navigation Bar (Clean, no shopper nav links) -->
   <header class="navbar">
-    <a href="admin.html" class="logo">SCENTORA<span>.</span></a>
+    <a href="admin.html" class="brand">
+      <svg class="brand-logo" viewBox="0 0 100 100"
+           fill="none" xmlns="http://www.w3.org/2000/svg">
+        <g stroke="currentColor" stroke-width="2.2"
+           stroke-linecap="round" stroke-linejoin="round">
+
+          <path d="M67 23C57 12 38 15 32 28C26 41 39 48 52 50C67 52 76 62 68 76C60 90 39 88 30 76"/>
+
+          <g transform="translate(39 20)">
+            <ellipse cy="-8" rx="4.5" ry="7"/>
+            <ellipse cy="-8" rx="4.5" ry="7" transform="rotate(72)"/>
+            <ellipse cy="-8" rx="4.5" ry="7" transform="rotate(144)"/>
+            <ellipse cy="-8" rx="4.5" ry="7" transform="rotate(216)"/>
+            <ellipse cy="-8" rx="4.5" ry="7" transform="rotate(288)"/>
+            <circle r="2.3" fill="#AD8754" stroke="none"/>
+          </g>
+
+          <g transform="translate(69 77)">
+            <ellipse cy="-7" rx="4" ry="6"/>
+            <ellipse cy="-7" rx="4" ry="6" transform="rotate(72)"/>
+            <ellipse cy="-7" rx="4" ry="6" transform="rotate(144)"/>
+            <ellipse cy="-7" rx="4" ry="6" transform="rotate(216)"/>
+            <ellipse cy="-7" rx="4" ry="6" transform="rotate(288)"/>
+            <circle r="2" fill="#AD8754" stroke="none"/>
+          </g>
+
+        </g>
+      </svg>
+
+      <span class="brand-name">scentora<span>.</span></span>
+    </a>
 
     <div class="nav-actions" id="admin-nav-actions">
       <a href="shop.html" class="secondary-button">View Storefront</a>
@@ -77,7 +111,7 @@
         </div>
       </form>
 
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:30px; padding-top:20px; border-top:1px solid #E6DACA;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:30px; padding-top:20px; border-top:1px solid #E8DED1;">
         <h3 style="font-family:'Playfair Display',serif; font-size:19px; font-weight:500;">Fragrance Catalog</h3>
         <button type="button" id="reset-catalog-btn" class="secondary-button">Reset Default 8</button>
       </div>
@@ -101,7 +135,38 @@
 
   <!-- Footer -->
   <footer class="footer">
-    <a href="admin.html" class="logo">SCENTORA<span>.</span></a>
+    <a href="admin.html" class="brand footer-brand">
+      <svg class="brand-logo" viewBox="0 0 100 100"
+           fill="none" xmlns="http://www.w3.org/2000/svg">
+        <g stroke="currentColor" stroke-width="2.2"
+           stroke-linecap="round" stroke-linejoin="round">
+
+          <path d="M67 23C57 12 38 15 32 28C26 41 39 48 52 50C67 52 76 62 68 76C60 90 39 88 30 76"/>
+
+          <g transform="translate(39 20)">
+            <ellipse cy="-8" rx="4.5" ry="7"/>
+            <ellipse cy="-8" rx="4.5" ry="7" transform="rotate(72)"/>
+            <ellipse cy="-8" rx="4.5" ry="7" transform="rotate(144)"/>
+            <ellipse cy="-8" rx="4.5" ry="7" transform="rotate(216)"/>
+            <ellipse cy="-8" rx="4.5" ry="7" transform="rotate(288)"/>
+            <circle r="2.3" fill="#AD8754" stroke="none"/>
+          </g>
+
+          <g transform="translate(69 77)">
+            <ellipse cy="-7" rx="4" ry="6"/>
+            <ellipse cy="-7" rx="4" ry="6" transform="rotate(72)"/>
+            <ellipse cy="-7" rx="4" ry="6" transform="rotate(144)"/>
+            <ellipse cy="-7" rx="4" ry="6" transform="rotate(216)"/>
+            <ellipse cy="-7" rx="4" ry="6" transform="rotate(288)"/>
+            <circle r="2" fill="#AD8754" stroke="none"/>
+          </g>
+
+        </g>
+      </svg>
+
+      <span class="brand-name">scentora<span>.</span></span>
+    </a>
+
     <p>Store Administration Portal</p>
     <p class="copyright" style="margin-top: 20px;">© 2026 Scentora. All rights reserved.</p>
   </footer>
