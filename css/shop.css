@@ -1,5 +1,7 @@
 
 
+
+
 /* =========================================
    SCENTORA SHOP PAGE
    Cream / Beige / Brown / Gold
@@ -116,6 +118,30 @@ select {
 .navbar nav a:hover::after,
 .navbar nav a.active::after {
     width: 100%;
+}
+
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    white-space: nowrap;
+}
+
+.login-btn {
+    color: var(--home-brown);
+    font-size: 11px;
+    font-weight: 600;
+    padding: 11px 22px;
+    border: 1px solid var(--home-sand);
+    border-radius: 50px;
+    transition: 0.3s ease;
+}
+
+.login-btn:hover {
+    background: var(--home-gold);
+    border-color: var(--home-gold);
+    color: #fff;
+    transform: translateY(-2px);
 }
 
 .cart-button {
@@ -414,6 +440,15 @@ select {
     letter-spacing: 1.5px;
     text-transform: uppercase;
     margin-bottom: 12px;
+}
+
+.product-notes {
+    color: var(--home-muted);
+    font-family: "Playfair Display", serif;
+    font-size: 13px;
+    font-style: italic;
+    line-height: 1.6;
+    margin: -4px 0 14px;
 }
 
 .product-price {
@@ -767,6 +802,14 @@ footer p {
         font-size: 11px;
     }
 
+    .nav-actions {
+        gap: 12px;
+    }
+
+    .login-btn {
+        padding: 9px 16px;
+    }
+
     .cart-button {
         padding: 10px 16px;
     }
@@ -838,4 +881,3 @@ footer p {
         transition-duration: 0.01ms !important;
     }
 }
-
