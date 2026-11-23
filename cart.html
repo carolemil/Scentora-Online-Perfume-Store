@@ -199,5 +199,20 @@
   <!-- Load your team's real product inventory first, then cart logic -->
   <script src="js/products.js"></script>
   <script src="js/cart.js"></script>
+
+  <!-- Increment Active Orders Counter on Checkout -->
+  <script>
+    document.getElementById("checkout-form").addEventListener("submit", function () {
+      const name = document.getElementById("cust-name").value.trim();
+      const email = document.getElementById("cust-email").value.trim();
+      const phone = document.getElementById("cust-phone").value.trim();
+      const address = document.getElementById("cust-address").value.trim();
+
+      if (name && email && phone && address) {
+        const currentOrders = parseInt(localStorage.getItem("scentoraActiveOrders")) || 0;
+        localStorage.setItem("scentoraActiveOrders", currentOrders + 1);
+      }
+    });
+  </script>
 </body>
 </html>
