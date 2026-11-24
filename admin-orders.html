@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Active Orders | Scentora Admin</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/admin.css">
+  <style>
+    .orders-status-wrapper {
+      max-width: 680px;
+      margin: 0 auto 80px auto;
+      padding: 0 20px;
+    }
+    .orders-status-card {
+      text-align: center;
+      padding: 56px 32px;
+      border: 1px solid rgba(173, 135, 84, 0.28);
+      border-radius: 12px;
+      background: #ffffff;
+      box-shadow: 0 10px 30px rgba(73, 55, 44, 0.05);
+    }
+    .orders-status-card h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 28px;
+      font-weight: 500;
+      margin: 12px 0;
+      color: #2c221e;
+    }
+    .orders-status-card h2 span {
+      color: #AD8754;
+      font-weight: 600;
+    }
+    .orders-status-card p {
+      font-size: 15px;
+      color: #6b5e57;
+      max-width: 440px;
+      margin: 0 auto 28px auto;
+      line-height: 1.6;
+    }
+    .orders-actions {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Security Check -->
+  <script>
+    const isAdminLoggedIn = sessionStorage.getItem("scentoraAdminLoggedIn") === "true";
+    if (!isAdminLoggedIn) {
+      window.location.href = "admin-login.html";
+    }
+  </script>
+
+  <!-- Admin Navigation Bar -->
+  <header class="navbar">
+    <a href="admin.html" class="brand">
+      <svg class="brand-logo" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <g stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M67 23C57 12 38 15 32 28C26 41 39 48 52 50C67 52 76 62 68 76C60 90 39 88 30 76"/>
+          <g transform="translate(39 20)">
+            <ellipse cy="-8" rx="4.5" ry="7"/>
+            <ellipse cy="-8" rx="4.5" ry="7" transform="rotate(72)"/>
+            <ellipse cy="-8" rx="4.5" ry="7" transform="rotate(144)"/>
+            <ellipse cy="-8" rx="4.5" ry="7" transform="rotate(216)"/>
+            <ellipse cy="-8" rx="4.5" ry="7" transform="rotate(288)"/>
+            <circle r="2.3" fill="#AD8754" stroke="none"/>
+          </g>
+          <g transform="translate(69 77)">
+            <ellipse cy="-7" rx="4" ry="6"/>
+            <ellipse cy="-7" rx="4" ry="6" transform="rotate(72)"/>
+            <ellipse cy="-7" rx="4" ry="6" transform="rotate(144)"/>
+            <ellipse cy="-7" rx="4" ry="6" transform="rotate(216)"/>
+            <ellipse cy="-7" rx="4" ry="6" transform="rotate(288)"/>
+            <circle r="2" fill="#AD8754" stroke="none"/>
+          </g>
+        </g>
+      </svg>
+      <span class="brand-name">scentora<span>.</span></span>
+    </a>
+
+    <div class="nav-actions" id="admin-nav-actions">
+      <a href="admin.html" class="secondary-button">← Back to Dashboard</a>
+      <button type="button" id="admin-auth-btn" class="nav-button">Log Out</button>
+    </div>
+  </header>
+
+  <!-- Page Banner -->
+  <section class="page-banner">
+    <p class="eyebrow">ORDER MANAGEMENT</p>
+    <h1>Active <span>Orders</span></h1>
+    <p class="banner-sub">Monitor incoming customer checkouts across Scentora.</p>
+  </section>
+
+  <!-- Active Orders Status Message -->
+  <main class="orders-status-wrapper">
+    <div class="orders-status-card">
+      <p class="eyebrow">CURRENT QUEUE</p>
+      <h2 id="orders-message">You currently have <span>0</span> active orders.</h2>
+      <p id="orders-subtext">Customer orders submitted through the shopping bag will appear here once full order tracking is connected.</p>
+
+      <div class="orders-actions">
+        <a href="admin.html" class="nav-button">Return to Dashboard</a>
+        <button type="button" id="reset-orders-btn" class="secondary-button">Reset Counter</button>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <a href="admin.html" class="brand footer-brand">
+      <svg class="brand-logo" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <g stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M67 23C57 12 38 15 32 28C26 41 39 48 52 50C67 52 76 62 68 76C60 90 39 88 30 76"/>
+          <g transform="translate(39 20)">
+            <ellipse cy="-8" rx="4.5" ry="7"/>
+            <ellipse cy="-8" rx="4.5" ry="7" transform="rotate(72)"/>
+            <ellipse cy="-8" rx="4.5" ry="7" transform="rotate(144)"/>
+            <ellipse cy="-8" rx="4.5" ry="7" transform="rotate(216)"/>
+            <ellipse cy="-8" rx="4.5" ry="7" transform="rotate(288)"/>
+            <circle r="2.3" fill="#AD8754" stroke="none"/>
+          </g>
+          <g transform="translate(69 77)">
+            <ellipse cy="-7" rx="4" ry="6"/>
+            <ellipse cy="-7" rx="4" ry="6" transform="rotate(72)"/>
+            <ellipse cy="-7" rx="4" ry="6" transform="rotate(144)"/>
+            <ellipse cy="-7" rx="4" ry="6" transform="rotate(216)"/>
+            <ellipse cy="-7" rx="4" ry="6" transform="rotate(288)"/>
+            <circle r="2" fill="#AD8754" stroke="none"/>
+          </g>
+        </g>
+      </svg>
+      <span class="brand-name">scentora<span>.</span></span>
+    </a>
+    <p>Store Administration Portal</p>
+    <p class="copyright" style="margin-top: 20px;">© 2026 Scentora. All rights reserved.</p>
+  </footer>
+
+  <script>
+    // Auth Button Logic
+    const authBtn = document.getElementById("admin-auth-btn");
+    if (sessionStorage.getItem("scentoraAdminLoggedIn") === "true") {
+      authBtn.textContent = "Log Out";
+      authBtn.onclick = function () {
+        sessionStorage.removeItem("scentoraAdminLoggedIn");
+        window.location.href = "admin-login.html";
+      };
+    } else {
+      authBtn.textContent = "Log In";
+      authBtn.onclick = function () {
+        window.location.href = "admin-login.html";
+      };
+    }
+
+    // Render Active Orders Message
+    function renderOrdersMessage() {
+      const count = parseInt(localStorage.getItem("scentoraActiveOrders")) || 0;
+      const msgEl = document.getElementById("orders-message");
+      const label = count === 1 ? "active order" : "active orders";
+      msgEl.innerHTML = `You currently have <span>${count}</span> ${label}.`;
+    }
+
+    document.addEventListener("DOMContentLoaded", renderOrdersMessage);
+
+    // Live-sync across tabs
+    window.addEventListener("storage", function (e) {
+      if (e.key === "scentoraActiveOrders") {
+        renderOrdersMessage();
+      }
+    });
+
+    // Reset Counter Button (useful while testing)
+    document.getElementById("reset-orders-btn").addEventListener("click", function () {
+      localStorage.setItem("scentoraActiveOrders", "0");
+      renderOrdersMessage();
+    });
+  </script>
+
+</body>
+</html>
