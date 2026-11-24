@@ -84,6 +84,9 @@
     <p class="eyebrow">STORE MANAGEMENT</p>
     <h1>Atelier <span>Admin</span></h1>
     <p class="banner-sub">Select a section below to manage Scentora's fragrance collection or seasonal offers.</p>
+
+    <p class="banner-sub">Select a section below to manage Scentora's fragrance collection, seasonal offers, or customer orders.</p>
+ main
   </section>
 
   <!-- Clickable Dynamic Stats Overview -->
@@ -99,6 +102,14 @@
       <span class="stat-label">ACTIVE OFFERS</span>
       <span class="stat-hint">Manage Promo Codes →</span>
     </a>
+
+
+    <a href="admin-orders.html" class="stat-box stat-box-link" title="View & Manage Active Orders">
+      <span class="stat-number" id="active-orders-count">0</span>
+      <span class="stat-label">ACTIVE ORDERS</span>
+      <span class="stat-hint">Manage Orders →</span>
+    </a>
+main
   </section>
 
   <!-- Footer -->
@@ -145,6 +156,23 @@
         window.location.href = "admin-login.html";
       };
     }
+
+    // Load Active Orders count from localStorage
+    function updateActiveOrdersDisplay() {
+      const ordersCountEl = document.getElementById("active-orders-count");
+      if (ordersCountEl) {
+        ordersCountEl.textContent = localStorage.getItem("scentoraActiveOrders") || "0";
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", updateActiveOrdersDisplay);
+
+    // Live-sync across browser tabs when a customer checks out
+    window.addEventListener("storage", function (e) {
+      if (e.key === "scentoraActiveOrders") {
+        updateActiveOrdersDisplay();
+      }
+    });
   </script>
 
   <script src="js/admin.js"></script>

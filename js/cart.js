@@ -9,6 +9,18 @@ function getCatalog() {
   return typeof products !== 'undefined' ? products : [];
 }
 
+// Pull active promo codes from Admin changes first, falling back to default offers
+function getAvailableOffers() {
+  const saved = JSON.parse(localStorage.getItem('scentora_offers'));
+  if (Array.isArray(saved) && saved.length > 0) {
+    return saved.filter(o => o && o.code && o.active !== false);
+  }
+  return [
+    { code: 'SCENT15', discount: 15 },
+    { code: 'LUXURY25', discount: 25 }
+  ];
+}
+
 function getCurrentUser() {
   const raw = localStorage.getItem('scentoraCurrentUser');
   if (!raw || raw === 'null' || raw === 'false' || raw === 'undefined') {
@@ -73,10 +85,10 @@ function saveAndRender() {
 
 function addSuggestedItem(productId) {
   const catalog = getCatalog();
-  const product = catalog.find(item => item.id === productId);
+  const product = catalog.find(item => String(item.id) === String(productId));
   if (!product) return;
 
-  const existing = cart.find(item => item.id === productId || item.name === product.name);
+  const existing = cart.find(item => String(item.id) === String(productId) || item.name === product.name);
   if (existing) {
     const updated = (existing.qty || existing.quantity || 1) + 1;
     existing.qty = updated;
@@ -119,16 +131,13 @@ document.getElementById('clear-cart-btn').addEventListener('click', () => {
 document.getElementById('apply-promo-btn').addEventListener('click', () => {
   const codeInput = document.getElementById('promo-input').value.trim().toUpperCase();
   const promoMsg = document.getElementById('promo-msg');
-  const offers = JSON.parse(localStorage.getItem('scentora_offers')) || [
-    { code: 'SCENT15', discount: 15 },
-    { code: 'LUXURY25', discount: 25 }
-  ];
+  const offers = getAvailableOffers();
 
-  const matched = offers.find(o => o.code === codeInput);
+  const matched = offers.find(o => o.code.toUpperCase() === codeInput);
   if (matched) {
-    activeDiscount = matched.discount;
-    activePromoCode = matched.code;
-    promoMsg.innerText = `Code "${matched.code}" applied (${matched.discount}% OFF)!`;
+    activeDiscount = Number(matched.discount) || 0;
+    activePromoCode = matched.code.toUpperCase();
+    promoMsg.innerText = `Code "${activePromoCode}" applied (${activeDiscount}% OFF)!`;
     promoMsg.style.color = '#2e7d32';
   } else {
     activeDiscount = 0;
@@ -138,6 +147,41 @@ document.getElementById('apply-promo-btn').addEventListener('click', () => {
   }
   renderCart();
 });
+
+// Check for available promo codes on page load and display pop-up
+function checkAndShowPromoPopup() {
+  const offers = getAvailableOffers();
+  if (!offers || offers.length === 0) return;
+
+  // Pick the highest discount available
+  const bestOffer = [...offers].sort((a, b) => Number(b.discount) - Number(a.discount))[0];
+  if (!bestOffer || !bestOffer.code) return;
+
+  const popup = document.getElementById('promo-popup');
+  const textEl = document.getElementById('promo-popup-text');
+  const applyBtn = document.getElementById('apply-popup-promo-btn');
+  const closeBtn = document.getElementById('close-promo-popup');
+  const dismissBtn = document.getElementById('dismiss-promo-popup');
+
+  textEl.innerHTML = `Use <strong>${bestOffer.code.toUpperCase()}</strong> for <strong>${bestOffer.discount}%</strong> off your order.`;
+  popup.style.display = 'flex';
+
+  const closeModal = () => {
+    popup.style.display = 'none';
+  };
+
+  closeBtn.onclick = closeModal;
+  dismissBtn.onclick = closeModal;
+  popup.onclick = (e) => {
+    if (e.target === popup) closeModal();
+  };
+
+  applyBtn.onclick = () => {
+    document.getElementById('promo-input').value = bestOffer.code.toUpperCase();
+    document.getElementById('apply-promo-btn').click();
+    closeModal();
+  };
+}
 
 // Press Enter inside any Delivery Details box to move to the next field (or submit on the last one)
 const checkoutInputs = Array.from(document.querySelectorAll('#checkout-form input'));
@@ -172,7 +216,8 @@ function renderCart() {
 
   cart.forEach((item, index) => {
     const qty = item.qty || item.quantity || 1;
-    const itemTotal = item.price * qty;
+    const unitPrice = Number(item.price) || 0;
+    const itemTotal = unitPrice * qty;
     subtotal += itemTotal;
     totalItems += qty;
 
@@ -180,7 +225,7 @@ function renderCart() {
       <div class="cart-item">
         <div class="item-details">
           <h3>${item.name}</h3>
-          <p class="item-meta">${item.category || 'Signature Fragrance'} · ${item.price.toLocaleString()} EGP each</p>
+          <p class="item-meta">${item.category || 'Signature Fragrance'} · ${unitPrice.toLocaleString()} EGP each</p>
         </div>
 
         <div class="qty-controls">
@@ -222,7 +267,7 @@ function renderRecommendations() {
   const catalog = getCatalog();
 
   const suggestions = catalog
-    .filter(prod => !cart.some(item => item.id === prod.id || item.name === prod.name))
+    .filter(prod => !cart.some(item => String(item.id) === String(prod.id) || item.name === prod.name))
     .slice(0, 3);
 
   if (suggestions.length === 0) {
@@ -234,15 +279,16 @@ function renderRecommendations() {
   grid.innerHTML = '';
 
   suggestions.forEach(prod => {
+    const prodPrice = Number(prod.price) || 0;
     grid.innerHTML += `
       <div class="rec-card">
         <img src="${prod.image}" alt="${prod.name}" onerror="this.onerror=null;this.src='https://placehold.co/300x300/f4ede2/75563f?text=Scentora';">
         <div class="rec-info">
           <span class="rec-cat">${prod.category}</span>
           <h4>${prod.name}</h4>
-          <p class="rec-price">${prod.price.toLocaleString()} EGP</p>
+          <p class="rec-price">${prodPrice.toLocaleString()} EGP</p>
         </div>
-        <button type="button" class="rec-add-btn" onclick="addSuggestedItem(${prod.id})">+ Add to Bag</button>
+        <button type="button" class="rec-add-btn" onclick="addSuggestedItem('${prod.id}')">+ Add to Bag</button>
       </div>
     `;
   });
@@ -314,3 +360,4 @@ document.getElementById('checkout-form').addEventListener('submit', (e) => {
 syncAuthUI();
 renderCart();
 renderRecommendations();
+checkAndShowPromoPopup();
