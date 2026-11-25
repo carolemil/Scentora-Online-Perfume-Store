@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,58 +10,10 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
 
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/home.css">
     <link rel="stylesheet" href="css/shop.css">
     <style>
-        /* =========================================
-           BRAND LOGO & NAVBAR THEME OVERRIDES
-        ========================================= */
-        .navbar {
-            min-height: 88px;
-            padding: 15px 8%;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 25px;
-            background: rgba(250, 247, 240, 0.96);
-            border-bottom: 1px solid #E8DED1;
-            position: relative;
-            z-index: 10;
-        }
-
-        .brand {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            flex-shrink: 0;
-            text-decoration: none;
-        }
-
-        .brand-logo {
-            width: 43px;
-            height: 43px;
-            color: #854B2C;
-            display: block;
-            transition: transform 0.5s ease;
-        }
-
-        .brand:hover .brand-logo {
-            transform: rotate(-12deg);
-        }
-
-        .brand-name {
-            color: #49352A;
-            font-family: "Playfair Display", serif;
-            font-size: 27px;
-            font-weight: 600;
-            letter-spacing: -1.3px;
-            line-height: 1;
-        }
-
-        .brand-name > span {
-            color: #AD8754;
-        }
-
-        /* High-Contrast Popping ADMIN Badge */
         .admin-badge-pill {
             display: inline-flex;
             align-items: center;
@@ -78,125 +31,58 @@
             box-shadow: 0 4px 12px rgba(48, 34, 25, 0.22);
         }
 
-        .navbar nav {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 29px;
-        }
-
-        .navbar nav a {
-            color: #897C70;
-            font-family: "DM Sans", sans-serif;
-            font-size: 12px;
-            font-weight: 500;
-            text-decoration: none;
-            position: relative;
-            transition: color 0.3s ease;
-        }
-
-        .navbar nav a::after {
-            content: "";
-            position: absolute;
-            bottom: -7px;
-            left: 0;
-            width: 0;
-            height: 1px;
-            background: #AD8754;
-            transition: width 0.3s ease;
-        }
-
-        .navbar nav a:hover::after,
-        .navbar nav a.active::after {
-            width: 100%;
-        }
-
-        .navbar nav a:hover,
-        .navbar nav a.active {
-            color: #AD8754;
-        }
-
-        /* Admin-specific additions matching theme palette */
-        .admin-nav-btns {
-            display: flex;
-            gap: 12px;
+        .secondary-nav-btn {
+            min-height: 40px;
+            padding: 0 16px;
+            border: 1px solid var(--dark-beige);
+            border-radius: var(--radius-pill);
+            background-color: var(--white);
+            color: var(--brown);
+            font-size: 13px;
+            font-weight: 600;
+            display: inline-flex;
             align-items: center;
             white-space: nowrap;
-        }
-
-        .secondary-nav-btn {
-            background-color: transparent;
-            color: #49352A;
-            border: 1px solid #C9B49A;
-            padding: 11px 18px;
-            border-radius: 50px;
-            text-decoration: none;
-            font-family: "DM Sans", sans-serif;
-            font-size: 11px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.3s ease;
+            transition: all 0.2s ease;
         }
 
         .secondary-nav-btn:hover {
-            background-color: #E9DDCB;
-            border-color: #AD8754;
-        }
-
-        .navbar .cart-button {
-            background: #49352A;
-            color: #FFFFFF;
-            padding: 12px 22px;
-            border-radius: 50px;
-            font-family: "DM Sans", sans-serif;
-            font-size: 11px;
-            font-weight: 600;
-            border: 1px solid #49352A;
-            cursor: pointer;
-            transition: 0.3s ease;
-        }
-
-        .navbar .cart-button:hover {
-            background: #AD8754;
-            border-color: #AD8754;
-            transform: translateY(-2px);
-        }
-
-        .products-section {
-            padding-top: 55px;
+            border-color: var(--gold);
+            color: var(--gold);
         }
 
         .delete-card-btn {
             position: absolute;
-            top: 12px;
-            right: 12px;
+            top: 14px;
+            right: 14px;
+            z-index: 2;
             width: 34px;
             height: 34px;
             border-radius: 50%;
             border: none;
             background-color: rgba(255, 253, 249, 0.95);
-            color: #a44e42;
+            color: var(--danger);
+            font-size: 14px;
+            font-weight: 700;
             box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
-            cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: 0.2s;
+            transition: all 0.2s ease;
         }
 
         .delete-card-btn:hover {
-            background-color: #a44e42;
-            color: white;
+            background-color: var(--danger);
+            color: var(--white);
             transform: scale(1.08);
         }
 
-        /* Edit / Add Modal */
         .edit-modal-overlay {
             display: none;
             position: fixed;
             inset: 0;
             background-color: rgba(40, 28, 20, 0.55);
-            z-index: 300;
+            z-index: 1200;
             align-items: center;
             justify-content: center;
             padding: 20px;
@@ -207,11 +93,12 @@
         }
 
         .edit-modal {
-            background-color: #faf7f1;
+            background-color: var(--light-cream);
             width: 100%;
             max-width: 460px;
-            border-radius: 16px;
+            border-radius: var(--radius-md);
             padding: 30px;
+            border: 1px solid var(--border);
             box-shadow: 0 15px 40px rgba(0, 0, 0, 0.22);
         }
 
@@ -221,13 +108,14 @@
             align-items: center;
             margin-bottom: 20px;
             padding-bottom: 12px;
-            border-bottom: 1px solid #ddcbb5;
+            border-bottom: 1px solid var(--border);
         }
 
         .edit-modal-header h2 {
-            font-family: 'Playfair Display', serif;
+            margin: 0;
+            font-family: "Playfair Display", serif;
             font-size: 24px;
-            color: #49372c;
+            color: var(--brown);
         }
 
         .edit-modal form {
@@ -239,8 +127,8 @@
         .edit-modal label {
             display: block;
             font-size: 12px;
-            font-weight: 500;
-            color: #75563f;
+            font-weight: 600;
+            color: var(--medium-brown);
             margin-bottom: 4px;
         }
 
@@ -248,17 +136,23 @@
         .edit-modal select {
             width: 100%;
             padding: 12px 14px;
-            border: 1px solid #ddcbb5;
+            border: 1px solid var(--dark-beige);
             border-radius: 10px;
-            background-color: white;
-            color: #49372c;
+            background-color: var(--white);
+            color: var(--brown);
             font-size: 14px;
             outline: none;
         }
 
+        .edit-modal input[type="file"] {
+            padding: 9px 10px;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
         .edit-modal input:focus,
         .edit-modal select:focus {
-            border-color: #a17b58;
+            border-color: var(--gold);
         }
 
         .modal-grid-row {
@@ -276,93 +170,47 @@
         .modal-btn-row button {
             flex: 1;
             padding: 13px;
-            border-radius: 25px;
+            border-radius: var(--radius-pill);
             border: none;
-            cursor: pointer;
             font-size: 14px;
+            font-weight: 600;
+            transition: all 0.2s ease;
         }
 
         .btn-cancel {
-            background-color: #e9ddcd;
-            color: #49372c;
+            background-color: var(--beige);
+            color: var(--brown);
+        }
+
+        .btn-cancel:hover {
+            background-color: var(--dark-beige);
         }
 
         .btn-save {
-            background-color: #75563f;
-            color: white;
+            background-color: var(--brown);
+            color: var(--white);
         }
 
         .btn-save:hover {
-            background-color: #a17b58;
-        }
-
-        /* Footer Brand Styling */
-        footer {
-            background: #302219;
-            color: #FAF7F0;
-            padding: 55px 8% 25px;
-            text-align: center;
-        }
-
-        .footer-brand {
-            justify-content: center;
-            margin-bottom: 15px;
-        }
-
-        .footer-brand .brand-logo,
-        .footer-brand .brand-name {
-            color: #FAF7F0;
-        }
-
-        footer .footer-tagline {
-            color: #C9BBAA;
-            font-size: 12px;
-            margin-bottom: 22px;
-        }
-
-        footer .copyright {
-            border-top: 1px solid #655448;
-            padding-top: 22px;
-            color: #B9AA99;
-            font-size: 10px;
-        }
-
-        @media (max-width: 850px) {
-            .navbar {
-                flex-wrap: wrap;
-                padding: 15px 5%;
-            }
-
-            .navbar nav {
-                order: 3;
-                width: 100%;
-                padding: 10px 0 5px;
-                flex-wrap: wrap;
-                gap: 18px;
-            }
+            background-color: var(--gold);
         }
     </style>
 </head>
 
 <body>
 
-    <!-- Security Check -->
+    <!-- Redirect if not authenticated as admin -->
     <script>
         if (sessionStorage.getItem("scentoraAdminLoggedIn") !== "true") {
             window.location.href = "admin-login.html";
         }
     </script>
 
-    <!-- Navigation -->
     <header class="navbar">
         <a href="admin-shop.html" class="brand">
-            <svg class="brand-logo" viewBox="0 0 100 100"
-                 fill="none" xmlns="http://www.w3.org/2000/svg">
-                <g stroke="currentColor" stroke-width="2.2"
-                   stroke-linecap="round" stroke-linejoin="round">
-
+            <svg class="brand-logo" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <g stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M67 23C57 12 38 15 32 28C26 41 39 48 52 50C67 52 76 62 68 76C60 90 39 88 30 76"/>
-
                     <g transform="translate(39 20)">
                         <ellipse cy="-8" rx="4.5" ry="7"/>
                         <ellipse cy="-8" rx="4.5" ry="7" transform="rotate(72)"/>
@@ -371,7 +219,6 @@
                         <ellipse cy="-8" rx="4.5" ry="7" transform="rotate(288)"/>
                         <circle r="2.3" fill="#AD8754" stroke="none"/>
                     </g>
-
                     <g transform="translate(69 77)">
                         <ellipse cy="-7" rx="4" ry="6"/>
                         <ellipse cy="-7" rx="4" ry="6" transform="rotate(72)"/>
@@ -380,79 +227,99 @@
                         <ellipse cy="-7" rx="4" ry="6" transform="rotate(288)"/>
                         <circle r="2" fill="#AD8754" stroke="none"/>
                     </g>
-
                 </g>
             </svg>
-
             <span class="brand-name">scentora<span>.</span></span>
             <span class="admin-badge-pill">ADMIN</span>
         </a>
 
-        <nav>
+        <nav class="nav-links" aria-label="Main Navigation">
             <a href="admin.html">Dashboard</a>
-            <a href="#products" class="active">Catalog</a>
-            <a href="shops.html" target="_blank">Preview User Shop</a>
+            <a href="admin-shop.html" class="active">Shop</a>
+            <a href="#products" class="nav-cat-btn" data-nav-category="Women">Women</a>
+            <a href="#products" class="nav-cat-btn" data-nav-category="Men">Men</a>
+            <a href="#products" class="nav-cat-btn" data-nav-category="Unisex">Unisex</a>
+            <a href="shops.html" target="_blank">Preview Shop</a>
         </nav>
 
-        <div class="admin-nav-btns">
-            <button type="button" class="secondary-nav-btn" id="resetDefaultBtn">Reset Default 8</button>
+        <div class="nav-actions">
+            <button type="button" class="secondary-nav-btn" id="resetDefaultBtn">Reset Default</button>
             <button type="button" class="cart-button" id="addFragranceBtn">+ Add Fragrance</button>
         </div>
     </header>
 
-    <!-- Products Section -->
-    <main class="products-section" id="products">
+    <main>
+        <section class="hero">
+            <div class="hero-content">
+                <div class="hero-label">
+                    <span class="label-line"></span>
+                    THE ART OF FRAGRANCE
+                </div>
+                <h1>Discover your <span>signature scent.</span></h1>
+                <p class="hero-description">
+                    Explore fragrances that capture your personality, tell your story, and leave a lasting impression.
+                </p>
+                <div class="hero-buttons">
+                    <a href="#products" class="primary-button">
+                        Explore Collection <span aria-hidden="true">↗</span>
+                    </a>
+                </div>
+            </div>
+        </section>
 
-        <div class="section-heading">
-            <p class="subtitle">MANAGE COLLECTION</p>
-            <h2>Click to Edit Any Scent</h2>
-        </div>
-
-        <!-- Search -->
-        <div class="search-container">
-            <input
-                type="text"
-                id="searchInput"
-                placeholder="Search fragrances to edit..."
-            >
-        </div>
-
-        <!-- Filters -->
-        <div class="filters">
-
-            <div class="categories">
-                <button type="button" class="category-btn active" data-category="All">All</button>
-                <button type="button" class="category-btn" data-category="Men">Men</button>
-                <button type="button" class="category-btn" data-category="Women">Women</button>
-                <button type="button" class="category-btn" data-category="Unisex">Unisex</button>
-                <button type="button" class="category-btn" data-category="Offers">Offers</button>
+        <section class="products-section section-padding" id="products">
+            <div class="section-heading">
+                <p id="productCount" aria-live="polite">Discover our collection.</p>
             </div>
 
-            <select id="sortSelect">
-                <option value="default">Sort By</option>
-                <option value="low-high">Price: Low to High</option>
-                <option value="high-low">Price: High to Low</option>
-            </select>
+            <div class="shop-toolbar">
+                <div class="search-container">
+                    <input
+                        type="search"
+                        id="searchInput"
+                        placeholder="Search by perfume, brand, or category..."
+                        aria-label="Search fragrances"
+                    >
+                    <button type="button" id="clearSearch" hidden>Clear</button>
+                </div>
 
-        </div>
+                <div class="filters">
+                    <div class="categories" role="group" aria-label="Filter by category">
+                        <button type="button" class="category-btn active" data-category="All" aria-pressed="true">All Perfumes</button>
+                        <button type="button" class="category-btn" data-category="Women" aria-pressed="false">Women</button>
+                        <button type="button" class="category-btn" data-category="Men" aria-pressed="false">Men</button>
+                        <button type="button" class="category-btn" data-category="Unisex" aria-pressed="false">Unisex</button>
+                        <button type="button" class="category-btn" data-category="Offers" aria-pressed="false">Special Offers</button>
+                    </div>
 
-        <!-- Products Grid -->
-        <div class="products-grid" id="productsGrid">
-            <!-- Generated via js/admin-shop.js -->
-        </div>
+                    <div class="sort-controls">
+                        <select id="sortSelect" aria-label="Sort products">
+                            <option value="default">Sort by: Featured</option>
+                            <option value="low-high">Price: Low to High</option>
+                            <option value="high-low">Price: High to Low</option>
+                            <option value="name">Name: A to Z</option>
+                        </select>
+                        <button type="button" id="resetFilters">Reset</button>
+                    </div>
+                </div>
+            </div>
 
-        <p id="noProducts" class="no-products" hidden>
-            No perfumes found. Try another search.
-        </p>
+            <!-- Populated dynamically by admin-shop.js -->
+            <div class="products-grid" id="productsGrid"></div>
 
+            <div class="no-products" id="noProducts" hidden>
+                <h3>No fragrances found</h3>
+                <p>Try adjusting your search or resetting the active filters.</p>
+            </div>
+        </section>
     </main>
 
-    <!-- Edit / Add Fragrance Modal -->
+    <!-- Shared modal for adding and editing fragrances (hidden #editProductId tracks edit mode) -->
     <div class="edit-modal-overlay" id="editModalOverlay">
         <div class="edit-modal">
             <div class="edit-modal-header">
                 <h2 id="modalHeading">Edit Fragrance</h2>
-                <button type="button" class="close-btn" id="closeEditModal">✕</button>
+                <button type="button" class="close-btn" id="closeEditModal" aria-label="Close modal">&times;</button>
             </div>
 
             <form id="adminShopForm">
@@ -460,7 +327,7 @@
 
                 <div>
                     <label for="editName">Perfume Name</label>
-                    <input type="text" id="editName" placeholder="e.g. Vanilla Dream" required>
+                    <input type="text" id="editName" placeholder="e.g. Prada Milano" required>
                 </div>
 
                 <div class="modal-grid-row">
@@ -486,29 +353,36 @@
                     </div>
 
                     <div>
-                        <label for="editImage">Image URL</label>
-                        <input type="url" id="editImage" placeholder="https://...">
+                        <label for="editImageFile">Upload Image</label>
+                        <input type="file" id="editImageFile" accept="image/*">
                     </div>
+                </div>
+
+                <div id="imagePreviewWrap" style="display: none; text-align: center;">
+                    <img id="editImagePreview" src="" alt="Preview" style="width: 84px; height: 105px; object-fit: cover; border-radius: 10px; border: 1px solid var(--border);">
                 </div>
 
                 <div class="modal-btn-row">
                     <button type="button" class="btn-cancel" id="cancelEditModal">Cancel</button>
-                    <button type="submit" class="btn-save">Save & Sync to Shop</button>
+                    <button type="submit" class="btn-save">Save &amp; Sync to Shop</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- Footer -->
-    <footer>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+    <section class="offer-banner">
+        <p class="eyebrow">A LITTLE SOMETHING SPECIAL</p>
+        <h2>Special Offers</h2>
+        <p id="shopOfferBannerText">Enjoy up to 25% OFF on selected fragrances!</p>
+    </section>
+
+    <footer class="footer">
         <a href="admin-shop.html" class="brand footer-brand">
-            <svg class="brand-logo" viewBox="0 0 100 100"
-                 fill="none" xmlns="http://www.w3.org/2000/svg">
-                <g stroke="currentColor" stroke-width="2.2"
-                   stroke-linecap="round" stroke-linejoin="round">
-
+            <svg class="brand-logo" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <g stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M67 23C57 12 38 15 32 28C26 41 39 48 52 50C67 52 76 62 68 76C60 90 39 88 30 76"/>
-
                     <g transform="translate(39 20)">
                         <ellipse cy="-8" rx="4.5" ry="7"/>
                         <ellipse cy="-8" rx="4.5" ry="7" transform="rotate(72)"/>
@@ -517,7 +391,6 @@
                         <ellipse cy="-8" rx="4.5" ry="7" transform="rotate(288)"/>
                         <circle r="2.3" fill="#AD8754" stroke="none"/>
                     </g>
-
                     <g transform="translate(69 77)">
                         <ellipse cy="-7" rx="4" ry="6"/>
                         <ellipse cy="-7" rx="4" ry="6" transform="rotate(72)"/>
@@ -526,18 +399,27 @@
                         <ellipse cy="-7" rx="4" ry="6" transform="rotate(288)"/>
                         <circle r="2" fill="#AD8754" stroke="none"/>
                     </g>
-
                 </g>
             </svg>
-
             <span class="brand-name">scentora<span>.</span></span>
         </a>
-        <p class="footer-tagline">Luxury is a fragrance you never forget.</p>
-        <p class="copyright">© 2026 Scentora. All rights reserved.</p>
+
+        <p class="footer-tagline">Find the scent that tells your story.</p>
+
+        <div class="footer-links">
+            <a href="admin.html">Dashboard</a>
+            <a href="admin-shop.html">Shop</a>
+            <a href="shops.html" target="_blank">User Shop</a>
+        </div>
+
+        <p class="copyright">© <span id="year"></span> Scentora. All rights reserved.</p>
     </footer>
 
     <script src="js/products.js"></script>
     <script src="js/admin-shop.js"></script>
-
+    <script>
+        document.getElementById("year").textContent = new Date().getFullYear();
+    </script>
 </body>
+
 </html>

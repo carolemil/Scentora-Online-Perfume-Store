@@ -1,8 +1,4 @@
-/* =========================================
-   SCENTORA SHOPPING BAG / CART PAGE
-   Matches Home Theme: Cream / Beige / Brown / Gold
-========================================= */
-
+/* Color palette */
 :root {
   --home-cream: #FAF7F0;
   --home-light: #F5F0E8;
@@ -34,9 +30,6 @@ a {
   color: inherit;
 }
 
-/* =========================================
-   NAVIGATION
-========================================= */
 .navbar {
   min-height: 88px;
   padding: 15px 8%;
@@ -149,9 +142,6 @@ a {
   transform: translateY(-2px);
 }
 
-/* =========================================
-   PAGE BANNER
-========================================= */
 .page-banner {
   background-color: var(--home-light);
   text-align: center;
@@ -186,9 +176,7 @@ a {
   margin-top: 10px;
 }
 
-/* =========================================
-   CART CONTAINER
-========================================= */
+/* Main cart layout */
 .cart-container {
   display: grid;
   grid-template-columns: 1.7fr 1fr;
@@ -264,9 +252,6 @@ a {
   color: var(--home-gold);
 }
 
-/* =========================================
-   CART ITEM CARDS
-========================================= */
 .cart-item {
   display: flex;
   justify-content: space-between;
@@ -367,9 +352,6 @@ a {
   font-size: 13px;
 }
 
-/* =========================================
-   CHECKOUT SIDEBAR
-========================================= */
 .checkout-section {
   background-color: var(--home-light);
   border: 1px solid var(--home-border);
@@ -491,9 +473,6 @@ input:focus {
   margin-bottom: 8px;
 }
 
-/* =========================================
-   YOU MAY ALSO LIKE RECOMMENDATIONS
-========================================= */
 .recommendations-section {
   margin-top: 44px;
   padding-top: 32px;
@@ -588,9 +567,7 @@ input:focus {
   color: #ffffff;
 }
 
-/* =========================================
-   PROMO CODE POP-UP MODAL
-========================================= */
+/* Full-screen backdrop overlay for promo popup */
 .promo-modal-overlay {
   position: fixed;
   inset: 0;
@@ -669,9 +646,6 @@ input:focus {
   gap: 12px;
 }
 
-/* =========================================
-   FOOTER
-========================================= */
 .footer {
   background: var(--home-dark);
   color: var(--home-cream);
@@ -723,9 +697,7 @@ input:focus {
   font-size: 10px;
 }
 
-/* =========================================
-   RESPONSIVE
-========================================= */
+/* Responsive breakpoints for tablet and mobile */
 @media (max-width: 1100px) {
   .navbar {
     padding: 15px 5%;

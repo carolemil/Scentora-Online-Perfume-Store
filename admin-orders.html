@@ -44,7 +44,6 @@
       color: #AD8754;
     }
 
-    /* High-Contrast Popping ADMIN Badge */
     .admin-badge-pill {
       display: inline-flex;
       align-items: center;
@@ -108,7 +107,7 @@
 </head>
 <body>
 
-  <!-- Security Check -->
+  <!-- Redirect to login if admin session isn't active -->
   <script>
     const isAdminLoggedIn = sessionStorage.getItem("scentoraAdminLoggedIn") === "true";
     if (!isAdminLoggedIn) {
@@ -116,7 +115,6 @@
     }
   </script>
 
-  <!-- Admin Navigation Bar -->
   <header class="navbar">
     <a href="admin.html" class="brand">
       <svg class="brand-logo" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -150,14 +148,12 @@
     </div>
   </header>
 
-  <!-- Page Banner -->
   <section class="page-banner">
     <p class="eyebrow">ORDER MANAGEMENT</p>
     <h1>Active <span>Orders</span></h1>
     <p class="banner-sub">Monitor incoming customer checkouts across Scentora.</p>
   </section>
 
-  <!-- Active Orders Status Message -->
   <main class="orders-status-wrapper">
     <div class="orders-status-card">
       <p class="eyebrow">CURRENT QUEUE</p>
@@ -171,7 +167,6 @@
     </div>
   </main>
 
-  <!-- Footer -->
   <footer class="footer">
     <a href="admin.html" class="brand footer-brand">
       <svg class="brand-logo" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -202,7 +197,6 @@
   </footer>
 
   <script>
-    // Auth Button Logic
     const authBtn = document.getElementById("admin-auth-btn");
     if (sessionStorage.getItem("scentoraAdminLoggedIn") === "true") {
       authBtn.textContent = "Log Out";
@@ -217,7 +211,7 @@
       };
     }
 
-    // Render Active Orders Message
+    // Read active order count from localStorage
     function renderOrdersMessage() {
       const count = parseInt(localStorage.getItem("scentoraActiveOrders")) || 0;
       const msgEl = document.getElementById("orders-message");
@@ -227,14 +221,13 @@
 
     document.addEventListener("DOMContentLoaded", renderOrdersMessage);
 
-    // Live-sync across tabs
+    // Sync count automatically if updated from another tab
     window.addEventListener("storage", function (e) {
       if (e.key === "scentoraActiveOrders") {
         renderOrdersMessage();
       }
     });
 
-    // Reset Counter Button (useful while testing)
     document.getElementById("reset-orders-btn").addEventListener("click", function () {
       localStorage.setItem("scentoraActiveOrders", "0");
       renderOrdersMessage();
