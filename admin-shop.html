@@ -5,43 +5,165 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Catalog | Scentora</title>
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="css/shop.css">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
-        /* Admin-specific additions matching shop.css palette */
-        .admin-badge-pill {
-            background-color: #b18a63;
-            color: white;
-            font-size: 11px;
-            letter-spacing: 1.5px;
-            padding: 4px 10px;
-            border-radius: 20px;
-            margin-left: 10px;
-            vertical-align: middle;
-            font-family: 'Poppins', sans-serif;
-            font-weight: 500;
+        /* =========================================
+           BRAND LOGO & NAVBAR THEME OVERRIDES
+        ========================================= */
+        .navbar {
+            min-height: 88px;
+            padding: 15px 8%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 25px;
+            background: rgba(250, 247, 240, 0.96);
+            border-bottom: 1px solid #E8DED1;
+            position: relative;
+            z-index: 10;
         }
 
+        .brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            flex-shrink: 0;
+            text-decoration: none;
+        }
+
+        .brand-logo {
+            width: 43px;
+            height: 43px;
+            color: #854B2C;
+            display: block;
+            transition: transform 0.5s ease;
+        }
+
+        .brand:hover .brand-logo {
+            transform: rotate(-12deg);
+        }
+
+        .brand-name {
+            color: #49352A;
+            font-family: "Playfair Display", serif;
+            font-size: 27px;
+            font-weight: 600;
+            letter-spacing: -1.3px;
+            line-height: 1;
+        }
+
+        .brand-name > span {
+            color: #AD8754;
+        }
+
+        /* High-Contrast Popping ADMIN Badge */
+        .admin-badge-pill {
+            display: inline-flex;
+            align-items: center;
+            background-color: #302219;
+            color: #FAF7F0;
+            border: 1.5px solid #AD8754;
+            font-family: "DM Sans", sans-serif;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            padding: 4px 11px;
+            border-radius: 50px;
+            margin-left: 6px;
+            box-shadow: 0 4px 12px rgba(48, 34, 25, 0.22);
+        }
+
+        .navbar nav {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 29px;
+        }
+
+        .navbar nav a {
+            color: #897C70;
+            font-family: "DM Sans", sans-serif;
+            font-size: 12px;
+            font-weight: 500;
+            text-decoration: none;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .navbar nav a::after {
+            content: "";
+            position: absolute;
+            bottom: -7px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: #AD8754;
+            transition: width 0.3s ease;
+        }
+
+        .navbar nav a:hover::after,
+        .navbar nav a.active::after {
+            width: 100%;
+        }
+
+        .navbar nav a:hover,
+        .navbar nav a.active {
+            color: #AD8754;
+        }
+
+        /* Admin-specific additions matching theme palette */
         .admin-nav-btns {
             display: flex;
-            gap: 10px;
+            gap: 12px;
             align-items: center;
+            white-space: nowrap;
         }
 
         .secondary-nav-btn {
             background-color: transparent;
-            color: #49372c;
-            border: 1px solid #cbb69d;
-            padding: 10px 18px;
-            border-radius: 25px;
+            color: #49352A;
+            border: 1px solid #C9B49A;
+            padding: 11px 18px;
+            border-radius: 50px;
             text-decoration: none;
-            font-size: 13px;
+            font-family: "DM Sans", sans-serif;
+            font-size: 11px;
+            font-weight: 600;
             cursor: pointer;
-            transition: 0.3s;
+            transition: 0.3s ease;
         }
 
         .secondary-nav-btn:hover {
-            background-color: #e9ddcd;
+            background-color: #E9DDCB;
+            border-color: #AD8754;
+        }
+
+        .navbar .cart-button {
+            background: #49352A;
+            color: #FFFFFF;
+            padding: 12px 22px;
+            border-radius: 50px;
+            font-family: "DM Sans", sans-serif;
+            font-size: 11px;
+            font-weight: 600;
+            border: 1px solid #49352A;
+            cursor: pointer;
+            transition: 0.3s ease;
+        }
+
+        .navbar .cart-button:hover {
+            background: #AD8754;
+            border-color: #AD8754;
+            transform: translateY(-2px);
+        }
+
+        .products-section {
+            padding-top: 55px;
         }
 
         .delete-card-btn {
@@ -173,6 +295,52 @@
         .btn-save:hover {
             background-color: #a17b58;
         }
+
+        /* Footer Brand Styling */
+        footer {
+            background: #302219;
+            color: #FAF7F0;
+            padding: 55px 8% 25px;
+            text-align: center;
+        }
+
+        .footer-brand {
+            justify-content: center;
+            margin-bottom: 15px;
+        }
+
+        .footer-brand .brand-logo,
+        .footer-brand .brand-name {
+            color: #FAF7F0;
+        }
+
+        footer .footer-tagline {
+            color: #C9BBAA;
+            font-size: 12px;
+            margin-bottom: 22px;
+        }
+
+        footer .copyright {
+            border-top: 1px solid #655448;
+            padding-top: 22px;
+            color: #B9AA99;
+            font-size: 10px;
+        }
+
+        @media (max-width: 850px) {
+            .navbar {
+                flex-wrap: wrap;
+                padding: 15px 5%;
+            }
+
+            .navbar nav {
+                order: 3;
+                width: 100%;
+                padding: 10px 0 5px;
+                flex-wrap: wrap;
+                gap: 18px;
+            }
+        }
     </style>
 </head>
 
@@ -185,13 +353,44 @@
         }
     </script>
 
-    <!-- Navigation (Same layout as user shop, with Admin controls) -->
+    <!-- Navigation -->
     <header class="navbar">
-        <a href="admin-shop.html" class="logo">SCENTORA<span>.</span> <span class="admin-badge-pill">ADMIN</span></a>
+        <a href="admin-shop.html" class="brand">
+            <svg class="brand-logo" viewBox="0 0 100 100"
+                 fill="none" xmlns="http://www.w3.org/2000/svg">
+                <g stroke="currentColor" stroke-width="2.2"
+                   stroke-linecap="round" stroke-linejoin="round">
+
+                    <path d="M67 23C57 12 38 15 32 28C26 41 39 48 52 50C67 52 76 62 68 76C60 90 39 88 30 76"/>
+
+                    <g transform="translate(39 20)">
+                        <ellipse cy="-8" rx="4.5" ry="7"/>
+                        <ellipse cy="-8" rx="4.5" ry="7" transform="rotate(72)"/>
+                        <ellipse cy="-8" rx="4.5" ry="7" transform="rotate(144)"/>
+                        <ellipse cy="-8" rx="4.5" ry="7" transform="rotate(216)"/>
+                        <ellipse cy="-8" rx="4.5" ry="7" transform="rotate(288)"/>
+                        <circle r="2.3" fill="#AD8754" stroke="none"/>
+                    </g>
+
+                    <g transform="translate(69 77)">
+                        <ellipse cy="-7" rx="4" ry="6"/>
+                        <ellipse cy="-7" rx="4" ry="6" transform="rotate(72)"/>
+                        <ellipse cy="-7" rx="4" ry="6" transform="rotate(144)"/>
+                        <ellipse cy="-7" rx="4" ry="6" transform="rotate(216)"/>
+                        <ellipse cy="-7" rx="4" ry="6" transform="rotate(288)"/>
+                        <circle r="2" fill="#AD8754" stroke="none"/>
+                    </g>
+
+                </g>
+            </svg>
+
+            <span class="brand-name">scentora<span>.</span></span>
+            <span class="admin-badge-pill">ADMIN</span>
+        </a>
 
         <nav>
             <a href="admin.html">Dashboard</a>
-            <a href="#products">Catalog</a>
+            <a href="#products" class="active">Catalog</a>
             <a href="shops.html" target="_blank">Preview User Shop</a>
         </nav>
 
@@ -200,22 +399,6 @@
             <button type="button" class="cart-button" id="addFragranceBtn">+ Add Fragrance</button>
         </div>
     </header>
-
-    <!-- Hero Section (Identical to User Shop) -->
-    <section class="hero" id="home">
-        <div class="hero-content">
-            <p class="subtitle">STOREFRONT CATALOG EDITOR</p>
-            <h1>Elegance in<br>Every Drop.</h1>
-            <p>Click any fragrance below to edit its details, pricing, or image. Changes sync live to the customer shop.</p>
-            <a href="#products" class="shop-btn">Edit Collection</a>
-        </div>
-    </section>
-
-    <!-- Offers Banner -->
-    <section class="offer-banner" id="offers">
-        <h2>Special Offers</h2>
-        <p id="adminOfferBannerText">Enjoy up to 25% OFF on selected fragrances!</p>
-    </section>
 
     <!-- Products Section -->
     <main class="products-section" id="products">
@@ -318,9 +501,39 @@
 
     <!-- Footer -->
     <footer>
-        <h2>SCENTORA.</h2>
-        <p>Luxury is a fragrance you never forget.</p>
-        <p>© 2026 Scentora. All rights reserved.</p>
+        <a href="admin-shop.html" class="brand footer-brand">
+            <svg class="brand-logo" viewBox="0 0 100 100"
+                 fill="none" xmlns="http://www.w3.org/2000/svg">
+                <g stroke="currentColor" stroke-width="2.2"
+                   stroke-linecap="round" stroke-linejoin="round">
+
+                    <path d="M67 23C57 12 38 15 32 28C26 41 39 48 52 50C67 52 76 62 68 76C60 90 39 88 30 76"/>
+
+                    <g transform="translate(39 20)">
+                        <ellipse cy="-8" rx="4.5" ry="7"/>
+                        <ellipse cy="-8" rx="4.5" ry="7" transform="rotate(72)"/>
+                        <ellipse cy="-8" rx="4.5" ry="7" transform="rotate(144)"/>
+                        <ellipse cy="-8" rx="4.5" ry="7" transform="rotate(216)"/>
+                        <ellipse cy="-8" rx="4.5" ry="7" transform="rotate(288)"/>
+                        <circle r="2.3" fill="#AD8754" stroke="none"/>
+                    </g>
+
+                    <g transform="translate(69 77)">
+                        <ellipse cy="-7" rx="4" ry="6"/>
+                        <ellipse cy="-7" rx="4" ry="6" transform="rotate(72)"/>
+                        <ellipse cy="-7" rx="4" ry="6" transform="rotate(144)"/>
+                        <ellipse cy="-7" rx="4" ry="6" transform="rotate(216)"/>
+                        <ellipse cy="-7" rx="4" ry="6" transform="rotate(288)"/>
+                        <circle r="2" fill="#AD8754" stroke="none"/>
+                    </g>
+
+                </g>
+            </svg>
+
+            <span class="brand-name">scentora<span>.</span></span>
+        </a>
+        <p class="footer-tagline">Luxury is a fragrance you never forget.</p>
+        <p class="copyright">© 2026 Scentora. All rights reserved.</p>
     </footer>
 
     <script src="js/products.js"></script>
