@@ -480,7 +480,6 @@ if (yearElement) {
     yearElement.textContent = new Date().getFullYear();
 }
 
-
 // Start the shop page
 syncShopOfferBanner();
 filterProducts();

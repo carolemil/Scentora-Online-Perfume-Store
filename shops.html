@@ -25,14 +25,18 @@
             <a href="index.html#contact">Contact</a>
         </nav>
 
-        <div class="nav-actions">
-            <a href="login.html" class="login-btn">Login</a>
+        
+       <div class="nav-actions">
 
-            <button type="button" class="cart-button" id="cartButton">
-                🛍️ Cart (<span id="cartCount">0</span>)
-            </button>
-        </div>
+    <span id="auth-nav">
+        <a href="login.html" class="login-btn" id="authButton">Login</a>
+    </span>
 
+    <button type="button" class="cart-button" id="cartButton">
+        🛍️ Cart (<span id="cartCount">0</span>)
+    </button>
+
+</div>
     </header>
 
 
@@ -121,9 +125,10 @@
     </footer>
 
 
-    <!-- Scripts (products.js must come first) -->
+    
     <script src="js/products.js"></script>
     <script src="js/shop.js"></script>
+    <script src="js/auth.js"></script>
 
 </body>
 
