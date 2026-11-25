@@ -13,6 +13,10 @@
 
     <link rel="stylesheet" href="css/common.css">
     <link rel="stylesheet" href="css/home.css">
+=======
+    <title>Shop | Scentora.</title>
+    <link rel="stylesheet" href="css/common.css">
+ main
     <link rel="stylesheet" href="css/shop.css">
 </head>
 
@@ -72,6 +76,41 @@
            <button type="button" class="cart-button" id="cartButton" aria-label="Open shopping bag">
                Bag (<span id="cartCount">0</span>)
         </button>
+=======
+
+        <a href="index.html" class="logo">SCENTORA<span>.</span></a>
+
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="shops.html" class="active">Shop</a>
+            <a href="index.html#categories">Categories</a>
+            <a href="index.html#about">About</a>
+            <a href="index.html#contact">Contact</a>
+        </nav>
+
+        
+       <div class="nav-actions">
+
+    <span id="auth-nav">
+        <a href="login.html" class="login-btn" id="authButton">Login</a>
+    </span>
+
+    <button type="button" class="cart-button" id="cartButton">
+         Cart (<span id="cartCount">0</span>)
+    </button>
+
+</div>
+    </header>
+
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-content">
+            <p class="subtitle">DISCOVER YOUR SIGNATURE SCENT</p>
+            <h1>Elegance in Every Drop.</h1>
+            <p>Explore handcrafted fragrances that tell your story and leave an unforgettable impression.</p>
+            <a href="#products" class="shop-btn">Explore Collection</a>
+ main
         </div>
     </header>
 
@@ -112,6 +151,29 @@
             <h2>Special Offers</h2>
             <p id="shopOfferBannerText">Enjoy up to 25% OFF on selected fragrances!</p>
         </section> -->
+=======
+
+    <!-- Special offers -->
+    <section class="offer-banner">
+        <h2>Special Offers</h2>
+        <p id="shopOfferBannerText">Enjoy up to 25% OFF on selected fragrances!</p>
+    </section>
+
+
+    <!-- Products -->
+    <section class="products-section" id="products">
+
+        <div class="section-heading">
+            <p class="subtitle" style="justify-content:center;">OUR COLLECTION</p>
+            <h2>Shop All Perfumes</h2>
+        </div>
+
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="Search for a perfume...">
+        </div>
+
+        <div class="filters">
+ main
 
 
             <!-- TOOLBAR: SEARCH, CATEGORIES & SORT -->
@@ -125,6 +187,13 @@
                     >
                     <button type="button" id="clearSearch" hidden>Clear</button>
                 </div>
+=======
+            <select id="sortSelect">
+                <option value="featured">Sort by: Featured</option>
+                <option value="low-high">Price: Low to High</option>
+                <option value="high-low">Price: High to Low</option>
+            </select>
+ main
 
                 <div class="filters">
                     <div class="categories" role="group" aria-label="Filter by category">
@@ -163,6 +232,23 @@
             <div class="cart-header">
                 <h2 id="cartTitle">Your Bag</h2>
                 <button type="button" class="close-btn" id="closeCart" aria-label="Close bag">&times;</button>
+=======
+        <div class="products-grid" id="productsGrid"></div>
+
+        <p class="no-products" id="noProducts" hidden>No perfumes found. Try another search.</p>
+
+    </section>
+
+
+    <!-- Shopping cart -->
+    <div class="cart-overlay" id="cartOverlay">
+
+        <div class="cart-panel">
+
+            <div class="cart-header">
+                <h2>Your Bag</h2>
+                <button type="button" class="close-btn" id="closeCart">&times;</button>
+ main
             </div>
 
             <div class="cart-items" id="cartItems"></div>
@@ -305,6 +391,29 @@
     <script>
         document.getElementById("year").textContent = new Date().getFullYear();
     </script>
+=======
+                <h3>Subtotal: <span id="cartTotal">0</span> EGP</h3>
+                <button type="button" class="checkout-btn" id="checkoutButton">Proceed to Checkout →</button>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Footer -->
+    <footer>
+        <h2>SCENTORA.</h2>
+        <p>Luxury is a fragrance you never forget.</p>
+        <p>&copy; <span id="year"></span> Scentora. All rights reserved.</p>
+    </footer>
+
+
+    
+    <script src="js/products.js"></script>
+    <script src="js/shop.js"></script>
+    <script src="js/auth.js"></script>
+ main
 
  <script>
 document.getElementById('checkoutButton').addEventListener('click', function () {
@@ -321,4 +430,5 @@ document.querySelectorAll('.nav-cat-btn').forEach(btn => {
 });
 </script>
 </body>
+
 </html>

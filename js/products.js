@@ -1,5 +1,12 @@
 
 window.products = [
+=======
+// Default products for the shop
+// (If the admin page has saved products, those are used instead.)
+// Fields: id, name, category, size, notes, price, oldPrice, discount, image
+const products = [
+
+ main
     {
         id: 1,
         name: "Prada Milano",

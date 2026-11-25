@@ -1,3 +1,4 @@
+mariam
 /* ========================================
    SCENTORA - SHOP PAGE STYLES
    Cream, beige, espresso brown & muted gold
@@ -14,6 +15,14 @@ body {
 #products {
     scroll-margin-top: 90px;
 }
+=======
+/* =========================================
+   SCENTORA SHOP PAGE
+   Cream / Beige / Brown / Gold
+   (same theme as home.css)
+========================================= */
+
+ main
 :root {
     --cream: #F8F4ED;
     --light-cream: #FCFAF6;
@@ -1181,4 +1190,6 @@ a {
 
 main {
     padding-top: 84px;
+=======
+ main
 }
