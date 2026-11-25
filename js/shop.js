@@ -5,6 +5,7 @@
 
 document.addEventListener("DOMContentLoaded", () => {
     const STORAGE_KEY = "scentoraCart";
+    const OVERRIDES_KEY = "scentora_admin_overrides";
     const FALLBACK_IMAGE = "https://placehold.co/600x750/f0e5d8/6b5140?text=SCENTORA";
 
     const CATEGORY_MAP = {
@@ -62,12 +63,30 @@ document.addEventListener("DOMContentLoaded", () => {
     // =====================================
     // 2. DATA & STATE
     // =====================================
-    const rawProducts =
-        (typeof products !== "undefined" && Array.isArray(products)) ? products :
-        Array.isArray(window.products) ? window.products :
-        Array.isArray(window.perfumes) ? window.perfumes : [];
+    function getLiveCatalog() {
+        const rawProducts =
+            (typeof products !== "undefined" && Array.isArray(products)) ? products :
+            Array.isArray(window.products) ? window.products :
+            Array.isArray(window.perfumes) ? window.perfumes : [];
 
-    const productList = rawProducts.map(normalizeProduct);
+        const saved = safeParse(localStorage.getItem(OVERRIDES_KEY));
+        const edited = saved?.edited || {};
+        const added = Array.isArray(saved?.added) ? saved.added : [];
+        const deletedIds = Array.isArray(saved?.deletedIds) ? saved.deletedIds.map(String) : [];
+
+        const baseProducts = rawProducts
+            .map(normalizeProduct)
+            .filter((p) => !deletedIds.includes(String(p.id)))
+            .map((p) => edited[p.id] ? normalizeProduct({ ...p, ...edited[p.id] }) : p);
+
+        const addedProducts = added
+            .map((p, idx) => normalizeProduct(p, baseProducts.length + idx))
+            .filter((p) => !deletedIds.includes(String(p.id)));
+
+        return [...baseProducts, ...addedProducts];
+    }
+
+    let productList = getLiveCatalog();
 
     const urlCategory = (new URLSearchParams(window.location.search).get("category") || "").toLowerCase();
 
@@ -83,8 +102,11 @@ document.addEventListener("DOMContentLoaded", () => {
     function normalizeProduct(product, index) {
         const price = Number(product.price ?? product.currentPrice ?? 0);
         const oldPrice = Number(product.oldPrice ?? product.originalPrice ?? 0);
-        const discount = Number(product.discount ?? product.discountPercent ?? 0);
+        const rawDiscount = Number(product.discount ?? product.discountPercent ?? 0);
         const validPrice = Number.isFinite(price) ? price : 0;
+        const discount = rawDiscount > 0
+            ? rawDiscount
+            : (oldPrice > validPrice ? Math.round(((oldPrice - validPrice) / oldPrice) * 100) : 0);
 
         return {
             id: String(product.id ?? product.productId ?? index + 1),
@@ -313,7 +335,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             for (let i = 0; i < store.length; i++) {
                 const key = store.key(i);
-                if (!key || key === STORAGE_KEY || key.toLowerCase().includes("users")) continue;
+                if (!key || key === STORAGE_KEY || key === OVERRIDES_KEY || key.toLowerCase().includes("users")) continue;
                 const parsed = safeParse(store.getItem(key));
                 if (isUserObject(parsed)) return { key, data: parsed };
             }
@@ -363,6 +385,14 @@ document.addEventListener("DOMContentLoaded", () => {
     // =====================================
     // 7. EVENT LISTENERS
     // =====================================
+
+    // Live-sync if Admin edits products in another tab
+    window.addEventListener("storage", (e) => {
+        if (e.key === OVERRIDES_KEY) {
+            productList = getLiveCatalog();
+            renderProducts();
+        }
+    });
 
     // Navbar Women / Men / Unisex links: filter & scroll smoothly to #products
     document.querySelectorAll(".nav-cat-btn").forEach((btn) => {

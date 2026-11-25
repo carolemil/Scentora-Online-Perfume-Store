@@ -90,14 +90,13 @@
 </head>
 <body>
 
-  <!-- Security Check -->
+  <!-- Redirect to login if admin session isn't active -->
   <script>
     if (sessionStorage.getItem("scentoraAdminLoggedIn") !== "true") {
       window.location.href = "admin-login.html";
     }
   </script>
 
-  <!-- Navigation -->
   <header class="navbar">
     <a href="admin.html" class="brand">
       <svg class="brand-logo" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -130,7 +129,6 @@
     </div>
   </header>
 
-  <!-- Page Banner -->
   <section class="page-banner">
     <p class="eyebrow">PROMOTIONS & DISCOUNTS</p>
     <h1>Active <span>Offers</span></h1>
@@ -138,10 +136,10 @@
   </section>
 
   <main class="admin-container">
-    <!-- Left Panel: Add / Edit Offer -->
     <section class="panel">
       <h2 id="offer-form-title">Create New Promo Code</h2>
       <form id="manage-offer-form">
+        <!-- -1 indicates create mode; >= 0 holds array index when editing -->
         <input type="hidden" id="offer-edit-index" value="-1">
         <input type="text" id="manage-offer-code" placeholder="Promo Code (e.g. SCENT20)" required>
         <input type="number" id="manage-offer-discount" placeholder="Discount Percentage (e.g. 20)" min="1" max="90" required>
@@ -153,7 +151,6 @@
       </form>
     </section>
 
-    <!-- Right Panel: Active Promo Codes Cards -->
     <section class="panel">
       <div style="display:flex; justify-content:space-between; align-items:center;">
         <h2>Active Promo Codes (<span id="offers-page-count">0</span>)</h2>
@@ -234,6 +231,7 @@
 
     document.getElementById("cancel-offer-edit").addEventListener("click", resetOfferForm);
 
+    // Save changes to localStorage so cart checkout picks them up immediately
     document.getElementById("manage-offer-form").addEventListener("submit", (e) => {
       e.preventDefault();
       const code = document.getElementById("manage-offer-code").value.trim().toUpperCase();

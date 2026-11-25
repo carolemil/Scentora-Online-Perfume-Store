@@ -1,232 +1,465 @@
-const productsGrid = document.getElementById("productsGrid");
-const searchInput = document.getElementById("searchInput");
-const sortSelect = document.getElementById("sortSelect");
-const categoryButtons = document.querySelectorAll(".category-btn");
-const noProducts = document.getElementById("noProducts");
+document.addEventListener("DOMContentLoaded", () => {
+    // Stores admin changes separately so base products.js stays untouched
+    const OVERRIDES_KEY = "scentora_admin_overrides";
+    const FALLBACK_IMAGE = "https://placehold.co/600x750/f0e5d8/6b5140?text=SCENTORA";
 
-const editModalOverlay = document.getElementById("editModalOverlay");
-const adminShopForm = document.getElementById("adminShopForm");
+    const CATEGORY_MAP = {
+        women: "Women",
+        men: "Men",
+        unisex: "Unisex",
+        offers: "Offers"
+    };
 
-const defaultCatalog = typeof products !== "undefined" ? products : [
-  { id: 1, name: "Vanilla Dream", category: "Women", price: 2500, oldPrice: 3000, discount: 17, image: "https://images.unsplash.com/photo-1594035910387-fea47794261f?w=600" },
-  { id: 2, name: "Oud Royal", category: "Men", price: 3200, oldPrice: 3800, discount: 16, image: "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=600" },
-  { id: 3, name: "Rose Elegance", category: "Women", price: 1800, oldPrice: 0, discount: 0, image: "https://images.unsplash.com/photo-1541643600914-78b084683601?w=600" },
-  { id: 4, name: "Midnight Noir", category: "Men", price: 2900, oldPrice: 3500, discount: 17, image: "https://cdn.shopify.com/s/files/1/0770/9389/6502/files/black-perfume-bottle-on-a-dark-background_1024x1024.webp?v=1728330852" },
-  { id: 5, name: "Golden Amber", category: "Unisex", price: 2700, oldPrice: 0, discount: 0, image: "https://images.unsplash.com/photo-1595425970377-c9703cf48b6d?w=600" },
-  { id: 6, name: "Blooming Jasmine", category: "Women", price: 1500, oldPrice: 2000, discount: 25, image: "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?w=600" },
-  { id: 7, name: "Ocean Breeze", category: "Men", price: 2100, oldPrice: 0, discount: 0, image: "https://images.unsplash.com/photo-1594035910387-fea47794261f?w=600" },
-  { id: 8, name: "White Musk", category: "Unisex", price: 1900, oldPrice: 2400, discount: 21, image: "https://images.unsplash.com/photo-1541643600914-78b084683601?w=600" }
-];
+    const el = {
+        productsGrid: document.getElementById("productsGrid"),
+        searchInput: document.getElementById("searchInput"),
+        clearSearch: document.getElementById("clearSearch"),
+        sortSelect: document.getElementById("sortSelect"),
+        categoryBtns: document.querySelectorAll(".category-btn"),
+        productCount: document.getElementById("productCount"),
+        noProducts: document.getElementById("noProducts"),
+        resetFilters: document.getElementById("resetFilters"),
+        editModalOverlay: document.getElementById("editModalOverlay"),
+        adminShopForm: document.getElementById("adminShopForm"),
+        editImageFile: document.getElementById("editImageFile"),
+        imagePreviewWrap: document.getElementById("imagePreviewWrap"),
+        editImagePreview: document.getElementById("editImagePreview"),
+        toast: document.getElementById("toast")
+    };
 
-let selectedCategory = "All";
-let storeProducts = JSON.parse(localStorage.getItem("scentora_products")) || [...defaultCatalog];
+    if (!el.productsGrid || !el.searchInput || !el.sortSelect) return;
 
-if (!localStorage.getItem("scentora_products")) {
-    localStorage.setItem("scentora_products", JSON.stringify(storeProducts));
-}
+    localStorage.removeItem("scentora_products");
 
-// Render product cards with "Click to Edit Fragrance" button
-function displayAdminProducts(productList) {
-    productsGrid.innerHTML = "";
-    noProducts.hidden = productList.length !== 0;
+    let uploadedImageData = "";
 
-    productList.forEach(product => {
-        const card = document.createElement("div");
-        card.className = "product-card";
+    function normalizeCategory(category) {
+        const val = String(category || "").toLowerCase().trim();
+        if (["women", "woman", "female", "women's"].includes(val)) return "Women";
+        if (["men", "man", "male", "men's"].includes(val)) return "Men";
+        if (val === "unisex") return "Unisex";
+        return String(category || "Unisex");
+    }
 
-        const image = document.createElement("img");
-        image.className = "product-image";
-        image.src = product.image;
-        image.alt = product.name;
-        image.loading = "lazy";
-        image.onerror = function () {
-            this.onerror = null;
-            this.src = "https://placehold.co/600x600/f4ede2/75563f?text=Perfume";
+    // Standardizes inconsistent field names and calculates discount percentage
+    function normalizeProduct(product, index = 0) {
+        const price = Number(product.price ?? product.currentPrice ?? 0);
+        const oldPrice = Number(product.oldPrice ?? product.originalPrice ?? 0);
+        const rawDiscount = Number(product.discount ?? product.discountPercent ?? 0);
+        const validPrice = Number.isFinite(price) ? price : 0;
+        const discount = rawDiscount > 0
+            ? rawDiscount
+            : (oldPrice > validPrice ? Math.round(((oldPrice - validPrice) / oldPrice) * 100) : 0);
+
+        return {
+            id: String(product.id ?? product.productId ?? index + 1),
+            name: String(product.name ?? product.title ?? "Perfume").trim(),
+            brand: String(product.brand ?? "Scentora"),
+            price: validPrice,
+            oldPrice: oldPrice > validPrice ? oldPrice : 0,
+            discount,
+            category: normalizeCategory(product.category ?? product.gender ?? "Unisex"),
+            image: String(product.image ?? product.img ?? product.imageUrl ?? ""),
+            isOffer: Boolean(product.offer ?? product.onOffer ?? product.isOffer) || discount > 0 || oldPrice > validPrice
         };
-        card.appendChild(image);
+    }
 
-        if (product.discount > 0) {
-            const badge = document.createElement("span");
-            badge.className = "discount-badge";
-            badge.textContent = `${product.discount}% OFF`;
-            card.appendChild(badge);
+    function formatPrice(value) {
+        return `${Number(value || 0).toLocaleString("en-EG")} EGP`;
+    }
+
+    // Prevents XSS when rendering user-submitted strings into innerHTML
+    function escapeHTML(value) {
+        const map = { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" };
+        return String(value).replace(/[&<>"']/g, (char) => map[char]);
+    }
+
+    function safeParse(raw) {
+        try {
+            return JSON.parse(raw || "null");
+        } catch {
+            return null;
         }
+    }
 
-        // Delete icon button on top right
-        const deleteBtn = document.createElement("button");
-        deleteBtn.type = "button";
-        deleteBtn.className = "delete-card-btn";
-        deleteBtn.title = "Delete Fragrance";
-        deleteBtn.innerHTML = "✕";
-        deleteBtn.addEventListener("click", (e) => {
-            e.stopPropagation();
-            deleteFragrance(product.id, product.name);
+    function showToast(message) {
+        if (!el.toast) return;
+        el.toast.textContent = message;
+        el.toast.classList.add("show");
+        clearTimeout(state.toastTimer);
+        state.toastTimer = setTimeout(() => el.toast.classList.remove("show"), 2400);
+    }
+
+    function getOverrides() {
+        const saved = safeParse(localStorage.getItem(OVERRIDES_KEY));
+        return {
+            edited: saved?.edited || {},
+            added: Array.isArray(saved?.added) ? saved.added : [],
+            deletedIds: Array.isArray(saved?.deletedIds) ? saved.deletedIds.map(String) : []
+        };
+    }
+
+    function saveOverrides(overrides) {
+        try {
+            localStorage.setItem(OVERRIDES_KEY, JSON.stringify(overrides));
+        } catch (err) {
+            alert("Browser storage limit reached. Try uploading a smaller image file.");
+        }
+    }
+
+    // Merges static products.js catalog with localStorage edits, additions, and deletions
+    function getLiveCatalog() {
+        const rawBase =
+            (typeof products !== "undefined" && Array.isArray(products)) ? products :
+            Array.isArray(window.products) ? window.products :
+            Array.isArray(window.perfumes) ? window.perfumes : [];
+
+        const overrides = getOverrides();
+
+        const baseProducts = rawBase
+            .map(normalizeProduct)
+            .filter((p) => !overrides.deletedIds.includes(String(p.id)))
+            .map((p) => overrides.edited[p.id] ? normalizeProduct({ ...p, ...overrides.edited[p.id] }) : p);
+
+        const addedProducts = overrides.added
+            .map((p, idx) => normalizeProduct(p, baseProducts.length + idx))
+            .filter((p) => !overrides.deletedIds.includes(String(p.id)));
+
+        return [...baseProducts, ...addedProducts];
+    }
+
+    let productList = getLiveCatalog();
+
+    const urlCategory = (new URLSearchParams(window.location.search).get("category") || "").toLowerCase();
+
+    let state = {
+        category: CATEGORY_MAP[urlCategory] || "All",
+        toastTimer: null
+    };
+
+    // Resizes and compresses uploaded images via Canvas so base64 strings fit in localStorage
+    function readAndCompressImage(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                const img = new Image();
+                img.onload = () => {
+                    const maxDim = 800;
+                    let { width, height } = img;
+                    if (width > maxDim || height > maxDim) {
+                        if (width > height) {
+                            height = Math.round((height * maxDim) / width);
+                            width = maxDim;
+                        } else {
+                            width = Math.round((width * maxDim) / height);
+                            height = maxDim;
+                        }
+                    }
+                    const canvas = document.createElement("canvas");
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext("2d");
+                    ctx.drawImage(img, 0, 0, width, height);
+                    resolve(canvas.toDataURL("image/jpeg", 0.82));
+                };
+                img.onerror = reject;
+                img.src = event.target.result;
+            };
+            reader.onerror = reject;
+            reader.readAsDataURL(file);
         });
-        card.appendChild(deleteBtn);
+    }
 
-        const info = document.createElement("div");
-        info.className = "product-info";
+    el.editImageFile?.addEventListener("change", async (e) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+        try {
+            uploadedImageData = await readAndCompressImage(file);
+            if (el.editImagePreview && el.imagePreviewWrap) {
+                el.editImagePreview.src = uploadedImageData;
+                el.imagePreviewWrap.style.display = "block";
+            }
+        } catch {
+            showToast("Could not read selected image");
+        }
+    });
 
-        const name = document.createElement("h3");
-        name.textContent = product.name;
+    function getFilteredProducts() {
+        const query = el.searchInput.value.trim().toLowerCase();
+        const sortBy = el.sortSelect.value;
 
-        const category = document.createElement("p");
-        category.className = "product-category";
-        category.textContent = product.category;
+        const filtered = productList.filter((product) => {
+            const matchesSearch = !query ||
+                `${product.name} ${product.brand} ${product.category}`.toLowerCase().includes(query);
 
-        const price = document.createElement("p");
-        price.className = "product-price";
+            const matchesCategory =
+                state.category === "All" ? true :
+                state.category === "Offers" ? product.isOffer :
+                product.category === state.category;
 
-        if (product.oldPrice > product.price) {
-            price.innerHTML =
-                `<span class="old-price">${product.oldPrice.toLocaleString()} EGP</span>
-                ${product.price.toLocaleString()} EGP`;
+            return matchesSearch && matchesCategory;
+        });
+
+        const sorters = {
+            "low-high": (a, b) => a.price - b.price,
+            "high-low": (a, b) => b.price - a.price,
+            "name": (a, b) => a.name.localeCompare(b.name)
+        };
+
+        return sorters[sortBy] ? filtered.sort(sorters[sortBy]) : filtered;
+    }
+
+    function renderProducts() {
+        const items = getFilteredProducts();
+        const isEmpty = items.length === 0;
+
+        el.productsGrid.innerHTML = items.map((product) => {
+            const badge = product.isOffer
+                ? `<span class="product-badge">${product.discount ? `${product.discount}% OFF` : "Special Offer"}</span>`
+                : "";
+
+            const oldPrice = product.oldPrice
+                ? `<span class="old-price">${formatPrice(product.oldPrice)}</span>`
+                : "";
+
+            return `
+                <article class="product-card">
+                    <div class="product-image-wrap">
+                        ${badge}
+                        <button type="button" class="delete-card-btn" data-delete-id="${escapeHTML(product.id)}" title="Delete Fragrance" aria-label="Delete ${escapeHTML(product.name)}">✕</button>
+                        <img
+                            class="product-image"
+                            src="${escapeHTML(product.image || FALLBACK_IMAGE)}"
+                            alt="${escapeHTML(product.name)}"
+                            loading="lazy"
+                            onerror="this.onerror=null;this.src='${FALLBACK_IMAGE}';"
+                        >
+                    </div>
+                    <div class="product-info">
+                        <p class="product-brand">${escapeHTML(product.brand)}</p>
+                        <h3 class="product-name">${escapeHTML(product.name)}</h3>
+                        <p class="product-category">${escapeHTML(product.category)}</p>
+                        <div class="product-price-row">
+                            <span class="product-price">${formatPrice(product.price)}</span>
+                            ${oldPrice}
+                        </div>
+                        <button type="button" class="add-to-cart-btn" data-edit-id="${escapeHTML(product.id)}">
+                            Click to Edit Fragrance
+                        </button>
+                    </div>
+                </article>
+            `;
+        }).join("");
+
+        if (el.productCount) {
+            el.productCount.textContent = `Showing ${items.length} ${items.length === 1 ? "fragrance" : "fragrances"}`;
+        }
+        if (el.noProducts) el.noProducts.hidden = !isEmpty;
+        el.productsGrid.hidden = isEmpty;
+        if (el.clearSearch) el.clearSearch.hidden = el.searchInput.value.length === 0;
+    }
+
+    function updateCategoryUI() {
+        el.categoryBtns.forEach((btn) => {
+            const isActive = btn.dataset.category === state.category;
+            btn.classList.toggle("active", isActive);
+            btn.setAttribute("aria-pressed", String(isActive));
+        });
+    }
+
+    // Reuses one modal for both adding (product = null) and editing
+    function openEditModal(product = null) {
+        const heading = document.getElementById("modalHeading");
+        const idField = document.getElementById("editProductId");
+
+        if (el.editImageFile) el.editImageFile.value = "";
+
+        if (product) {
+            heading.textContent = "Edit Fragrance";
+            idField.value = product.id;
+            document.getElementById("editName").value = product.name;
+            document.getElementById("editCategory").value = normalizeCategory(product.category);
+            document.getElementById("editPrice").value = product.price;
+            document.getElementById("editOldPrice").value = product.oldPrice || "";
+            uploadedImageData = product.image || "";
+
+            if (el.editImagePreview && el.imagePreviewWrap) {
+                el.editImagePreview.src = uploadedImageData || FALLBACK_IMAGE;
+                el.imagePreviewWrap.style.display = "block";
+            }
         } else {
-            price.textContent = `${product.price.toLocaleString()} EGP`;
+            heading.textContent = "Add New Fragrance";
+            idField.value = "";
+            uploadedImageData = "";
+            el.adminShopForm.reset();
+
+            if (el.imagePreviewWrap) {
+                el.imagePreviewWrap.style.display = "none";
+            }
         }
 
-        // Replaces "Add to Cart" with "Click to Edit Fragrance"
-        const editButton = document.createElement("button");
-        editButton.type = "button";
-        editButton.className = "add-cart-btn";
-        editButton.textContent = "Click to Edit Fragrance";
-        editButton.addEventListener("click", () => openEditModal(product));
+        el.editModalOverlay.classList.add("show");
+    }
 
-        info.appendChild(name);
-        info.appendChild(category);
-        info.appendChild(price);
-        info.appendChild(editButton);
+    function closeEditModal() {
+        el.editModalOverlay.classList.remove("show");
+    }
 
-        card.appendChild(info);
-        productsGrid.appendChild(card);
+    function deleteFragrance(id) {
+        const target = productList.find((p) => String(p.id) === String(id));
+        if (!target) return;
+        if (!confirm(`Delete "${target.name}" from the store?`)) return;
+
+        const overrides = getOverrides();
+        overrides.added = overrides.added.filter((p) => String(p.id) !== String(id));
+        delete overrides.edited[String(id)];
+        if (!overrides.deletedIds.includes(String(id))) {
+            overrides.deletedIds.push(String(id));
+        }
+
+        saveOverrides(overrides);
+        productList = getLiveCatalog();
+        renderProducts();
+        showToast(`${target.name} removed from shop`);
+    }
+
+    document.querySelectorAll(".nav-cat-btn").forEach((btn) => {
+        btn.addEventListener("click", (e) => {
+            e.preventDefault();
+            const chosenCategory = btn.dataset.navCategory;
+            if (!chosenCategory) return;
+
+            state.category = chosenCategory;
+            updateCategoryUI();
+            renderProducts();
+
+            document.getElementById("products")?.scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+        });
     });
-}
 
-// Filter & Sort
-function filterProducts() {
-    let filtered = [...storeProducts];
-
-    if (selectedCategory === "Offers") {
-        filtered = filtered.filter(p => p.discount > 0);
-    } else if (selectedCategory !== "All") {
-        filtered = filtered.filter(p => p.category === selectedCategory);
-    }
-
-    const searchText = searchInput.value.toLowerCase().trim();
-    filtered = filtered.filter(p => p.name.toLowerCase().includes(searchText));
-
-    const sortValue = sortSelect.value;
-    if (sortValue === "low-high") {
-        filtered.sort((a, b) => a.price - b.price);
-    } else if (sortValue === "high-low") {
-        filtered.sort((a, b) => b.price - a.price);
-    }
-
-    displayAdminProducts(filtered);
-}
-
-categoryButtons.forEach(btn => {
-    btn.addEventListener("click", function () {
-        categoryButtons.forEach(b => b.classList.remove("active"));
-        this.classList.add("active");
-        selectedCategory = this.dataset.category;
-        filterProducts();
+    document.querySelector('.hero a[href="#products"]')?.addEventListener("click", (e) => {
+        e.preventDefault();
+        document.getElementById("products")?.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
     });
-});
 
-searchInput.addEventListener("input", filterProducts);
-sortSelect.addEventListener("change", filterProducts);
+    el.searchInput.addEventListener("input", renderProducts);
+    el.sortSelect.addEventListener("change", renderProducts);
 
-// Open Modal (for Editing or Adding)
-function openEditModal(product = null) {
-    const heading = document.getElementById("modalHeading");
-    const idField = document.getElementById("editProductId");
+    el.clearSearch?.addEventListener("click", () => {
+        el.searchInput.value = "";
+        renderProducts();
+        el.searchInput.focus();
+    });
 
-    if (product) {
-        heading.textContent = "Edit Fragrance";
-        idField.value = product.id;
-        document.getElementById("editName").value = product.name;
-        document.getElementById("editCategory").value = product.category;
-        document.getElementById("editPrice").value = product.price;
-        document.getElementById("editOldPrice").value = product.oldPrice || "";
-        document.getElementById("editImage").value = product.image || "";
-    } else {
-        heading.textContent = "Add New Fragrance";
-        idField.value = "";
-        adminShopForm.reset();
-    }
+    el.categoryBtns.forEach((btn) => {
+        btn.addEventListener("click", () => {
+            state.category = btn.dataset.category;
+            updateCategoryUI();
+            renderProducts();
+        });
+    });
 
-    editModalOverlay.classList.add("show");
-}
+    el.resetFilters?.addEventListener("click", () => {
+        el.searchInput.value = "";
+        el.sortSelect.value = "default";
+        state.category = "All";
+        updateCategoryUI();
+        renderProducts();
+    });
 
-function closeEditModal() {
-    editModalOverlay.classList.remove("show");
-}
+    // Event delegation for dynamically rendered edit/delete buttons
+    el.productsGrid.addEventListener("click", (e) => {
+        const deleteBtn = e.target.closest("[data-delete-id]");
+        if (deleteBtn) {
+            deleteFragrance(deleteBtn.dataset.deleteId);
+            return;
+        }
 
-function deleteFragrance(id, name) {
-    if (!confirm(`Delete "${name}" from the store?`)) return;
-    storeProducts = storeProducts.filter(p => p.id !== id);
-    localStorage.setItem("scentora_products", JSON.stringify(storeProducts));
-    filterProducts();
-}
+        const editBtn = e.target.closest("[data-edit-id]");
+        if (editBtn) {
+            const product = productList.find((p) => String(p.id) === String(editBtn.dataset.editId));
+            if (product) openEditModal(product);
+        }
+    });
 
-// Modal Event Listeners
-document.getElementById("addFragranceBtn").addEventListener("click", () => openEditModal(null));
-document.getElementById("closeEditModal").addEventListener("click", closeEditModal);
-document.getElementById("cancelEditModal").addEventListener("click", closeEditModal);
+    document.getElementById("addFragranceBtn")?.addEventListener("click", () => openEditModal(null));
+    document.getElementById("closeEditModal")?.addEventListener("click", closeEditModal);
+    document.getElementById("cancelEditModal")?.addEventListener("click", closeEditModal);
 
-editModalOverlay.addEventListener("click", (e) => {
-    if (e.target === editModalOverlay) closeEditModal();
-});
+    el.editModalOverlay?.addEventListener("click", (e) => {
+        if (e.target === el.editModalOverlay) closeEditModal();
+    });
 
-document.getElementById("resetDefaultBtn").addEventListener("click", () => {
-    if (!confirm("Reset catalog back to the default 8 fragrances?")) return;
-    storeProducts = [...defaultCatalog];
-    localStorage.setItem("scentora_products", JSON.stringify(storeProducts));
-    filterProducts();
-});
+    document.getElementById("resetDefaultBtn")?.addEventListener("click", () => {
+        if (!confirm("Reset all admin edits back to products.js?")) return;
+        localStorage.removeItem(OVERRIDES_KEY);
+        productList = getLiveCatalog();
+        renderProducts();
+        showToast("Catalog reset to products.js");
+    });
 
-// Save Edits & Sync to localStorage
-adminShopForm.addEventListener("submit", (e) => {
-    e.preventDefault();
+    el.adminShopForm?.addEventListener("submit", (e) => {
+        e.preventDefault();
 
-    const idVal = document.getElementById("editProductId").value;
-    const name = document.getElementById("editName").value.trim();
-    const category = document.getElementById("editCategory").value;
-    const price = Number(document.getElementById("editPrice").value);
-    const oldPrice = Number(document.getElementById("editOldPrice").value) || 0;
-    const image = document.getElementById("editImage").value.trim() || "https://images.unsplash.com/photo-1594035910387-fea47794261f?w=600";
-    const discount = oldPrice > price ? Math.round(((oldPrice - price) / oldPrice) * 100) : 0;
+        const idVal = document.getElementById("editProductId").value;
+        const name = document.getElementById("editName").value.trim();
+        const category = normalizeCategory(document.getElementById("editCategory").value);
+        const price = Number(document.getElementById("editPrice").value);
+        const oldPrice = Number(document.getElementById("editOldPrice").value) || 0;
+        const image = uploadedImageData || FALLBACK_IMAGE;
+        const discount = oldPrice > price ? Math.round(((oldPrice - price) / oldPrice) * 100) : 0;
 
-    if (idVal) {
-        const index = storeProducts.findIndex(p => String(p.id) === String(idVal));
-        if (index !== -1) {
-            storeProducts[index] = {
-                ...storeProducts[index],
+        const overrides = getOverrides();
+
+        if (idVal) {
+            const addedIdx = overrides.added.findIndex((p) => String(p.id) === String(idVal));
+            if (addedIdx !== -1) {
+                overrides.added[addedIdx] = {
+                    ...overrides.added[addedIdx],
+                    name,
+                    category,
+                    price,
+                    oldPrice,
+                    discount,
+                    image
+                };
+            } else {
+                overrides.edited[String(idVal)] = {
+                    name,
+                    category,
+                    price,
+                    oldPrice,
+                    discount,
+                    image
+                };
+            }
+            showToast(`${name} updated & synced to shop`);
+        } else {
+            overrides.added.push({
+                id: String(Date.now()),
                 name,
+                brand: "Scentora",
                 category,
                 price,
                 oldPrice,
                 discount,
                 image
-            };
+            });
+            showToast(`${name} added & synced to shop`);
         }
-    } else {
-        storeProducts.push({
-            id: Date.now(),
-            name,
-            category,
-            price,
-            oldPrice,
-            discount,
-            image
-        });
-    }
 
-    localStorage.setItem("scentora_products", JSON.stringify(storeProducts));
-    closeEditModal();
-    filterProducts();
+        saveOverrides(overrides);
+        productList = getLiveCatalog();
+        closeEditModal();
+        renderProducts();
+    });
+
+    updateCategoryUI();
+    renderProducts();
 });
-
-// Initialize
-filterProducts();

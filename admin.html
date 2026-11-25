@@ -44,7 +44,6 @@
       color: #AD8754;
     }
 
-    /* High-Contrast Popping ADMIN Badge */
     .admin-badge-pill {
       display: inline-flex;
       align-items: center;
@@ -92,7 +91,7 @@
 </head>
 <body>
 
-  <!-- Security Check -->
+  <!-- Redirect to login if admin session isn't active -->
   <script>
     const isAdminLoggedIn = sessionStorage.getItem("scentoraAdminLoggedIn") === "true";
     if (!isAdminLoggedIn) {
@@ -100,7 +99,6 @@
     }
   </script>
 
-  <!-- Admin Navigation Bar -->
   <header class="navbar">
     <a href="admin.html" class="brand">
       <svg class="brand-logo" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -134,14 +132,13 @@
     </div>
   </header>
 
-  <!-- Page Banner -->
   <section class="page-banner">
     <p class="eyebrow">STORE MANAGEMENT</p>
     <h1>Atelier <span>Admin</span></h1>
     <p class="banner-sub">Select a section below to manage Scentora's fragrance collection, seasonal offers, or customer orders.</p>
   </section>
 
-  <!-- Clickable Dynamic Stats Overview -->
+  <!-- Stat counts are populated dynamically from localStorage via admin.js -->
   <section class="stats-bar">
     <a href="admin-shop.html#products" class="stat-box stat-box-link" title="Open Admin Shop Editor">
       <span class="stat-number" id="total-products-count">0</span>
@@ -162,7 +159,6 @@
     </a>
   </section>
 
-  <!-- Footer -->
   <footer class="footer">
     <a href="admin.html" class="brand footer-brand">
       <svg class="brand-logo" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -192,6 +188,7 @@
     <p class="copyright" style="margin-top: 20px;">© 2026 Scentora. All rights reserved.</p>
   </footer>
 
+  <!-- Clear session flag on logout -->
   <script>
     const authBtn = document.getElementById("admin-auth-btn");
     if (sessionStorage.getItem("scentoraAdminLoggedIn") === "true") {
@@ -206,25 +203,9 @@
         window.location.href = "admin-login.html";
       };
     }
-
-    // Load Active Orders count from localStorage
-    function updateActiveOrdersDisplay() {
-      const ordersCountEl = document.getElementById("active-orders-count");
-      if (ordersCountEl) {
-        ordersCountEl.textContent = localStorage.getItem("scentoraActiveOrders") || "0";
-      }
-    }
-
-    document.addEventListener("DOMContentLoaded", updateActiveOrdersDisplay);
-
-    // Live-sync across browser tabs when a customer checks out
-    window.addEventListener("storage", function (e) {
-      if (e.key === "scentoraActiveOrders") {
-        updateActiveOrdersDisplay();
-      }
-    });
   </script>
 
+  <script src="js/products.js"></script>
   <script src="js/admin.js"></script>
 </body>
 </html>

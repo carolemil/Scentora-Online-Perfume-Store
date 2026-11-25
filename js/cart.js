@@ -1,15 +1,14 @@
-let cart = JSON.parse(localStorage.getItem('scentora_cart')) || [];
+let cart = JSON.parse(localStorage.getItem('scentoraCart')) || [];
 let activeDiscount = 0;
 let activePromoCode = '';
 
-// Pull live inventory from Admin changes first, falling back to your team's products.js
+// Check localStorage first, fall back to static products.js
 function getCatalog() {
   const saved = JSON.parse(localStorage.getItem('scentora_products'));
   if (saved && saved.length > 0) return saved;
   return typeof products !== 'undefined' ? products : [];
 }
 
-// Pull active promo codes from Admin changes first, falling back to default offers
 function getAvailableOffers() {
   const saved = JSON.parse(localStorage.getItem('scentora_offers'));
   if (Array.isArray(saved) && saved.length > 0) {
@@ -33,6 +32,7 @@ function getCurrentUser() {
   }
 }
 
+// Toggle nav auth links and auto-fill delivery fields if logged in
 function syncAuthUI() {
   const user = getCurrentUser();
   const loginLink = document.querySelector('.login-link');
@@ -54,12 +54,10 @@ function syncAuthUI() {
     }
   }
 
-  // Hide "Join Us" button if already logged in; keep it if logged out
   if (joinBtn) {
     joinBtn.style.display = user ? 'none' : 'inline-block';
   }
 
-  // Pre-fill Delivery Details if logged in
   if (user && typeof user === 'object') {
     const nameField = document.getElementById('cust-name');
     const emailField = document.getElementById('cust-email');
@@ -78,7 +76,7 @@ function syncAuthUI() {
 }
 
 function saveAndRender() {
-  localStorage.setItem('scentora_cart', JSON.stringify(cart));
+  localStorage.setItem('scentoraCart', JSON.stringify(cart));
   renderCart();
   renderRecommendations();
 }
@@ -96,6 +94,8 @@ function addSuggestedItem(productId) {
   } else {
     cart.push({
       ...product,
+      id: String(product.id),
+      brand: product.brand || 'Scentora',
       qty: 1,
       quantity: 1
     });
@@ -148,12 +148,11 @@ document.getElementById('apply-promo-btn').addEventListener('click', () => {
   renderCart();
 });
 
-// Check for available promo codes on page load and display pop-up
+// Display modal with the highest available discount code
 function checkAndShowPromoPopup() {
   const offers = getAvailableOffers();
   if (!offers || offers.length === 0) return;
 
-  // Pick the highest discount available
   const bestOffer = [...offers].sort((a, b) => Number(b.discount) - Number(a.discount))[0];
   if (!bestOffer || !bestOffer.code) return;
 
@@ -183,7 +182,7 @@ function checkAndShowPromoPopup() {
   };
 }
 
-// Press Enter inside any Delivery Details box to move to the next field (or submit on the last one)
+// Move focus to next input on Enter instead of submitting early
 const checkoutInputs = Array.from(document.querySelectorAll('#checkout-form input'));
 checkoutInputs.forEach((input, idx) => {
   input.addEventListener('keydown', (e) => {
@@ -261,6 +260,7 @@ function renderCart() {
   }
 }
 
+// Show up to 3 catalog items not currently in the cart
 function renderRecommendations() {
   const grid = document.getElementById('recommendations-grid');
   const wrapper = document.getElementById('recommendations-wrapper');
@@ -299,7 +299,7 @@ document.getElementById('checkout-form').addEventListener('submit', (e) => {
   const errorEl = document.getElementById('error-msg');
   errorEl.innerText = '';
 
-  // Require login before checking out
+  // Redirect unauthenticated users to login, saving return path
   if (!getCurrentUser()) {
     alert('Please log in to your account to complete checkout.');
     localStorage.setItem('scentoraRedirectAfterLogin', 'cart.html');
@@ -353,7 +353,7 @@ document.getElementById('checkout-form').addEventListener('submit', (e) => {
   localStorage.setItem('scentora_last_order', JSON.stringify(orderSummary));
 
   cart = [];
-  localStorage.setItem('scentora_cart', JSON.stringify(cart));
+  localStorage.setItem('scentoraCart', JSON.stringify(cart));
   window.location.href = 'order-confirmation.html';
 });
 

@@ -1,8 +1,4 @@
-/* =========================================
-   SCENTORA ORDER CONFIRMATION PAGE
-   Matches Home Theme: Cream / Beige / Brown / Gold
-========================================= */
-
+/* Color palette variables */
 :root {
   --home-cream: #FAF7F0;
   --home-light: #F5F0E8;
@@ -34,9 +30,6 @@ a {
   color: inherit;
 }
 
-/* =========================================
-   NAVIGATION
-========================================= */
 .navbar {
   min-height: 88px;
   padding: 15px 8%;
@@ -162,9 +155,7 @@ a {
   border-color: var(--home-brown);
 }
 
-/* =========================================
-   CONFIRMATION CARD
-========================================= */
+/* Center confirmation card vertically and horizontally */
 .confirmation-wrapper {
   min-height: 75vh;
   display: flex;
@@ -231,9 +222,6 @@ a {
   margin: 12px 0 30px;
 }
 
-/* =========================================
-   RECEIPT SUMMARY
-========================================= */
 .receipt-box {
   background-color: var(--home-light);
   border: 1px solid var(--home-border);
@@ -243,6 +231,7 @@ a {
   margin-bottom: 22px;
 }
 
+/* Split label left and value right inside receipt */
 .receipt-row {
   display: flex;
   justify-content: space-between;
@@ -305,9 +294,6 @@ a {
   flex-wrap: wrap;
 }
 
-/* =========================================
-   FOOTER
-========================================= */
 .footer {
   background: var(--home-dark);
   color: var(--home-cream);
@@ -358,9 +344,7 @@ a {
   font-size: 10px;
 }
 
-/* =========================================
-   RESPONSIVE
-========================================= */
+/* Responsive adjustments for tablet and mobile */
 @media (max-width: 1100px) {
   .navbar {
     padding: 15px 5%;
