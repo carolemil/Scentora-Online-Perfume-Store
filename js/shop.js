@@ -56,40 +56,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (!el.productsGrid || !el.searchInput || !el.sortSelect) {
         console.error("Scentora: Required shop HTML elements are missing.");
-=======
-// Get HTML elements
-const productsGrid = document.getElementById("productsGrid");
-const searchInput = document.getElementById("searchInput");
-const sortSelect = document.getElementById("sortSelect");
-const categoryButtons = document.querySelectorAll(".category-btn");
-
-const cartButton = document.getElementById("cartButton");
-const cartOverlay = document.getElementById("cartOverlay");
-const closeCart = document.getElementById("closeCart");
-
-const cartItems = document.getElementById("cartItems");
-const cartCount = document.getElementById("cartCount");
-const cartTotal = document.getElementById("cartTotal");
-
-const checkoutButton = document.getElementById("checkoutButton");
-const noProducts = document.getElementById("noProducts");
-const shopOfferBannerText = document.getElementById("shopOfferBannerText");
-
-
-// Variables (connected to admin and cart through localStorage)
-let selectedCategory = "All";
-
-const savedProducts = JSON.parse(localStorage.getItem("scentora_products"));
-let storeProducts = (savedProducts && savedProducts.length > 0) ? savedProducts : products;
-
-let cart = JSON.parse(localStorage.getItem("scentora_cart")) || [];
-
-
-// Display the best active offer in the banner
-function syncShopOfferBanner() {
-
-    if (!shopOfferBannerText) {
- main
         return;
     }
 
@@ -335,7 +301,7 @@ function syncShopOfferBanner() {
     function getLoggedInUser() {
         const stores = [localStorage, sessionStorage];
         const priorityKeys = [
-            "scentoraUser", "scentora_user", "currentUser",
+            "scentoraCurrentUser", "scentoraUser", "scentora_user", "currentUser",
             "loggedInUser", "activeUser", "user", "authUser"
         ];
 
@@ -398,9 +364,10 @@ function syncShopOfferBanner() {
     // 7. EVENT LISTENERS
     // =====================================
 
-   // Navbar Women / Men / Unisex buttons: filter & scroll smoothly to #products
+    // Navbar Women / Men / Unisex links: filter & scroll smoothly to #products
     document.querySelectorAll(".nav-cat-btn").forEach((btn) => {
-        btn.addEventListener("click", () => {
+        btn.addEventListener("click", (e) => {
+            e.preventDefault();
             const chosenCategory = btn.dataset.navCategory;
             if (!chosenCategory) return;
 
@@ -408,23 +375,21 @@ function syncShopOfferBanner() {
             updateCategoryUI();
             renderProducts();
 
-            const productsSection = document.getElementById("products");
-            if (productsSection) {
-                productsSection.scrollIntoView({
-                    behavior: "smooth",
-                    block: "start"
-                });
-            }
+            document.getElementById("products")?.scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
         });
     });
 
-    document.querySelector('a[href="#products"]')?.addEventListener("click", (e) => {
+    document.querySelector('.hero a[href="#products"]')?.addEventListener("click", (e) => {
         e.preventDefault();
         document.getElementById("products")?.scrollIntoView({
             behavior: "smooth",
             block: "start"
         });
     });
+
     el.searchInput.addEventListener("input", renderProducts);
     el.sortSelect.addEventListener("change", renderProducts);
 
@@ -506,7 +471,7 @@ function syncShopOfferBanner() {
             sessionStorage.removeItem(session.key);
         }
         [
-            "scentoraUser", "scentora_user", "currentUser",
+            "scentoraCurrentUser", "scentoraUser", "scentora_user", "currentUser",
             "loggedInUser", "activeUser", "user", "authUser"
         ].forEach((k) => {
             localStorage.removeItem(k);
@@ -525,11 +490,11 @@ function syncShopOfferBanner() {
         }
     });
 
-   
-el.checkoutBtn?.addEventListener("click", () => {
-    if (state.cart.length === 0) return;
-    window.location.href = "cart.html";
-});
+    el.checkoutBtn?.addEventListener("click", () => {
+        if (state.cart.length === 0) return;
+        window.location.href = "cart.html";
+    });
+
     // =====================================
     // 8. INITIALIZE
     // =====================================
@@ -551,9 +516,3 @@ el.checkoutBtn?.addEventListener("click", () => {
         console.warn("Scentora: No products found. Check that products.js loads before shop.js.");
     }
 });
-=======
-// Start the shop page
-syncShopOfferBanner();
-filterProducts();
-updateCart();
- main
