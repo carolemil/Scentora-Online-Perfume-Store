@@ -1,4 +1,5 @@
-document.addEventListener("DOMContentLoaded", function () {
+  
+  document.addEventListener("DOMContentLoaded", function () {
 
     const USERS_KEY = "scentoraDemoUsers";
     const CURRENT_USER_KEY = "scentoraCurrentUser";
@@ -415,59 +416,3 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-});
-
-
-//for auth in the shop page  
-
-document.addEventListener("DOMContentLoaded", function () {
-
-    const authNav = document.getElementById("auth-nav");
-
-    if (!authNav) return;
-
-    function updateAuthButton() {
-
-        const loggedIn = localStorage.getItem("isLoggedIn") === "true";
-
-        if (loggedIn) {
-
-            authNav.innerHTML = `
-                <a href="#" class="login-btn" id="authButton">
-                    Logout
-                </a>
-            `;
-
-        } else {
-
-            authNav.innerHTML = `
-                <a href="login.html" class="login-btn">
-                    Login
-                </a>
-            `;
-
-        }
-
-        const authButton = document.getElementById("authButton");
-
-        if (authButton) {
-            authButton.addEventListener("click", function (e) {
-
-                e.preventDefault();
-
-                localStorage.removeItem("isLoggedIn");
-                localStorage.removeItem("userEmail");
-                localStorage.removeItem("rememberMe");
-
-                alert("You have logged out successfully!");
-
-                updateAuthButton();
-
-            });
-        }
-
-    }
-
-    updateAuthButton();
-
-});
