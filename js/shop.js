@@ -491,25 +491,11 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    el.checkoutBtn?.addEventListener("click", () => {
-        if (state.cart.length === 0) return;
-
-        const subtotal = state.cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-        const summary = state.cart.map((item) => `${item.name} × ${item.quantity}`).join("\n");
-
-        alert(
-            `Thank you for shopping with Scentora!\n\n${summary}\n\n` +
-            `Order total: ${formatPrice(subtotal)}\n\n` +
-            `This is a demo checkout. No payment has been processed.`
-        );
-
-        state.cart = [];
-        saveCart();
-        renderCart();
-        toggleCart(false);
-        showToast("Demo order completed!");
-    });
-
+   
+el.checkoutBtn?.addEventListener("click", () => {
+    if (state.cart.length === 0) return;
+    window.location.href = "cart.html";
+});
     // =====================================
     // 8. INITIALIZE
     // =====================================

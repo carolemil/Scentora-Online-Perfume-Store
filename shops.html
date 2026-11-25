@@ -306,6 +306,12 @@
         document.getElementById("year").textContent = new Date().getFullYear();
     </script>
 
+ <script>
+document.getElementById('checkoutButton').addEventListener('click', function () {
+  window.location.href = 'cart.html';
+});
+</script>
+
 <script>
 document.querySelectorAll('.nav-cat-btn').forEach(btn => {
   btn.addEventListener('click', e => {

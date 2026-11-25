@@ -483,4 +483,4 @@ document.addEventListener("DOMContentLoaded", function () {
 
     updateAuthButton();
 
-});
+}); 
