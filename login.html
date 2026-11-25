@@ -20,7 +20,6 @@
     <header class="top-header">
         <a href="index.html" class="brand">
 
-            <!-- SCENTORA SIGNATURE FLOWER LOGO -->
             <svg class="brand-logo" viewBox="0 0 100 100"
                  fill="none" xmlns="http://www.w3.org/2000/svg">
 
@@ -68,8 +67,6 @@
         <section class="login-card">
 
             <div class="card-logo">
-
-                <!-- LOGIN CARD FLOWER LOGO -->
                 <svg class="card-logo-svg" viewBox="0 0 100 100"
                      fill="none" xmlns="http://www.w3.org/2000/svg">
 
@@ -98,36 +95,85 @@
 
                     </g>
                 </svg>
-
             </div>
 
             <h1>Welcome Back</h1>
-            <p class="card-subtitle">Your favorite fragrances are waiting for you.</p>
+            <p class="card-subtitle">
+                Your favorite fragrances are waiting for you.
+            </p>
 
-            <form id="loginForm">
+            <form id="loginForm" autocomplete="on">
 
-                <div class="input-field">
-                    <span class="input-icon">✉</span>
-                    <input type="email" id="loginEmail" placeholder="Email address" autocomplete="email">
+                <div class="form-group">
+
+                    <label class="form-label" for="loginEmail">
+                        Email Address
+                    </label>
+
+                    <div class="input-field">
+                        <span class="input-icon">✉</span>
+
+                        <input
+                            type="email"
+                            id="loginEmail"
+                            name="username"
+                            placeholder="Email address"
+                            autocomplete="username"
+                            list="scentoraEmailSuggestions"
+                        >
+
+                        <datalist id="scentoraEmailSuggestions"></datalist>
+                    </div>
+
+                    <small class="field-error" id="loginEmailError"></small>
+
                 </div>
-                <small class="field-error" id="loginEmailError"></small>
 
-                <div class="input-field">
-                    <span class="input-icon">♧</span>
-                    <input type="password" id="loginPassword" placeholder="Password" autocomplete="current-password">
-                    <button type="button" class="show-password" id="toggleLoginPassword">Show</button>
+                <div class="form-group">
+
+                    <label class="form-label" for="loginPassword">
+                        Password
+                    </label>
+
+                    <div class="input-field">
+                        <span class="input-icon">♧</span>
+
+                        <input
+                            type="password"
+                            id="loginPassword"
+                            name="password"
+                            placeholder="Password"
+                            autocomplete="current-password"
+                        >
+
+                        <button
+                            type="button"
+                            class="show-password"
+                            id="toggleLoginPassword"
+                        >
+                            Show
+                        </button>
+                    </div>
+
+                    <small class="field-error" id="loginPasswordError"></small>
+
                 </div>
-                <small class="field-error" id="loginPasswordError"></small>
 
                 <div class="form-options">
+
                     <label class="remember">
-                        <input type="checkbox" id="rememberMe">
+                        <input type="checkbox" id="rememberMe" name="rememberMe">
                         Remember me
                     </label>
 
-                    <button type="button" class="forgot-link" id="forgotPassword">
+                    <button
+                        type="button"
+                        class="forgot-link"
+                        id="forgotPassword"
+                    >
                         Forgot password?
                     </button>
+
                 </div>
 
                 <button type="submit" class="login-button" id="loginButton">
@@ -147,19 +193,32 @@
             <div class="social-buttons">
 
                 <button type="button" class="social-button" id="googleLogin">
-                    <svg class="google-logo" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+
+                    <svg class="google-logo" viewBox="0 0 48 48"
+                         xmlns="http://www.w3.org/2000/svg">
+
                         <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+
                         <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.71 7.18l7.72 6C44.45 37.99 46.98 31.77 46.98 24.55z"/>
+
                         <path fill="#FBBC05" d="M10.53 28.59A14.4 14.4 0 0 1 9.75 24c0-1.59.27-3.13.76-4.59l-7.98-6.19A23.9 23.9 0 0 0 0 24c0 3.88.93 7.56 2.56 10.78l7.97-6.19z"/>
+
                         <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.91-5.8l-7.72-6c-2.15 1.45-4.92 2.3-8.19 2.3-6.26 0-11.57-4.22-13.46-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+
                     </svg>
+
                     Google
                 </button>
 
                 <button type="button" class="social-button" id="appleLogin">
-                    <svg class="apple-logo" viewBox="0 0 384 512" xmlns="http://www.w3.org/2000/svg">
+
+                    <svg class="apple-logo" viewBox="0 0 384 512"
+                         xmlns="http://www.w3.org/2000/svg">
+
                         <path fill="currentColor" d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.3-41.7-85.1-44.6-35.7-2.8-74.7 20.8-89.2 20.8-15.3 0-49.8-19.8-77-19.8C61.2 141.2 0 184.9 0 273.7c0 26.3 4.8 53.4 14.4 81.2 12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 76-17.9 32 0 48.5 17.9 76.6 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.1-30.7-58.1-90.2-58.1-92.1zM262.1 104.5c27.4-32.5 24.9-62.1 24.1-72.7-24.2 1.4-52.2 16.5-68.1 34.8-17.5 19.8-27.8 44.3-25.6 71.9 26.2 2 50.1-11.4 69.6-34z"/>
+
                     </svg>
+
                     Apple
                 </button>
 
@@ -178,7 +237,8 @@
         © 2026 <span>SCENTORA</span> · THE ART OF FRAGRANCE
     </footer>
 
+    <!-- Load the authentication script only once -->
     <script src="js/auth.js"></script>
-    <script src="js/login.js"></script>
+
 </body>
 </html>

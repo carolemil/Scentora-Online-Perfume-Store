@@ -1,13 +1,16 @@
-  
-  document.addEventListener("DOMContentLoaded", function () {
+
+document.addEventListener("DOMContentLoaded", function () {
 
     const USERS_KEY = "scentoraDemoUsers";
     const CURRENT_USER_KEY = "scentoraCurrentUser";
     const REDIRECT_KEY = "scentoraRedirectAfterLogin";
 
+    // GET AND SAVE USERS
+
     function getUsers() {
         try {
-            return JSON.parse(localStorage.getItem(USERS_KEY)) || [];
+            const users = JSON.parse(localStorage.getItem(USERS_KEY));
+            return Array.isArray(users) ? users : [];
         } catch {
             return [];
         }
@@ -19,15 +22,19 @@
 
     function getCurrentUser() {
         const raw = localStorage.getItem(CURRENT_USER_KEY);
-        if (!raw || raw === "null" || raw === "false" || raw === "undefined") {
+
+        if (!raw || raw === "null" || raw === "false") {
             return null;
         }
+
         try {
             return JSON.parse(raw);
         } catch {
             return null;
         }
     }
+
+    // NAVBAR AUTHENTICATION
 
     function syncNavbarAuth() {
         const user = getCurrentUser();
@@ -38,8 +45,10 @@
             if (user) {
                 loginLink.textContent = "Log Out";
                 loginLink.href = "#";
-                loginLink.onclick = function (e) {
-                    e.preventDefault();
+
+                loginLink.onclick = function (event) {
+                    event.preventDefault();
+
                     localStorage.removeItem(CURRENT_USER_KEY);
                     window.location.reload();
                 };
@@ -57,9 +66,14 @@
 
     syncNavbarAuth();
 
+    // ERROR AND MESSAGE FUNCTIONS
+
     function showError(id, message) {
         const element = document.getElementById(id);
-        if (element) element.textContent = message;
+
+        if (element) {
+            element.textContent = message;
+        }
     }
 
     function clearErrors(ids) {
@@ -68,11 +82,14 @@
 
     function setMessage(id, message, success = false) {
         const element = document.getElementById(id);
+
         if (!element) return;
 
         element.textContent = message;
         element.style.color = success ? "#63846A" : "#A74636";
     }
+
+    // VALIDATION
 
     function validEmail(email) {
         return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -93,9 +110,12 @@
             /[0-9]/.test(password);
     }
 
+    // PASSWORD HASHING
+
     async function hashPassword(password, salt) {
         const encoder = new TextEncoder();
         const data = encoder.encode(salt + password);
+
         const hash = await crypto.subtle.digest("SHA-256", data);
 
         return Array.from(new Uint8Array(hash))
@@ -111,6 +131,8 @@
             .join("");
     }
 
+    // SHOW / HIDE PASSWORD
+
     function togglePassword(buttonId, inputId) {
         const button = document.getElementById(buttonId);
         const input = document.getElementById(inputId);
@@ -119,32 +141,40 @@
 
         button.addEventListener("click", function () {
             const hidden = input.type === "password";
+
             input.type = hidden ? "text" : "password";
             button.textContent = hidden ? "Hide" : "Show";
-        });
-    }
-
-    function populateEmailSuggestions() {
-        const emailList = document.getElementById("scentoraEmailSuggestions");
-        if (!emailList) return;
-
-        const users = getUsers();
-        emailList.innerHTML = "";
-
-        users.forEach(user => {
-            if (!user.email) return;
-            const option = document.createElement("option");
-            option.value = user.email;
-            emailList.appendChild(option);
         });
     }
 
     togglePassword("toggleLoginPassword", "loginPassword");
     togglePassword("toggleRegPassword", "regPassword");
     togglePassword("toggleConfirmPassword", "regConfirmPassword");
+
+    // SCENTORA EMAIL SUGGESTIONS ONLY
+
+    function populateEmailSuggestions() {
+        const emailList = document.getElementById("scentoraEmailSuggestions");
+
+        if (!emailList) return;
+
+        const users = getUsers();
+
+        emailList.innerHTML = "";
+
+        users.forEach(user => {
+            if (!user.email) return;
+
+            const option = document.createElement("option");
+            option.value = user.email;
+
+            emailList.appendChild(option);
+        });
+    }
+
     populateEmailSuggestions();
 
-    /* REGISTRATION */
+    // REGISTRATION
 
     const registerForm = document.getElementById("registerForm");
 
@@ -154,30 +184,35 @@
         const strengthBar = document.getElementById("strengthBar");
         const strengthText = document.getElementById("strengthText");
 
-        passwordInput.addEventListener("input", function () {
-            const password = passwordInput.value;
-            let score = 0;
+        if (passwordInput && strengthBar && strengthText) {
 
-            if (password.length >= 8) score++;
-            if (/[A-Z]/.test(password)) score++;
-            if (/[a-z]/.test(password)) score++;
-            if (/[0-9]/.test(password)) score++;
-            if (/[^A-Za-z0-9]/.test(password)) score++;
+            passwordInput.addEventListener("input", function () {
 
-            const levels = [
-                { width: "0%", text: "Password strength" },
-                { width: "20%", text: "Very weak" },
-                { width: "40%", text: "Weak" },
-                { width: "60%", text: "Fair" },
-                { width: "80%", text: "Good" },
-                { width: "100%", text: "Strong" }
-            ];
+                const password = passwordInput.value;
+                let score = 0;
 
-            strengthBar.style.width = levels[score].width;
-            strengthText.textContent = levels[score].text;
-        });
+                if (password.length >= 8) score++;
+                if (/[A-Z]/.test(password)) score++;
+                if (/[a-z]/.test(password)) score++;
+                if (/[0-9]/.test(password)) score++;
+                if (/[^A-Za-z0-9]/.test(password)) score++;
+
+                const levels = [
+                    { width: "0%", text: "Password strength" },
+                    { width: "20%", text: "Very weak" },
+                    { width: "40%", text: "Weak" },
+                    { width: "60%", text: "Fair" },
+                    { width: "80%", text: "Good" },
+                    { width: "100%", text: "Strong" }
+                ];
+
+                strengthBar.style.width = levels[score].width;
+                strengthText.textContent = levels[score].text;
+            });
+        }
 
         registerForm.addEventListener("submit", async function (event) {
+
             event.preventDefault();
 
             const firstName = document.getElementById("regFirstName").value.trim();
@@ -223,7 +258,10 @@
             }
 
             if (!validPassword(password)) {
-                showError("passwordError", "Use 8+ characters, uppercase, lowercase and a number.");
+                showError(
+                    "passwordError",
+                    "Use 8+ characters, uppercase, lowercase and a number."
+                );
                 valid = false;
             }
 
@@ -241,12 +279,19 @@
 
             const users = getUsers();
 
-            if (users.some(user => user.email && user.email.toLowerCase() === email)) {
+            if (users.some(user =>
+                user.email && user.email.toLowerCase() === email
+            )) {
                 showError("emailError", "This email is already registered.");
                 return;
             }
 
+            const registerButton = document.getElementById("registerButton");
+
             try {
+
+                registerButton.disabled = true;
+
                 const salt = makeSalt();
                 const passwordHash = await hashPassword(password, salt);
 
@@ -274,11 +319,15 @@
                     role: newUser.role
                 }));
 
-                setMessage("registerMessage", "Account created successfully! Redirecting...", true);
+                setMessage(
+                    "registerMessage",
+                    "Account created successfully! Redirecting...",
+                    true
+                );
 
-                document.getElementById("registerButton").disabled = true;
+                const redirectTarget =
+                    localStorage.getItem(REDIRECT_KEY) || "shops.html";
 
-                const redirectTarget = localStorage.getItem(REDIRECT_KEY) || "shops.html";
                 localStorage.removeItem(REDIRECT_KEY);
 
                 setTimeout(() => {
@@ -286,25 +335,39 @@
                 }, 1200);
 
             } catch (error) {
-                setMessage("registerMessage", "Something went wrong. Please try again.");
-                console.error(error);
+
+                registerButton.disabled = false;
+
+                setMessage(
+                    "registerMessage",
+                    "Something went wrong. Please try again."
+                );
+
+                console.error("Registration error:", error);
             }
         });
     }
 
-    /* LOGIN */
+    // LOGIN
 
     const loginForm = document.getElementById("loginForm");
 
     if (loginForm) {
 
         loginForm.addEventListener("submit", async function (event) {
+
             event.preventDefault();
 
             const email = document.getElementById("loginEmail").value.trim().toLowerCase();
             const password = document.getElementById("loginPassword").value;
 
-            clearErrors(["loginEmailError", "loginPasswordError"]);
+            const loginButton = document.getElementById("loginButton");
+
+            clearErrors([
+                "loginEmailError",
+                "loginPasswordError"
+            ]);
+
             setMessage("loginMessage", "");
 
             let valid = true;
@@ -322,7 +385,10 @@
             if (!valid) return;
 
             const users = getUsers();
-            const user = users.find(item => item.email && item.email.toLowerCase() === email);
+
+            const user = users.find(item =>
+                item.email && item.email.toLowerCase() === email
+            );
 
             if (!user) {
                 setMessage("loginMessage", "No account found with this email.");
@@ -330,64 +396,96 @@
             }
 
             try {
+
+                loginButton.disabled = true;
+
                 let passwordMatches = false;
 
                 if (user.passwordHash && user.salt) {
+
                     const hash = await hashPassword(password, user.salt);
                     passwordMatches = hash === user.passwordHash;
+
                 } else if (user.password) {
+
                     passwordMatches = user.password === password;
 
                     if (passwordMatches) {
+
                         const salt = makeSalt();
+
                         user.salt = salt;
                         user.passwordHash = await hashPassword(password, salt);
+
                         delete user.password;
+
                         saveUsers(users);
                     }
                 }
 
                 if (!passwordMatches) {
-                    setMessage("loginMessage", "Incorrect email or password.");
+
+                    loginButton.disabled = false;
+
+                    setMessage(
+                        "loginMessage",
+                        "Incorrect email or password."
+                    );
+
                     return;
                 }
 
                 localStorage.setItem(CURRENT_USER_KEY, JSON.stringify({
                     id: user.id,
-                    name: user.name || `${user.firstName || ""} ${user.lastName || ""}`.trim(),
+                    name: user.name ||
+                        `${user.firstName || ""} ${user.lastName || ""}`.trim(),
                     email: user.email,
                     phone: user.phone || "",
                     role: user.role || "customer"
                 }));
 
-                setMessage("loginMessage", "Welcome back! Redirecting...", true);
-
-                document.getElementById("loginButton").disabled = true;
+                setMessage(
+                    "loginMessage",
+                    "Welcome back! Redirecting...",
+                    true
+                );
 
                 const savedRedirect = localStorage.getItem(REDIRECT_KEY);
+
                 localStorage.removeItem(REDIRECT_KEY);
 
                 setTimeout(() => {
+
                     if (user.role === "admin") {
                         window.location.href = "admin.html";
                     } else {
                         window.location.href = savedRedirect || "shops.html";
                     }
+
                 }, 1000);
 
             } catch (error) {
-                setMessage("loginMessage", "Login failed. Please try again.");
-                console.error(error);
+
+                loginButton.disabled = false;
+
+                setMessage(
+                    "loginMessage",
+                    "Login failed. Please try again."
+                );
+
+                console.error("Login error:", error);
             }
         });
     }
 
-    /* FORGOT PASSWORD */
+    // FORGOT PASSWORD
 
     const forgotButton = document.getElementById("forgotPassword");
 
     if (forgotButton) {
+
         forgotButton.addEventListener("click", function () {
+
             const email = document.getElementById("loginEmail").value.trim();
 
             if (!email || !validEmail(email)) {
@@ -395,24 +493,31 @@
                 return;
             }
 
-            setMessage("loginMessage", "Password reset requires a connected email service.");
+            setMessage(
+                "loginMessage",
+                "Password reset requires a connected email service."
+            );
         });
     }
 
-    /* SOCIAL LOGIN PLACEHOLDERS */
+    // GOOGLE LOGIN PLACEHOLDER
 
     const googleButton = document.getElementById("googleLogin");
-    const appleButton = document.getElementById("appleLogin");
 
     if (googleButton) {
-        googleButton.addEventListener("click", () => {
+        googleButton.addEventListener("click", function () {
             alert("Google login requires OAuth configuration.");
         });
     }
 
+    // APPLE LOGIN PLACEHOLDER
+
+    const appleButton = document.getElementById("appleLogin");
+
     if (appleButton) {
-        appleButton.addEventListener("click", () => {
+        appleButton.addEventListener("click", function () {
             alert("Apple login requires OAuth configuration.");
         });
     }
 
+});
