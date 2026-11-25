@@ -11,11 +11,63 @@
 
   <link rel="stylesheet" href="css/admin.css">
   <style>
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+      text-decoration: none;
+    }
+
+    .brand-logo {
+      width: 43px;
+      height: 43px;
+      color: #854B2C;
+      display: block;
+      transition: transform 0.5s ease;
+    }
+
+    .brand:hover .brand-logo {
+      transform: rotate(-12deg);
+    }
+
+    .brand-name {
+      color: #49352A;
+      font-family: "Playfair Display", serif;
+      font-size: 27px;
+      font-weight: 600;
+      letter-spacing: -1.3px;
+      line-height: 1;
+    }
+
+    .brand-name > span {
+      color: #AD8754;
+    }
+
+    /* High-Contrast Popping ADMIN Badge */
+    .admin-badge-pill {
+      display: inline-flex;
+      align-items: center;
+      background-color: #302219;
+      color: #FAF7F0;
+      border: 1.5px solid #AD8754;
+      font-family: "DM Sans", sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 4px 11px;
+      border-radius: 50px;
+      margin-left: 6px;
+      box-shadow: 0 4px 12px rgba(48, 34, 25, 0.22);
+    }
+
     .orders-status-wrapper {
       max-width: 680px;
       margin: 0 auto 80px auto;
       padding: 0 20px;
     }
+
     .orders-status-card {
       text-align: center;
       padding: 56px 32px;
@@ -24,6 +76,7 @@
       background: #ffffff;
       box-shadow: 0 10px 30px rgba(73, 55, 44, 0.05);
     }
+
     .orders-status-card h2 {
       font-family: 'Playfair Display', serif;
       font-size: 28px;
@@ -31,10 +84,12 @@
       margin: 12px 0;
       color: #2c221e;
     }
+
     .orders-status-card h2 span {
       color: #AD8754;
       font-weight: 600;
     }
+
     .orders-status-card p {
       font-size: 15px;
       color: #6b5e57;
@@ -42,6 +97,7 @@
       margin: 0 auto 28px auto;
       line-height: 1.6;
     }
+
     .orders-actions {
       display: flex;
       justify-content: center;
@@ -85,6 +141,7 @@
         </g>
       </svg>
       <span class="brand-name">scentora<span>.</span></span>
+      <span class="admin-badge-pill">ADMIN</span>
     </a>
 
     <div class="nav-actions" id="admin-nav-actions">

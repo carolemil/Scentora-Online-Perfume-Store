@@ -1,4 +1,5 @@
-document.addEventListener("DOMContentLoaded", function () {
+  
+  document.addEventListener("DOMContentLoaded", function () {
 
     const USERS_KEY = "scentoraDemoUsers";
     const CURRENT_USER_KEY = "scentoraCurrentUser";
@@ -415,4 +416,3 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-});
