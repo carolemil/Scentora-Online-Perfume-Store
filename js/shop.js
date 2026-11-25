@@ -1,4 +1,3 @@
-
 // Get HTML elements
 const productsGrid = document.getElementById("productsGrid");
 const searchInput = document.getElementById("searchInput");
@@ -34,17 +33,6 @@ function syncShopOfferBanner() {
         return;
     }
 
-
-const savedProducts = JSON.parse(localStorage.getItem("scentora_products"));
-let storeProducts = (savedProducts && savedProducts.length > 0) ? savedProducts : products;
-let cart = JSON.parse(localStorage.getItem("scentora_cart")) || [];
-
-
-// SYNC ACTIVE OFFERS BANNER FROM ADMIN
-
-function syncShopOfferBanner() {
-    if (!shopOfferBannerText) return;
- main
     const offers = JSON.parse(localStorage.getItem("scentora_offers")) || [
         { code: "SCENT15", discount: 15 },
         { code: "LUXURY25", discount: 25 }
@@ -66,11 +54,6 @@ function syncShopOfferBanner() {
 
 
 // Select a category from the page link (shop.html?category=Men)
-    const bestOffer = offers.reduce((max, item) => item.discount > max.discount ? item : max, offers[0]);
-    shopOfferBannerText.innerHTML = `Enjoy up to <strong>${bestOffer.discount}% OFF</strong> — use promo code <strong>${bestOffer.code}</strong> at checkout!`;
-}
-
-main
 const requestedCategory = new URLSearchParams(window.location.search).get("category");
 
 if (requestedCategory) {
@@ -184,12 +167,6 @@ function displayProducts(productList) {
                 button.textContent = "Add to Cart";
             }, 900);
 
-
-            button.textContent = "Added ✓";
-            setTimeout(() => {
-                button.textContent = "Add to Cart";
-            }, 900);
- main
         });
 
         info.appendChild(name);
@@ -304,8 +281,6 @@ function addToCart(productId) {
         if (!product) {
             return;
         }
-
-        if (!product) return;
 
         cart.push({
             ...product,
@@ -475,9 +450,6 @@ if (cartOverlay) {
 
     cartOverlay.addEventListener("click", function (event) {
 
-// PROCEED TO CHECKOUT -> LINKS DIRECTLY TO cart.html
- main
-
         if (event.target === cartOverlay) {
             cartOverlay.classList.remove("show");
         }
@@ -510,8 +482,6 @@ if (yearElement) {
 
 
 // Start the shop page
-
- main
 syncShopOfferBanner();
 filterProducts();
 updateCart();

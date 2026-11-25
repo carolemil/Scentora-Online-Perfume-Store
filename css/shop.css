@@ -1,7 +1,3 @@
-
-
-
-
 /* =========================================
    SCENTORA SHOP PAGE
    Cream / Beige / Brown / Gold
@@ -541,6 +537,7 @@ select {
     box-shadow: -10px 0 40px rgba(48, 34, 25, 0.15);
     animation: slideIn 0.35s ease both;
 }
+
 .cart-header {
     display: flex;
     justify-content: space-between;
