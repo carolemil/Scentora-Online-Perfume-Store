@@ -1,4 +1,6 @@
 
+
+</html>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -13,10 +15,6 @@
 
     <link rel="stylesheet" href="css/common.css">
     <link rel="stylesheet" href="css/home.css">
-=======
-    <title>Shop | Scentora.</title>
-    <link rel="stylesheet" href="css/common.css">
- main
     <link rel="stylesheet" href="css/shop.css">
 </head>
 
@@ -48,20 +46,17 @@
             </svg>
             <span class="brand-name">scentora<span>.</span></span>
         </a>
-<!--new nav bar-->
- 
-       <nav class="nav-links" aria-label="Main Navigation">
-    <a href="index.html">Home</a>
-    <a href="shops.html" class="active">Shop</a>
-    <a href="#products" class="nav-cat-btn" data-nav-category="Women">Women</a>
-    <a href="#products" class="nav-cat-btn" data-nav-category="Men">Men</a>
-    <a href="#products" class="nav-cat-btn" data-nav-category="Unisex">Unisex</a>
-    <a href="index.html#contact">Contact</a>
-</nav>
-    
-   
 
-     <div class="nav-actions">
+        <nav class="nav-links" aria-label="Main Navigation">
+            <a href="index.html">Home</a>
+            <a href="shops.html" class="active">Shop</a>
+            <a href="#products" class="nav-cat-btn" data-nav-category="Women">Women</a>
+            <a href="#products" class="nav-cat-btn" data-nav-category="Men">Men</a>
+            <a href="#products" class="nav-cat-btn" data-nav-category="Unisex">Unisex</a>
+            <a href="index.html#contact">Contact</a>
+        </nav>
+
+        <div class="nav-actions">
             <span id="auth-nav">
                 <a href="login.html" class="login-link">Login</a>
             </span>
@@ -70,47 +65,12 @@
             <a href="register.html" id="joinUsButton" hidden></a>
 
             <button type="button" class="account-button" id="accountButton" aria-label="Open account details">
-                 <span id="navUserName">Account</span>
+                <span id="navUserName">Account</span>
             </button>
 
-           <button type="button" class="cart-button" id="cartButton" aria-label="Open shopping bag">
-               Bag (<span id="cartCount">0</span>)
-        </button>
-=======
-
-        <a href="index.html" class="logo">SCENTORA<span>.</span></a>
-
-        <nav>
-            <a href="index.html">Home</a>
-            <a href="shops.html" class="active">Shop</a>
-            <a href="index.html#categories">Categories</a>
-            <a href="index.html#about">About</a>
-            <a href="index.html#contact">Contact</a>
-        </nav>
-
-        
-       <div class="nav-actions">
-
-    <span id="auth-nav">
-        <a href="login.html" class="login-btn" id="authButton">Login</a>
-    </span>
-
-    <button type="button" class="cart-button" id="cartButton">
-         Cart (<span id="cartCount">0</span>)
-    </button>
-
-</div>
-    </header>
-
-
-    <!-- Hero -->
-    <section class="hero">
-        <div class="hero-content">
-            <p class="subtitle">DISCOVER YOUR SIGNATURE SCENT</p>
-            <h1>Elegance in Every Drop.</h1>
-            <p>Explore handcrafted fragrances that tell your story and leave an unforgettable impression.</p>
-            <a href="#products" class="shop-btn">Explore Collection</a>
- main
+            <button type="button" class="cart-button" id="cartButton" aria-label="Open shopping bag">
+                Bag (<span id="cartCount">0</span>)
+            </button>
         </div>
     </header>
 
@@ -134,47 +94,11 @@
             </div>
         </section>
 
-       
-
-       
         <!-- PRODUCTS CATALOGUE -->
-     <section class="products-section section-padding" id="products">
-     <div class="section-heading">
-       <!---<p class="eyebrow">EXPLORE YOUR STYLE</p>--> 
-       <!--<h2>Find your kind of <span>fragrance.</span></h2>--> 
-        <p id="productCount" aria-live="polite">Discover our collection.</p>
-    </div>
-
- <!-- SPECIAL OFFERS BANNER 
-        <section class="offer-banner">
-            <p class="eyebrow">A LITTLE SOMETHING SPECIAL</p>
-            <h2>Special Offers</h2>
-            <p id="shopOfferBannerText">Enjoy up to 25% OFF on selected fragrances!</p>
-        </section> -->
-=======
-
-    <!-- Special offers -->
-    <section class="offer-banner">
-        <h2>Special Offers</h2>
-        <p id="shopOfferBannerText">Enjoy up to 25% OFF on selected fragrances!</p>
-    </section>
-
-
-    <!-- Products -->
-    <section class="products-section" id="products">
-
-        <div class="section-heading">
-            <p class="subtitle" style="justify-content:center;">OUR COLLECTION</p>
-            <h2>Shop All Perfumes</h2>
-        </div>
-
-        <div class="search-container">
-            <input type="text" id="searchInput" placeholder="Search for a perfume...">
-        </div>
-
-        <div class="filters">
- main
-
+        <section class="products-section section-padding" id="products">
+            <div class="section-heading">
+                <p id="productCount" aria-live="polite">Discover our collection.</p>
+            </div>
 
             <!-- TOOLBAR: SEARCH, CATEGORIES & SORT -->
             <div class="shop-toolbar">
@@ -187,13 +111,6 @@
                     >
                     <button type="button" id="clearSearch" hidden>Clear</button>
                 </div>
-=======
-            <select id="sortSelect">
-                <option value="featured">Sort by: Featured</option>
-                <option value="low-high">Price: Low to High</option>
-                <option value="high-low">Price: High to Low</option>
-            </select>
- main
 
                 <div class="filters">
                     <div class="categories" role="group" aria-label="Filter by category">
@@ -232,23 +149,6 @@
             <div class="cart-header">
                 <h2 id="cartTitle">Your Bag</h2>
                 <button type="button" class="close-btn" id="closeCart" aria-label="Close bag">&times;</button>
-=======
-        <div class="products-grid" id="productsGrid"></div>
-
-        <p class="no-products" id="noProducts" hidden>No perfumes found. Try another search.</p>
-
-    </section>
-
-
-    <!-- Shopping cart -->
-    <div class="cart-overlay" id="cartOverlay">
-
-        <div class="cart-panel">
-
-            <div class="cart-header">
-                <h2>Your Bag</h2>
-                <button type="button" class="close-btn" id="closeCart">&times;</button>
- main
             </div>
 
             <div class="cart-items" id="cartItems"></div>
@@ -269,7 +169,7 @@
         </aside>
     </div>
 
-    <!-- SLIDE-OVER ACCOUNT DRAWER (Place right after the Cart Drawer) -->
+    <!-- SLIDE-OVER ACCOUNT DRAWER -->
     <div class="account-overlay" id="accountOverlay" aria-hidden="true">
         <aside class="account-panel" role="dialog" aria-modal="true" aria-labelledby="accountTitle">
             <div class="cart-header">
@@ -304,7 +204,7 @@
 
                 <div class="account-links">
                     <a href="shops.html?category=Offers#products">Member Exclusive Offers</a>
-                    <a href="index.html#contact">Concierge & Support</a>
+                    <a href="index.html#contact">Concierge &amp; Support</a>
                 </div>
 
                 <button type="button" class="checkout-btn logout-btn" id="logoutButton">
@@ -325,11 +225,12 @@
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
     <!-- SPECIAL OFFERS BANNER -->
-        <section class="offer-banner">
-            <p class="eyebrow">A LITTLE SOMETHING SPECIAL</p>
-            <h2>Special Offers</h2>
-            <p id="shopOfferBannerText">Enjoy up to 25% OFF on selected fragrances!</p>
-        </section> 
+    <section class="offer-banner">
+        <p class="eyebrow">A LITTLE SOMETHING SPECIAL</p>
+        <h2>Special Offers</h2>
+        <p id="shopOfferBannerText">Enjoy up to 25% OFF on selected fragrances!</p>
+    </section>
+
     <!-- FOOTER -->
     <footer class="footer">
         <a href="index.html" class="brand footer-brand">
@@ -372,63 +273,10 @@
     <!-- SCRIPTS -->
     <script src="js/products.js"></script>
     <script src="js/shop.js"></script>
-    <script>
-        function filterAndScroll(categoryName) {
-            // 1. Click the matching category filter button so shop.js filters the cards
-            const targetBtn = document.querySelector(`.category-btn[data-category="${categoryName}"]`);
-            if (targetBtn) {
-                targetBtn.click();
-            }
-
-            // 2. Scroll to #products (works regardless of overflow settings)
-            const productsEl = document.getElementById("products");
-            if (productsEl) {
-                productsEl.scrollIntoView({ behavior: "smooth", block: "start" });
-            }
-        }
-    </script>
     <script src="js/auth.js"></script>
     <script>
         document.getElementById("year").textContent = new Date().getFullYear();
     </script>
-=======
-                <h3>Subtotal: <span id="cartTotal">0</span> EGP</h3>
-                <button type="button" class="checkout-btn" id="checkoutButton">Proceed to Checkout →</button>
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <!-- Footer -->
-    <footer>
-        <h2>SCENTORA.</h2>
-        <p>Luxury is a fragrance you never forget.</p>
-        <p>&copy; <span id="year"></span> Scentora. All rights reserved.</p>
-    </footer>
-
-
-    
-    <script src="js/products.js"></script>
-    <script src="js/shop.js"></script>
-    <script src="js/auth.js"></script>
- main
-
- <script>
-document.getElementById('checkoutButton').addEventListener('click', function () {
-  window.location.href = 'cart.html';
-});
-</script>
-
-<script>
-document.querySelectorAll('.nav-cat-btn').forEach(btn => {
-  btn.addEventListener('click', e => {
-    e.preventDefault();
-    filterAndScroll(btn.dataset.navCategory);
-  });
-});
-</script>
 </body>
 
 </html>
